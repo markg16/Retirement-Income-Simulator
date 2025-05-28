@@ -1,0 +1,5 @@
+[2025-05-27 10:49:37] URL patterns loaded successfully
+[2025-05-27 10:49:37] URL cache populated with 4 tables
+[2025-05-27 10:49:37] Retrieved 4 table URLs
+[2025-05-27 10:49:45] Table ALT_Table2020_22 not in cache, fetching from source...
+[2025-05-27 10:51:08] Error fetching table ALT_Table2020_22: Failed to fetch table ALT_Table2020_22: Failed to fetch raw data: No download URL found for table ALT_Table2020_22

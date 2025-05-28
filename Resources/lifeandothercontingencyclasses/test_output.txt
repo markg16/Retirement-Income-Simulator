@@ -1,0 +1,35 @@
+Test 1: Reading Australian Life Tables 2015-17...
+Test 1 passed!
+
+Test 2: Testing loadOrCreateBaseTable...
+Test 2 passed!
+
+Test 3: Testing specific mortality rates...
+Test 3 passed!
+
+Test 4: Testing improvement factors...
+Test 4 passed!
+
+Test 5: Testing mortality table adjustment...
+Test 5 passed!
+
+All tests passed successfully!
+Test 1: Reading Australian Life Tables 2015-17...
+Male file sheets: Males
+Female file sheets: Females
+Test 1 passed!
+
+Test 2: Testing loadOrCreateBaseTable...
+Test 2 passed!
+
+Test 3: Testing specific mortality rates...
+Test 3 passed!
+
+Test 4: Testing improvement factors...
+Improvement factors file sheets: ALT Improvement Factors
+Test 4 passed!
+
+Test 5: Testing mortality table adjustment...
+Test 5 passed!
+
+All tests passed successfully!

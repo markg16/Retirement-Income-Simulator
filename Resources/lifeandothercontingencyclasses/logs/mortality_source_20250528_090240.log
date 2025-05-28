@@ -1,0 +1,15 @@
+[2025-05-28 09:02:40] Successfully loaded URL patterns from resource file
+[2025-05-28 09:02:40] URL cache populated with 4 tables
+[2025-05-28 09:02:40] Table InvalidTable not in cache, fetching from source...
+[2025-05-28 09:02:40] Data cache and URL cache cleared
+[2025-05-28 09:02:41] Successfully loaded URL patterns from resource file
+[2025-05-28 09:02:41] URL cache populated with 4 tables
+[2025-05-28 09:02:41] Data cache and URL cache cleared
+[2025-05-28 09:02:41] Table ALT_Table2020_22 not in cache, fetching from source...
+[2025-05-28 09:02:41] Found download URLs for table ALT_Table2020_22:
+[2025-05-28 09:02:41]   https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-28 09:02:41] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-28 09:02:41] Downloading: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-28 09:02:42] Updated URL cache for ALT_Table2020_22: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-28 09:02:43] Data cache and URL cache cleared
+[2025-05-28 09:02:43] Data cache and URL cache cleared

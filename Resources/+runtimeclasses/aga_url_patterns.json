@@ -1,0 +1,36 @@
+{
+    "base_url": "https://aga.gov.au/sites/aga.gov.au/files",
+    "table_patterns": {
+        "ALT_Table2020-22": {
+            "type": "combined",
+            "url": "/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx"
+        },
+        "ALT_Table2015-17": {
+            "type": "separate",
+            "urls": {
+                "male": "/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Males.xlsx",
+                "female": "/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Females.xlsx"
+            }
+        },
+        "ALT_Table2010-12": {
+            "type": "separate",
+            "urls": {
+                "male": "/publications/life_table_2010-12/downloads/Males_Australian_Life_Tables_2010-12.xls",
+                "female": "/publications/life_table_2010-12/downloads/Females_Australian_Life_Tables_2010-12.xls"
+            }
+        },
+        "ALT_Table2005-07": {
+            "type": "separate",
+            "urls": {
+                "male": "/publications/life_tables_2005-07/downloads/males_2005-07.xls",
+                "female": "/publications/life_tables_2005-07/downloads/females_2005-07.xls"
+            }
+        }
+    },
+    "file_types": {
+        "life_tables": {
+            "description": "Australian Life Tables",
+            "years": ["ALT_Table2020-22", "ALT_Table2015-17", "ALT_Table2010-12", "ALT_Table2005-07"]
+        }
+    }
+} 

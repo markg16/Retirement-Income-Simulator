@@ -1,0 +1,32 @@
+classdef MarketIndexAcctDataDecorator < ScenarioSpecificMarketData & KaparraMarketDataManipulationInterFace
+    %UNTITLED2 Summary of this class goes here
+    %   Detailed explanation goes here
+
+    properties
+        IndexMarketDataTimeTable
+    end
+
+    methods (Static)
+        function obj = KaparraIndexMarketData(indexMarketData)
+            %UNTITLED2 Construct an instance of this class
+            %   Detailed explanation goes here
+
+
+            % Call the parent constructor
+            obj@marketdata.ScenarioSpecificMarketData(simulationIdentifier,historicalScenarioMarketData);
+            obj.IndexMarketDataTimeTable = indexMarketData;
+        end
+    end
+
+    methods
+
+        function outputArg = getTickerPrices(obj,tickers,valuationDate)
+            %METHOD1 Summary of this method goes here
+            %   Detailed explanation goes here
+
+            for i = 1 : length(tickers)
+            outputArg(i) = obj.IndexMarketDataTimeTable.(tickers{i})(valuationDate);
+            end
+        end
+    end
+end

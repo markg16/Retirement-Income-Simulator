@@ -1,0 +1,9 @@
+[2025-05-27 12:08:11] URL patterns loaded successfully
+[2025-05-27 12:08:11] URL cache populated with 4 tables
+[2025-05-27 12:08:12] Failed to update URL cache for table ALT_Table2005_07: Failed to extract download URL: No download URL found on page: https://aga.gov.au/publications/life-tables/australian-life-tables-2005-07
+[2025-05-27 12:08:12] Failed to update URL cache for table ALT_Table2010_12: Failed to extract download URL: No download URL found on page: https://aga.gov.au/publications/life-tables/australian-life-tables-2010-12
+[2025-05-27 12:08:13] Failed to update URL cache for table ALT_Table2015_17: Failed to extract download URL: No download URL found on page: https://aga.gov.au/publications/life-tables/australian-life-tables-2015-17
+[2025-05-27 12:08:13] Failed to update URL cache for table ALT_Table2020_22: Failed to extract download URL: No download URL found on page: https://aga.gov.au/publications/life-tables/australian-life-tables-2020-22
+[2025-05-27 12:08:13] Retrieved 4 table URLs
+[2025-05-27 12:08:13] Table ALT_Table2020_22 not in cache, fetching from source...
+[2025-05-27 12:08:13] Error fetching table ALT_Table2020_22: Failed to fetch table ALT_Table2020_22: Failed to fetch raw data: No download URL found for table ALT_Table2020_22

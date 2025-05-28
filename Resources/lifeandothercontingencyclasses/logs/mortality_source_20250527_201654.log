@@ -1,0 +1,49 @@
+[2025-05-27 20:16:54] Successfully loaded URL patterns from resource file
+[2025-05-27 20:16:55] URL cache populated with 4 tables
+[2025-05-27 20:17:37] Fetching all available tables...
+[2025-05-27 20:17:37] Fetching table 2020_22...
+[2025-05-27 20:17:38] Table ALT_Table2020_22 not in cache, fetching from source...
+[2025-05-27 20:17:38] Found download URLs for table ALT_Table2020_22:
+[2025-05-27 20:17:38]   https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-27 20:17:38] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-27 20:17:38] Downloading: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-27 20:17:39] Updated URL cache for ALT_Table2020_22: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-27 20:17:39] Error fetching table 2020_22: Failed to fetch table ALT_Table2020_22: Too many input arguments.
+[2025-05-27 20:17:39] Fetching table 2015_17...
+[2025-05-27 20:17:39] Table ALT_Table2015_17 not in cache, fetching from source...
+[2025-05-27 20:17:39] Found download URLs for table ALT_Table2015_17:
+[2025-05-27 20:17:39]   https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Males.xlsx
+[2025-05-27 20:17:39]   https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Females.xlsx
+[2025-05-27 20:17:39] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Males.xlsx
+[2025-05-27 20:17:39] Downloading: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Males.xlsx
+[2025-05-27 20:17:40] Updated URL cache for ALT_Table2015_17: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Males.xlsx
+[2025-05-27 20:17:40] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Females.xlsx
+[2025-05-27 20:17:40] Downloading: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Females.xlsx
+[2025-05-27 20:17:41] Updated URL cache for ALT_Table2015_17: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Females.xlsx
+[2025-05-27 20:17:41] Error fetching table 2015_17: Failed to fetch table ALT_Table2015_17: Too many input arguments.
+[2025-05-27 20:17:41] Fetching table 2010_12...
+[2025-05-27 20:17:41] Table ALT_Table2010_12 not in cache, fetching from source...
+[2025-05-27 20:17:41] Found download URLs for table ALT_Table2010_12:
+[2025-05-27 20:17:41]   https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Males_Australian_Life_Tables_2010-12.xls
+[2025-05-27 20:17:41]   https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Females_Australian_Life_Tables_2010-12.xls
+[2025-05-27 20:17:41] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Males_Australian_Life_Tables_2010-12.xls
+[2025-05-27 20:17:41] Downloading: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Males_Australian_Life_Tables_2010-12.xls
+[2025-05-27 20:17:42] Updated URL cache for ALT_Table2010_12: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Males_Australian_Life_Tables_2010-12.xls
+[2025-05-27 20:17:42] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Females_Australian_Life_Tables_2010-12.xls
+[2025-05-27 20:17:42] Downloading: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Females_Australian_Life_Tables_2010-12.xls
+[2025-05-27 20:17:43] Updated URL cache for ALT_Table2010_12: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Females_Australian_Life_Tables_2010-12.xls
+[2025-05-27 20:17:43] Error fetching table 2010_12: Failed to fetch table ALT_Table2010_12: Too many input arguments.
+[2025-05-27 20:17:43] Fetching table 2005_07...
+[2025-05-27 20:17:43] Table ALT_Table2005_07 not in cache, fetching from source...
+[2025-05-27 20:17:43] Found download URLs for table ALT_Table2005_07:
+[2025-05-27 20:17:43]   https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/males_2005-07.xls
+[2025-05-27 20:17:43]   https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/females_2005-07.xls
+[2025-05-27 20:17:43] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/males_2005-07.xls
+[2025-05-27 20:17:43] Downloading: https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/males_2005-07.xls
+[2025-05-27 20:17:43] Updated URL cache for ALT_Table2005_07: https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/males_2005-07.xls
+[2025-05-27 20:17:43] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/females_2005-07.xls
+[2025-05-27 20:17:44] Downloading: https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/females_2005-07.xls
+[2025-05-27 20:17:44] Updated URL cache for ALT_Table2005_07: https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/females_2005-07.xls
+[2025-05-27 20:17:44] Error fetching table 2005_07: Failed to fetch table ALT_Table2005_07: Too many input arguments.
+[2025-05-27 20:17:44] Successfully fetched 0 tables
+[2025-05-27 20:17:45] Data cache and URL cache cleared

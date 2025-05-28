@@ -1,0 +1,2 @@
+function survivorshipProbabilities = getSurvivorshipProbabilitiesForEachPaymentDate(survivorshipProbabilitiesFull,paymentDatesToValue)
+end
