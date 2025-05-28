@@ -1,0 +1,121 @@
+
+tic
+import scenarios.*
+import marketData.*
+% Other Settings
+format('bank');
+floatingPointTolerance = 1e-10;
+verbose = 1;
+addpath('lifeandothercontingencyclasses'); 
+addpath('annuityclasses'); 
+addpath('portfolioclasses');
+addpath('instrumentclasses\'); 
+addpath('tradingstrategyclasses\'); 
+addpath('+utilities\');
+addpath('+marketdata\');
+addpath('marketdatasimulationclasses');
+
+
+displayProgressIndicator = 1;
+
+outputFolder = 'test';
+
+startDate =datetime('30-Sep-2013');
+endDate = datetime('30-Sep-2020');
+startDate.TimeZone = 'Australia/Sydney';
+endDate.TimeZone = 'Australia/Sydney';
+
+
+indexMarketData= marketdata.MarketData();
+marketIndexAcctParameters.name = 'testAccount';
+marketIndexAcctParameters.startDate = startDate;
+marketIndexAcctParameters.tickers = {'ASX200_Price','SP500_Price'};
+marketIndexAcctParameters.targetWeights = [0.80 0.20];
+marketIndexAcctParameters.exposureLimits = 0.05;
+marketIndexAcctParameters.allowableIndexes = {'ASX200_Price','SP500_Price'};
+marketIndexAcctParameters.benchmarkWeights = array2table([0.80 0.20],'VariableNames',{'ASX200_Price','SP500_Price'});
+
+
+depositAmount = 100000;
+initialDepositDate ='30-Sep-2013';
+withdrawalAmount =10000;
+initialWithdrawalDate ='30-Sep-2015';
+secondDepositDate ='30-Sep-2017';
+rebalanceDate ='30-Sep-2017';
+frequency = utilities.FrequencyType.Weekly;
+
+simulationStartDate = datetime(rebalanceDate);
+simulationStartDate.TimeZone = 'Australia/Sydney';
+
+
+
+% Define a mapping between file names and time zones
+    timeZoneMapping = containers.Map;
+ % Define the directory where your data files are located
+ % in future upgrade to read file paths
+   %inputFilePath = 'G:\My Drive\Kaparra Software\UNSWLecture\AccumReturnData';
+    inputFilePath = 'G:\My Drive\Kaparra Software\UNSWLecture\PriceReturnData';
+    
+    
+    % Identify files with a specific extension (e.g., .csv)
+
+    dataFiles = dir(fullfile(inputFilePath, '*.csv'));
+
+indexMarketData.MarketIndexPrices = marketdata.MarketDataReader.readIndexPriceFiles(inputFilePath,timeZoneMapping,outputFolder,displayProgressIndicator);
+%test = indexMarketData.IndexMarketDataTimeTable.ExtractMarketDataBetweenTwoDates(initialDepositDate,rebalanceDate);
+%create market index account
+
+
+
+testMarketIndexAccount = MarketIndexAccount(marketIndexAcctParameters,indexMarketData);
+startValues = testMarketIndexAccount.IndexMarketData.getTickerPrices(simulationStartDate);
+simulationParameters = SimulationParameters(startValues,simulationStartDate,frequency,calendarDuration(5,0,0));
+simulationParameters.TradingStrategy = testMarketIndexAccount.TradingStrategy;
+%  %Create Simulation Generator
+simulator = DeterministicScenarioGenerator(simulationParameters);
+% 
+% % simulate future market data
+simulatedMarketData = simulator.generateSimulatedScenarioMarketData();
+
+
+
+
+% deposit an initial amount
+testMarketIndexAccount = testMarketIndexAccount.deposit(depositAmount,initialDepositDate);
+
+
+% get initial value
+initialValues = testMarketIndexAccount.getCurrentValues(initialDepositDate);
+%initialValue = sum(initialValues);
+initialValue = rowfun(@plus,initialValues,"OutputVariableNames",'MarketIndexAcctValue');
+values = initialValue;
+
+secondValues = testMarketIndexAccount.getCurrentValues(initialWithdrawalDate);
+%secondValuePreWithdrawal = sum(secondValues)
+secondValue = rowfun(@plus,secondValues,"OutputVariableNames",'MarketIndexAcctValue');
+
+values = [values; secondValue];
+% withdraw an amount in a year
+
+testMarketIndexAccount = testMarketIndexAccount.withdraw(withdrawalAmount,initialWithdrawalDate);
+% get value after withdrawal
+
+secondValues = testMarketIndexAccount.getCurrentValues(initialWithdrawalDate);
+secondValue = rowfun(@plus,secondValues,"OutputVariableNames",'MarketIndexAcctValue');
+values = [values; secondValue];
+% pre second deposit value
+
+thirdValues = testMarketIndexAccount.getCurrentValues(secondDepositDate);
+thirdValuePreDeposit =  rowfun(@plus,thirdValues,"OutputVariableNames",'MarketIndexAcctValue');
+values = [values; thirdValuePreDeposit];
+
+% deposit an amount in 2 years
+testMarketIndexAccount = testMarketIndexAccount.deposit(depositAmount,secondDepositDate);
+
+% get value after deposit
+thirdValues = testMarketIndexAccount.getCurrentValues(secondDepositDate);
+thirdValue = rowfun(@plus,thirdValues,"OutputVariableNames",'MarketIndexAcctValue');
+values = [values; thirdValue]
+%rebalance account allocations
+
+testMarketIndexAccount = testMarketIndexAccount.rebalance(rebalanceDate);

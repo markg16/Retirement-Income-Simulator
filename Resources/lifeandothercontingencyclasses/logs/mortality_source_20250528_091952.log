@@ -1,0 +1,47 @@
+[2025-05-28 09:19:52] Successfully loaded URL patterns from resource file
+[2025-05-28 09:19:52] URL cache populated with 4 tables
+[2025-05-28 09:19:57] 
+Testing patterns for table 2020_22:
+[2025-05-28 09:20:12]   Testing pattern 1: https://aga.gov.au/sites/aga.gov.au/files/2025-05/australian-life-tables-2020_22-all-tables.xlsx
+[2025-05-28 09:20:13]   ERROR: Pattern 1 failed with error: The server returned the status 404 with message "Not Found" in response to the request to URL https://aga.gov.au/sites/aga.gov.au/files/2025-05/australian-life-tables-2020_22-all-tables.xlsx.
+[2025-05-28 09:20:13]   Testing pattern 2: https://aga.gov.au/sites/aga.gov.au/files/2025-05/australian-life-tables-2020_22-all-tables_2.xlsx
+[2025-05-28 09:20:13]   ERROR: Pattern 2 failed with error: The server returned the status 404 with message "Not Found" in response to the request to URL https://aga.gov.au/sites/aga.gov.au/files/2025-05/australian-life-tables-2020_22-all-tables_2.xlsx.
+[2025-05-28 09:20:13]   Testing pattern 3: https://aga.gov.au/sites/aga.gov.au/files/2025-05/australian-life-tables-2020_22.xlsx
+[2025-05-28 09:20:13]   ERROR: Pattern 3 failed with error: The server returned the status 404 with message "Not Found" in response to the request to URL https://aga.gov.au/sites/aga.gov.au/files/2025-05/australian-life-tables-2020_22.xlsx.
+[2025-05-28 09:20:13]   Testing pattern 4: https://aga.gov.au/sites/aga.gov.au/files/2025-05/Australian_Life_Tables_2020_22_Males.xlsx
+[2025-05-28 09:20:13]   ERROR: Pattern 4 failed with error: The server returned the status 404 with message "Not Found" in response to the request to URL https://aga.gov.au/sites/aga.gov.au/files/2025-05/Australian_Life_Tables_2020_22_Males.xlsx.
+[2025-05-28 09:20:13]   Testing pattern 5: https://aga.gov.au/sites/aga.gov.au/files/2025-05/Australian_Life_Tables_2020_22_Females.xlsx
+[2025-05-28 09:20:13]   ERROR: Pattern 5 failed with error: The server returned the status 404 with message "Not Found" in response to the request to URL https://aga.gov.au/sites/aga.gov.au/files/2025-05/Australian_Life_Tables_2020_22_Females.xlsx.
+[2025-05-28 09:20:29] 
+Testing patterns for table 2015_17:
+[2025-05-28 09:20:46]   Testing pattern 1: https://aga.gov.au/sites/aga.gov.au/files/2025-05/australian-life-tables-2015_17-all-tables.xlsx
+[2025-05-28 09:20:51]   ERROR: Pattern 1 failed with error: The server returned the status 404 with message "Not Found" in response to the request to URL https://aga.gov.au/sites/aga.gov.au/files/2025-05/australian-life-tables-2015_17-all-tables.xlsx.
+[2025-05-28 09:20:59]   Testing pattern 2: https://aga.gov.au/sites/aga.gov.au/files/2025-05/australian-life-tables-2015_17-all-tables_2.xlsx
+[2025-05-28 09:20:59]   ERROR: Pattern 2 failed with error: The server returned the status 404 with message "Not Found" in response to the request to URL https://aga.gov.au/sites/aga.gov.au/files/2025-05/australian-life-tables-2015_17-all-tables_2.xlsx.
+[2025-05-28 09:21:07]   Testing pattern 3: https://aga.gov.au/sites/aga.gov.au/files/2025-05/australian-life-tables-2015_17.xlsx
+[2025-05-28 09:21:07]   ERROR: Pattern 3 failed with error: The server returned the status 404 with message "Not Found" in response to the request to URL https://aga.gov.au/sites/aga.gov.au/files/2025-05/australian-life-tables-2015_17.xlsx.
+[2025-05-28 09:21:07]   Testing pattern 4: https://aga.gov.au/sites/aga.gov.au/files/2025-05/Australian_Life_Tables_2015_17_Males.xlsx
+[2025-05-28 09:21:07]   ERROR: Pattern 4 failed with error: The server returned the status 404 with message "Not Found" in response to the request to URL https://aga.gov.au/sites/aga.gov.au/files/2025-05/Australian_Life_Tables_2015_17_Males.xlsx.
+[2025-05-28 09:21:07]   Testing pattern 5: https://aga.gov.au/sites/aga.gov.au/files/2025-05/Australian_Life_Tables_2015_17_Females.xlsx
+[2025-05-28 09:21:07]   ERROR: Pattern 5 failed with error: The server returned the status 404 with message "Not Found" in response to the request to URL https://aga.gov.au/sites/aga.gov.au/files/2025-05/Australian_Life_Tables_2015_17_Females.xlsx.
+[2025-05-28 09:21:24] 
+Testing patterns for table 2010_12:
+[2025-05-28 09:21:41]   Testing pattern 1: https://aga.gov.au/sites/aga.gov.au/files/2025-05/australian-life-tables-2010_12-all-tables.xlsx
+[2025-05-28 09:21:41]   ERROR: Pattern 1 failed with error: The server returned the status 404 with message "Not Found" in response to the request to URL https://aga.gov.au/sites/aga.gov.au/files/2025-05/australian-life-tables-2010_12-all-tables.xlsx.
+[2025-05-28 09:21:51]   Testing pattern 2: https://aga.gov.au/sites/aga.gov.au/files/2025-05/australian-life-tables-2010_12.xlsx
+[2025-05-28 09:21:51]   ERROR: Pattern 2 failed with error: The server returned the status 404 with message "Not Found" in response to the request to URL https://aga.gov.au/sites/aga.gov.au/files/2025-05/australian-life-tables-2010_12.xlsx.
+[2025-05-28 09:21:51]   Testing pattern 3: https://aga.gov.au/sites/aga.gov.au/files/2025-05/Males_Australian_Life_Tables_2010_12.xlsx
+[2025-05-28 09:21:51]   ERROR: Pattern 3 failed with error: The server returned the status 404 with message "Not Found" in response to the request to URL https://aga.gov.au/sites/aga.gov.au/files/2025-05/Males_Australian_Life_Tables_2010_12.xlsx.
+[2025-05-28 09:21:51]   Testing pattern 4: https://aga.gov.au/sites/aga.gov.au/files/2025-05/Females_Australian_Life_Tables_2010_12.xlsx
+[2025-05-28 09:21:51]   ERROR: Pattern 4 failed with error: The server returned the status 404 with message "Not Found" in response to the request to URL https://aga.gov.au/sites/aga.gov.au/files/2025-05/Females_Australian_Life_Tables_2010_12.xlsx.
+[2025-05-28 09:22:02] 
+Testing patterns for table 2005_07:
+[2025-05-28 09:22:07]   Testing pattern 1: https://aga.gov.au/sites/aga.gov.au/files/2025-05/australian-life-tables-2005_07-all-tables.xlsx
+[2025-05-28 09:22:08]   ERROR: Pattern 1 failed with error: The server returned the status 404 with message "Not Found" in response to the request to URL https://aga.gov.au/sites/aga.gov.au/files/2025-05/australian-life-tables-2005_07-all-tables.xlsx.
+[2025-05-28 09:22:08]   Testing pattern 2: https://aga.gov.au/sites/aga.gov.au/files/2025-05/australian-life-tables-2005_07.xlsx
+[2025-05-28 09:22:08]   ERROR: Pattern 2 failed with error: The server returned the status 404 with message "Not Found" in response to the request to URL https://aga.gov.au/sites/aga.gov.au/files/2025-05/australian-life-tables-2005_07.xlsx.
+[2025-05-28 09:22:08]   Testing pattern 3: https://aga.gov.au/sites/aga.gov.au/files/2025-05/males_2005_07.xlsx
+[2025-05-28 09:22:08]   ERROR: Pattern 3 failed with error: The server returned the status 404 with message "Not Found" in response to the request to URL https://aga.gov.au/sites/aga.gov.au/files/2025-05/males_2005_07.xlsx.
+[2025-05-28 09:22:08]   Testing pattern 4: https://aga.gov.au/sites/aga.gov.au/files/2025-05/females_2005_07.xlsx
+[2025-05-28 09:22:08]   ERROR: Pattern 4 failed with error: The server returned the status 404 with message "Not Found" in response to the request to URL https://aga.gov.au/sites/aga.gov.au/files/2025-05/females_2005_07.xlsx.
+[2025-05-28 09:23:04] Data cache and URL cache cleared

@@ -1,0 +1,54 @@
+# Created by https://www.toptal.com/developers/gitignore/api/matlab
+# Edit at https://www.toptal.com/developers/gitignore?templates=matlab
+
+### MATLAB ###
+# Backups
+*.asv
+*.bak
+*.fig~
+
+# Simulink
+*.slx.original
+*.slx.autosave
+*.sltx.original
+*.sltx.autosave
+*.mdl.original
+*.mdl.autosave
+*.mex*
+*.p
+*.orig
+slprj/
+_Simulink_Cache_/
+sim_output/
+
+# ML App
+resources/
+
+# ML Project
+*.mlproj.user
+*CodeGen/
+
+# Temp
+*.tmp
+*.temp
+
+# Generated files
+*.rpt
+*.dmr
+*.mldatx
+*.slxc
+*.slci
+*.sldd
+*_ert_rtw/
+*_grt_rtw/
+*_slrt_rtw/
+
+# FID
+*.id
+
+#MEX
+*.mexa64
+*.mexmaci64
+*.mexw64
+
+# End of https://www.toptal.com/developers/gitignore/api/matlab

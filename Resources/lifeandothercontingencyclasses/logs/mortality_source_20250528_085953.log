@@ -1,0 +1,39 @@
+[2025-05-28 08:59:53] Successfully loaded URL patterns from resource file
+[2025-05-28 08:59:53] URL cache populated with 4 tables
+[2025-05-28 08:59:54] Fetching all available tables...
+[2025-05-28 08:59:54] Fetching table 2020_22...
+[2025-05-28 08:59:54] Fetching table 2015_17...
+[2025-05-28 08:59:54] Table ALT_Table2015_17 not in cache, fetching from source...
+[2025-05-28 08:59:54] Found download URLs for table ALT_Table2015_17:
+[2025-05-28 08:59:54]   https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Males.xlsx
+[2025-05-28 08:59:54]   https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Females.xlsx
+[2025-05-28 08:59:54] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Males.xlsx
+[2025-05-28 08:59:54] Downloading: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Males.xlsx
+[2025-05-28 08:59:55] Updated URL cache for ALT_Table2015_17: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Males.xlsx
+[2025-05-28 08:59:55] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Females.xlsx
+[2025-05-28 08:59:55] Downloading: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Females.xlsx
+[2025-05-28 08:59:55] Updated URL cache for ALT_Table2015_17: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Females.xlsx
+[2025-05-28 08:59:57] Fetching table 2010_12...
+[2025-05-28 08:59:57] Table ALT_Table2010_12 not in cache, fetching from source...
+[2025-05-28 08:59:57] Found download URLs for table ALT_Table2010_12:
+[2025-05-28 08:59:57]   https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Males_Australian_Life_Tables_2010-12.xls
+[2025-05-28 08:59:57]   https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Females_Australian_Life_Tables_2010-12.xls
+[2025-05-28 08:59:57] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Males_Australian_Life_Tables_2010-12.xls
+[2025-05-28 08:59:57] Downloading: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Males_Australian_Life_Tables_2010-12.xls
+[2025-05-28 08:59:58] Updated URL cache for ALT_Table2010_12: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Males_Australian_Life_Tables_2010-12.xls
+[2025-05-28 08:59:58] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Females_Australian_Life_Tables_2010-12.xls
+[2025-05-28 08:59:58] Downloading: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Females_Australian_Life_Tables_2010-12.xls
+[2025-05-28 08:59:58] Updated URL cache for ALT_Table2010_12: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Females_Australian_Life_Tables_2010-12.xls
+[2025-05-28 08:59:59] Fetching table 2005_07...
+[2025-05-28 08:59:59] Table ALT_Table2005_07 not in cache, fetching from source...
+[2025-05-28 09:00:00] Found download URLs for table ALT_Table2005_07:
+[2025-05-28 09:00:00]   https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/males_2005-07.xls
+[2025-05-28 09:00:00]   https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/females_2005-07.xls
+[2025-05-28 09:00:00] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/males_2005-07.xls
+[2025-05-28 09:00:00] Downloading: https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/males_2005-07.xls
+[2025-05-28 09:00:00] Updated URL cache for ALT_Table2005_07: https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/males_2005-07.xls
+[2025-05-28 09:00:00] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/females_2005-07.xls
+[2025-05-28 09:00:00] Downloading: https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/females_2005-07.xls
+[2025-05-28 09:00:01] Updated URL cache for ALT_Table2005_07: https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/females_2005-07.xls
+[2025-05-28 09:00:02] Successfully fetched 4 tables
+[2025-05-28 09:00:54] Data cache and URL cache cleared
