@@ -24,7 +24,8 @@ classdef MortalityDataSource < handle
     end
     
     properties (Access = protected)
-        % These properties are inherited from the base class
+       % The DataCache is now replaced by a dedicated CacheManager object
+        CacheManager % Handles all caching operations
     end
     
     methods (Abstract, Access = protected)
@@ -36,9 +37,13 @@ classdef MortalityDataSource < handle
     methods
         function obj = MortalityDataSource()
             %MORTALITYDATASOURCE Constructor
+            % Constructor now creates the CacheManager via the factory
+            obj.CacheManager = utilities.CacheManagerFactory.createCacheManager(utilities.CacheManagerType.Mortality);
             %   Initializes common properties and directories
-            obj.DataCache = containers.Map();
+            
             obj.initializeDirectories();
+            
+            obj.DataCache = containers.Map();
             obj.initializeDataCache();  % Initialize the data cache
         end
         
@@ -59,65 +64,77 @@ classdef MortalityDataSource < handle
             %       tableEnum - TableNames enumeration value
             %   Returns:
             %       table - Struct containing mortality data
-            if ~obj.isTableInCache(tableEnum)
+
+
+            % This method now delegates directly to the CacheManager.
+            % It implements the "read-through" cache pattern.
+            tableKey = char(tableEnum);
+            [table, isCached] = obj.CacheManager.getTable(tableKey);
+
+
+            if ~isCached
                 obj.log(sprintf('Table %s not in cache, fetching from source...', char(tableEnum)));
                 try
                     rawData = obj.fetchRawData(tableEnum);
                     parsedData = obj.parseRawData(rawData, tableEnum);
-                    obj.cacheTableData(tableEnum, parsedData);
+
+
+                    %Cache the newly fetched and parsed data
+                    obj.CacheManager.cacheTable(tableKey, parsedData);
+                    table = parsedData; % Return the new data
+                    %obj.cacheTableData(tableEnum, parsedData);
                 catch e
                     error('MATLAB:invalidType', 'Failed to fetch table %s: %s', char(tableEnum), e.message);
                 end
+            else
+                % Step 2b: If it was in the cache, 'table' (from Step 1) already holds the data.
+                % This 'else' block was primarily for logging the cache hit.
+                obj.log(sprintf('Table %s retrieved from cache.', tableKey));
             end
-            table = obj.getTableFromCache(tableEnum);
         end
         
-        function tables = getAvailableTables(obj, forceRefresh)
-            %GETAVAILABLETABLES Get list of available tables
-            %   Returns list of tables that have data in cache.
-            %   Optionally forces refresh of available tables list.
+        function tables = getAvailableTables(obj)
+            %GETAVAILABLETABLES Get list of available tables from the cache.
+            %   Queries the CacheManager to find all table keys currently stored
+            %   and returns them as an array of TableNames enumerations.
             %
-            %   Inputs:
-            %       forceRefresh - Optional boolean to force refresh
             %   Returns:
-            %       tables - Array of TableNames enumeration values
-            if nargin < 2
-                forceRefresh = false;
-            end
-            
-            if forceRefresh || ~obj.DataCache.isKey('tables')
-                if ~obj.DataCache.isKey('initialized')
-                    obj.initializeDataCache();
+            %       tables - Array of TableNames enumeration values found in the cache.
+
+            % 1. Get the list of all table keys (as strings) from the CacheManager.
+            %    This is the only line needed to query the cache's contents.
+            cachedTableKeys = obj.CacheManager.getCachedTables();
+
+            % 2. Convert the string keys back into TableNames enumeration members.
+            %    This ensures the method returns data in the expected format.
+            availableTables = TableNames.empty; % Initialize an empty array of the correct enum type
+
+            for i = 1:length(cachedTableKeys)
+                key = cachedTableKeys{i};
+                try
+                    % Convert the string key to its corresponding enum member
+                    tableEnum = TableNames.(key);
+                    availableTables(end+1) = tableEnum;
+                catch
+                    % This key from the cache file is not a valid TableNames member.
+                    % This could happen if the cache contains old or non-table data.
+                    % We can log this for debugging purposes and safely skip it.
+                    obj.log('Warning: Found key "%s" in cache that is not a valid TableNames member. Skipping.', key);
                 end
-                
-                allTables = enumeration('TableNames');
-                availableTables = [];
-                
-                for i = 1:length(allTables)
-                    if obj.isTableInCache(allTables(i))
-                        availableTables = [availableTables, allTables(i)];
-                    end
-                end
-                
-                obj.DataCache('tables') = availableTables;
-                
-                fprintf('Available tables:\n');
-                for i = 1:length(availableTables)
-                    fprintf('  %s\n', char(availableTables(i)));
-                end
-            else
-                tables = obj.DataCache('tables');
             end
-            
-            if ~exist('tables', 'var')
-                tables = [];
-            end
+
+            tables = availableTables;
         end
         
         function clearCache(obj)
             %CLEARCACHE Clear the data cache
             %   Removes all cached data and resets cache state
             try
+               
+                
+                obj.log('Clearing data cache...');
+                obj.CacheManager.clearCache();
+                obj.log('Data cache cleared.');
                 % Clear the cache
                 obj.DataCache = containers.Map();
                 
@@ -171,16 +188,16 @@ classdef MortalityDataSource < handle
             %INITIALIZEDATACACHE Initialize data cache
             %   Creates a new data cache in the LifeTables directory
             %   Cache location: LifeTables/cache/
-            
+
             % Get cache directory
             obj.CacheDir = fullfile(fileparts(mfilename('fullpath')), '..', 'LifeTables', 'cache');
             if ~exist(obj.CacheDir, 'dir')
                 mkdir(obj.CacheDir);
             end
-            
+
             % Set cache file path
             obj.CacheFile = fullfile(obj.CacheDir, 'cache.mat');
-            
+
             % Initialize cache
             if exist(obj.CacheFile, 'file')
                 try
@@ -193,7 +210,7 @@ classdef MortalityDataSource < handle
                 obj.DataCache = containers.Map();
             end
         end
-        
+
         function cacheTableData(obj, tableEnum, parsedData)
             %CACHETABLEDATA Cache table data
             %   Stores parsed table data in cache
@@ -204,12 +221,12 @@ classdef MortalityDataSource < handle
             key = char(tableEnum);
             obj.DataCache(key) = parsedData;
             obj.updateLastUpdated();
-            
+
             % Save cache to file
             dataCache = obj.DataCache;
             save(obj.CacheFile, 'dataCache');
         end
-        
+
         function table = getTableFromCache(obj, tableEnum)
             %GETTABLEFROMCACHE Get table from cache
             %   Retrieves table data from cache
@@ -224,7 +241,7 @@ classdef MortalityDataSource < handle
             end
             table = obj.DataCache(key);
         end
-        
+
         function isCached = isTableInCache(obj, tableEnum)
             %ISTABLEINCACHE Check if table is in cache
             %   Verifies if table exists in cache and has valid data
@@ -239,20 +256,20 @@ classdef MortalityDataSource < handle
                       isfield(obj.DataCache(key).Male, 'Age') && ...
                       ~isempty(obj.DataCache(key).Male.Age);
         end
-        
+
         function updateLastUpdated(obj)
             %UPDATELASTUPDATED Update last updated timestamp
             %   Updates both the object's LastUpdated property and the cache's timestamp
-            
+
             % Update object property
             obj.LastUpdated = datetime('now');
-            
+
             % Update cache timestamp
             obj.DataCache('lastUpdated') = obj.LastUpdated;
-            
+
             % Save cache to file
             dataCache = obj.DataCache;
             save(obj.CacheFile, 'dataCache');
         end
-    end
+     end
 end 
