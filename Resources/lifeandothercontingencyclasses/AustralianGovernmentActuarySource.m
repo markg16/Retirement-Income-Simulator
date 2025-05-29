@@ -20,6 +20,7 @@ classdef AustralianGovernmentActuarySource < MortalityDataSource
         OverwriteExisting = false;  % Whether to overwrite existing files
         UrlPatterns = struct();  % URL patterns loaded from resource file
         SourceDir = 'source';  % Directory for source files
+        %CacheManager % Property to hold the cache manager
     end
     
     methods (Access = public)
@@ -53,6 +54,10 @@ classdef AustralianGovernmentActuarySource < MortalityDataSource
             % Initialize table URLs before URL cache
             obj.initializeTableURLs();
             obj.initializeUrlCache();
+
+            % % initilaise mortality cachemanager
+            % obj.CacheManager = CacheManagerFactory.createCacheManager(CacheManagerType.Mortality);
+            % % obj.CacheManager = MortalityCacheManager();
         end
          function initializeSourceDirectory(obj)
             %INITIALIZESOURCEDIRECTORY Initialize source directory
@@ -337,36 +342,7 @@ classdef AustralianGovernmentActuarySource < MortalityDataSource
                 isValid = false;
             end
         end
-        
-        function tables = getAvailableTables(obj)
-            %GETAVAILABLETABLES Get available tables
-            %   Returns array of available TableNames enumeration values
-            %   Checks the cache to determine which tables are actually available
-            
-            % If the cache is empty, return an empty array
-            if isempty(obj.DataCache) || obj.DataCache.Count == 0
-                tables = TableNames.empty;
-                return;
-            end
-            
-            % Get all possible tables
-            allTables = enumeration('TableNames');
-            availableTables = [];
-            
-            % Check each table in the cache
-            for i = 1:length(allTables)
-                tableEnum = allTables(i);
-                tableKey = char(tableEnum);
                 
-                % Check if table exists in cache and has valid data
-                if obj.isTableInCache(tableEnum) && ~isempty(obj.getTableFromCache(tableEnum))
-                    availableTables = [availableTables, tableEnum];
-                end
-            end
-            
-            tables = availableTables;
-        end
-        
         function filename = downloadFile(obj, url)
             %DOWNLOADFILE Download file from URL
             %   Downloads file and returns local filename
@@ -388,6 +364,8 @@ classdef AustralianGovernmentActuarySource < MortalityDataSource
             try
                 % Clear data cache
                 obj.DataCache = containers.Map();
+                % 1. Call the parent's clearCache to handle the main data cache.
+                clearCache@MortalityDataSource(obj);
                 
                 % Clear URL cache
                 obj.UrlCache = containers.Map('KeyType', 'char', 'ValueType', 'any');

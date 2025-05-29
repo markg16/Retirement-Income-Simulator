@@ -26897,3 +26897,933 @@ In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('test_AGA
 [2025-05-28 09:17:30] Data cache and URL cache cleared
 matlab.lang.internal.introspective.errorDocCallback('AustralianGovernmentActuarySource/clearCache', 'G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\AustralianGovernmentActuarySource.m', 395)
 run_tests
+Running AGA Test Suite...
+------------------------
+Running test_AGA
+
+================================================================================
+<strong>Verification failed in test_AGA/testInitialization.</strong>
+    ----------------
+    Test Diagnostic:
+    ----------------
+    Failed to initialize AGA source: Unable to resolve the name 'CacheManagerFactory.createCacheManager'.
+    ------------------
+    Stack Information:
+    ------------------
+    In <a href="matlab:opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',35,1)">G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m (test_AGA.setup) at 35</a>
+================================================================================
+
+================================================================================
+<strong>Verification failed in test_AGA/testInitialization.</strong>
+    ----------------
+    Test Diagnostic:
+    ----------------
+    Source should not be empty
+    ---------------------
+    Framework Diagnostic:
+    ---------------------
+    <a href="matlab:helpPopup matlab.unittest.TestCase.verifyNotEmpty" style="font-weight:bold">verifyNotEmpty</a> failed.
+    --> The value must not be empty.
+    --> The value has a size of [0  0].
+    
+    Actual Value:
+         []
+    ------------------
+    Stack Information:
+    ------------------
+    In <a href="matlab:opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',58,1)">G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m (test_AGA.testInitialization) at 58</a>
+================================================================================
+
+================================================================================
+<strong>Error occurred in test_AGA/testInitialization and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:structRefFromNonStruct'
+    --------------
+    Error Details:
+    --------------
+    Dot indexing is not supported for variables of this type.
+    
+    Error in <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('test_AGA/testInitialization', 'G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m', 59)" style="font-weight:bold">test_AGA/testInitialization</a> (<a href="matlab: opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',59,0)">line 59</a>)
+                testCase.verifyEqual(testCase.Source.SourceName, 'Australian Government Actuary',
+                'Source name should be correct');
+================================================================================
+.
+================================================================================
+<strong>Verification failed in test_AGA/testFetchLatestData.</strong>
+    ----------------
+    Test Diagnostic:
+    ----------------
+    Failed to initialize AGA source: Unable to resolve the name 'CacheManagerFactory.createCacheManager'.
+    ------------------
+    Stack Information:
+    ------------------
+    In <a href="matlab:opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',35,1)">G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m (test_AGA.setup) at 35</a>
+================================================================================
+
+================================================================================
+<strong>Error occurred in test_AGA/testFetchLatestData and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:structRefFromNonStruct'
+    --------------
+    Error Details:
+    --------------
+    Dot indexing is not supported for variables of this type.
+    
+    Error in <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('test_AGA/testFetchLatestData', 'G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m', 68)" style="font-weight:bold">test_AGA/testFetchLatestData</a> (<a href="matlab: opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',68,0)">line 68</a>)
+                data = testCase.Source.fetchLatestData; %TODO make latest data either an
+================================================================================
+.
+================================================================================
+<strong>Verification failed in test_AGA/testFetchAllTables.</strong>
+    ----------------
+    Test Diagnostic:
+    ----------------
+    Failed to initialize AGA source: Unable to resolve the name 'CacheManagerFactory.createCacheManager'.
+    ------------------
+    Stack Information:
+    ------------------
+    In <a href="matlab:opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',35,1)">G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m (test_AGA.setup) at 35</a>
+================================================================================
+
+================================================================================
+<strong>Error occurred in test_AGA/testFetchAllTables and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:structRefFromNonStruct'
+    --------------
+    Error Details:
+    --------------
+    Dot indexing is not supported for variables of this type.
+    
+    Error in <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('test_AGA/testFetchAllTables', 'G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m', 80)" style="font-weight:bold">test_AGA/testFetchAllTables</a> (<a href="matlab: opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',80,0)">line 80</a>)
+                testCase.Source.fetchAllTables();
+================================================================================
+.
+================================================================================
+<strong>Verification failed in test_AGA/testTableValidation.</strong>
+    ----------------
+    Test Diagnostic:
+    ----------------
+    Failed to initialize AGA source: Unable to resolve the name 'CacheManagerFactory.createCacheManager'.
+    ------------------
+    Stack Information:
+    ------------------
+    In <a href="matlab:opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',35,1)">G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m (test_AGA.setup) at 35</a>
+================================================================================
+
+================================================================================
+<strong>Error occurred in test_AGA/testTableValidation and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:structRefFromNonStruct'
+    --------------
+    Error Details:
+    --------------
+    Dot indexing is not supported for variables of this type.
+    
+    Error in <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('test_AGA/testTableValidation', 'G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m', 89)" style="font-weight:bold">test_AGA/testTableValidation</a> (<a href="matlab: opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',89,0)">line 89</a>)
+                data = testCase.Source.fetchLatestData();
+================================================================================
+.
+================================================================================
+<strong>Verification failed in test_AGA/testUrlPatterns.</strong>
+    ----------------
+    Test Diagnostic:
+    ----------------
+    Failed to initialize AGA source: Unable to resolve the name 'CacheManagerFactory.createCacheManager'.
+    ------------------
+    Stack Information:
+    ------------------
+    In <a href="matlab:opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',35,1)">G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m (test_AGA.setup) at 35</a>
+================================================================================
+
+================================================================================
+<strong>Error occurred in test_AGA/testUrlPatterns and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:structRefFromNonStruct'
+    --------------
+    Error Details:
+    --------------
+    Dot indexing is not supported for variables of this type.
+    
+    Error in <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('test_AGA/testUrlPatterns', 'G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m', 99)" style="font-weight:bold">test_AGA/testUrlPatterns</a> (<a href="matlab: opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',99,0)">line 99</a>)
+                testCase.Source.testUrlPatterns();
+================================================================================
+.
+================================================================================
+<strong>Verification failed in test_AGA/testErrorHandling.</strong>
+    ----------------
+    Test Diagnostic:
+    ----------------
+    Failed to initialize AGA source: Unable to resolve the name 'CacheManagerFactory.createCacheManager'.
+    ------------------
+    Stack Information:
+    ------------------
+    In <a href="matlab:opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',35,1)">G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m (test_AGA.setup) at 35</a>
+================================================================================
+
+================================================================================
+<strong>Verification failed in test_AGA/testErrorHandling.</strong>
+    ---------------------
+    Framework Diagnostic:
+    ---------------------
+    <a href="matlab:helpPopup matlab.unittest.TestCase.verifyError" style="font-weight:bold">verifyError</a> failed.
+    --> The function threw the wrong exception.
+        
+        Actual Exception:
+            'MATLAB:structRefFromNonStruct'
+        Expected Exception:
+            'MATLAB:invalidType'
+    --> Actual Error Report:
+            Dot indexing is not supported for variables of this type.
+            
+            Error in <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('test_AGA>@()testCase.Source.getMortalityTable(''InvalidTable'')', 'G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m', 106)" style="font-weight:bold">test_AGA>@()testCase.Source.getMortalityTable('InvalidTable')</a> (<a href="matlab: opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',106,0)">line 106</a>)
+                        testCase.verifyError(@() testCase.Source.getMortalityTable('InvalidTable'),
+                        'MATLAB:invalidType');
+    
+    Evaluated Function:
+      <a href="matlab:helpPopup('function_handle')" style="font-weight:bold">function_handle</a> with value:
+    
+        @()testCase.Source.getMortalityTable('InvalidTable')
+    ------------------
+    Stack Information:
+    ------------------
+    In <a href="matlab:opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',106,1)">G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m (test_AGA.testErrorHandling) at 106</a>
+================================================================================
+.
+================================================================================
+<strong>Verification failed in test_AGA/testCacheManagement.</strong>
+    ----------------
+    Test Diagnostic:
+    ----------------
+    Failed to initialize AGA source: Unable to resolve the name 'CacheManagerFactory.createCacheManager'.
+    ------------------
+    Stack Information:
+    ------------------
+    In <a href="matlab:opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',35,1)">G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m (test_AGA.setup) at 35</a>
+================================================================================
+
+================================================================================
+<strong>Error occurred in test_AGA/testCacheManagement and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:structRefFromNonStruct'
+    --------------
+    Error Details:
+    --------------
+    Dot indexing is not supported for variables of this type.
+    
+    Error in <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('test_AGA/testCacheManagement', 'G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m', 112)" style="font-weight:bold">test_AGA/testCacheManagement</a> (<a href="matlab: opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',112,0)">line 112</a>)
+                testCase.Source.clearCache();
+================================================================================
+.
+================================================================================
+<strong>Verification failed in test_AGA/testDataConsistency.</strong>
+    ----------------
+    Test Diagnostic:
+    ----------------
+    Failed to initialize AGA source: Unable to resolve the name 'CacheManagerFactory.createCacheManager'.
+    ------------------
+    Stack Information:
+    ------------------
+    In <a href="matlab:opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',35,1)">G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m (test_AGA.setup) at 35</a>
+================================================================================
+
+================================================================================
+<strong>Error occurred in test_AGA/testDataConsistency and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:structRefFromNonStruct'
+    --------------
+    Error Details:
+    --------------
+    Dot indexing is not supported for variables of this type.
+    
+    Error in <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('test_AGA/testDataConsistency', 'G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m', 125)" style="font-weight:bold">test_AGA/testDataConsistency</a> (<a href="matlab: opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',125,0)">line 125</a>)
+                data1 = testCase.Source.fetchLatestData();
+================================================================================
+.
+================================================================================
+<strong>Verification failed in test_AGA/testUrlCache.</strong>
+    ----------------
+    Test Diagnostic:
+    ----------------
+    Failed to initialize AGA source: Unable to resolve the name 'CacheManagerFactory.createCacheManager'.
+    ------------------
+    Stack Information:
+    ------------------
+    In <a href="matlab:opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',35,1)">G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m (test_AGA.setup) at 35</a>
+================================================================================
+
+================================================================================
+<strong>Error occurred in test_AGA/testUrlCache and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:structRefFromNonStruct'
+    --------------
+    Error Details:
+    --------------
+    Dot indexing is not supported for variables of this type.
+    
+    Error in <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('test_AGA/testUrlCache', 'G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m', 139)" style="font-weight:bold">test_AGA/testUrlCache</a> (<a href="matlab: opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',139,0)">line 139</a>)
+                testCase.Source.fetchLatestData();
+================================================================================
+.
+================================================================================
+<strong>Verification failed in test_AGA/testLogging.</strong>
+    ----------------
+    Test Diagnostic:
+    ----------------
+    Failed to initialize AGA source: Unable to resolve the name 'CacheManagerFactory.createCacheManager'.
+    ------------------
+    Stack Information:
+    ------------------
+    In <a href="matlab:opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',35,1)">G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m (test_AGA.setup) at 35</a>
+================================================================================
+
+================================================================================
+<strong>Error occurred in test_AGA/testLogging and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:structRefFromNonStruct'
+    --------------
+    Error Details:
+    --------------
+    Dot indexing is not supported for variables of this type.
+    
+    Error in <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('test_AGA/testLogging', 'G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m', 153)" style="font-weight:bold">test_AGA/testLogging</a> (<a href="matlab: opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',153,0)">line 153</a>)
+                testCase.Source.log('Test log message');
+================================================================================
+.
+Done test_AGA
+__________
+
+Failure Summary:
+
+     Name                          Failed  Incomplete  Reason(s)
+    ===========================================================================
+     test_AGA/testInitialization     X         X       Failed by verification.
+                                                       Errored.
+    ---------------------------------------------------------------------------
+     test_AGA/testFetchLatestData    X         X       Failed by verification.
+                                                       Errored.
+    ---------------------------------------------------------------------------
+     test_AGA/testFetchAllTables     X         X       Failed by verification.
+                                                       Errored.
+    ---------------------------------------------------------------------------
+     test_AGA/testTableValidation    X         X       Failed by verification.
+                                                       Errored.
+    ---------------------------------------------------------------------------
+     test_AGA/testUrlPatterns        X         X       Failed by verification.
+                                                       Errored.
+    ---------------------------------------------------------------------------
+     test_AGA/testErrorHandling      X                 Failed by verification.
+    ---------------------------------------------------------------------------
+     test_AGA/testCacheManagement    X         X       Failed by verification.
+                                                       Errored.
+    ---------------------------------------------------------------------------
+     test_AGA/testDataConsistency    X         X       Failed by verification.
+                                                       Errored.
+    ---------------------------------------------------------------------------
+     test_AGA/testUrlCache           X         X       Failed by verification.
+                                                       Errored.
+    ---------------------------------------------------------------------------
+     test_AGA/testLogging            X         X       Failed by verification.
+                                                       Errored.
+Test Results:
+-------------
+Test: test_AGA/testInitialization
+Result: FAILED
+Details: [Struct or non-string value]
+
+Test: test_AGA/testFetchLatestData
+Result: FAILED
+Details: [Struct or non-string value]
+
+Test: test_AGA/testFetchAllTables
+Result: FAILED
+Details: [Struct or non-string value]
+
+Test: test_AGA/testTableValidation
+Result: FAILED
+Details: [Struct or non-string value]
+
+Test: test_AGA/testUrlPatterns
+Result: FAILED
+Details: [Struct or non-string value]
+
+Test: test_AGA/testErrorHandling
+Result: FAILED
+Details: [Struct or non-string value]
+
+Test: test_AGA/testCacheManagement
+Result: FAILED
+Details: [Struct or non-string value]
+
+Test: test_AGA/testDataConsistency
+Result: FAILED
+Details: [Struct or non-string value]
+
+Test: test_AGA/testUrlCache
+Result: FAILED
+Details: [Struct or non-string value]
+
+Test: test_AGA/testLogging
+Result: FAILED
+Details: [Struct or non-string value]
+
+Summary:
+Total Tests: 10
+Passed: 0
+Failed: 10
+Incomplete: 9
+Running AGA Test Suite...
+------------------------
+Running test_AGA
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbcont; end
+
+================================================================================
+<strong>Verification failed in test_AGA/testInitialization.</strong>
+    ----------------
+    Test Diagnostic:
+    ----------------
+    Failed to initialize AGA source: Unable to resolve the name 'CacheManagerFactory.createCacheManager'.
+    ------------------
+    Stack Information:
+    ------------------
+    In <a href="matlab:opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',35,1)">G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m (test_AGA.setup) at 35</a>
+================================================================================
+
+================================================================================
+<strong>Verification failed in test_AGA/testInitialization.</strong>
+    ----------------
+    Test Diagnostic:
+    ----------------
+    Source should not be empty
+    ---------------------
+    Framework Diagnostic:
+    ---------------------
+    <a href="matlab:helpPopup matlab.unittest.TestCase.verifyNotEmpty" style="font-weight:bold">verifyNotEmpty</a> failed.
+    --> The value must not be empty.
+    --> The value has a size of [0  0].
+    
+    Actual Value:
+         []
+    ------------------
+    Stack Information:
+    ------------------
+    In <a href="matlab:opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',58,1)">G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m (test_AGA.testInitialization) at 58</a>
+================================================================================
+
+================================================================================
+<strong>Error occurred in test_AGA/testInitialization and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:structRefFromNonStruct'
+    --------------
+    Error Details:
+    --------------
+    Dot indexing is not supported for variables of this type.
+    
+    Error in <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('test_AGA/testInitialization', 'G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m', 59)" style="font-weight:bold">test_AGA/testInitialization</a> (<a href="matlab: opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',59,0)">line 59</a>)
+                testCase.verifyEqual(testCase.Source.SourceName, 'Australian Government Actuary',
+                'Source name should be correct');
+================================================================================
+.if system_dependent('IsDebugMode')==1, dbquit; end
+run_tests
+Running AGA Test Suite...
+------------------------
+Running test_AGA
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbcont; end
+
+================================================================================
+<strong>Verification failed in test_AGA/testInitialization.</strong>
+    ----------------
+    Test Diagnostic:
+    ----------------
+    Failed to initialize AGA source: Unable to resolve the name 'CacheManagerFactory.createCacheManager'.
+    ------------------
+    Stack Information:
+    ------------------
+    In <a href="matlab:opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',35,1)">G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m (test_AGA.setup) at 35</a>
+================================================================================
+
+================================================================================
+<strong>Verification failed in test_AGA/testInitialization.</strong>
+    ----------------
+    Test Diagnostic:
+    ----------------
+    Source should not be empty
+    ---------------------
+    Framework Diagnostic:
+    ---------------------
+    <a href="matlab:helpPopup matlab.unittest.TestCase.verifyNotEmpty" style="font-weight:bold">verifyNotEmpty</a> failed.
+    --> The value must not be empty.
+    --> The value has a size of [0  0].
+    
+    Actual Value:
+         []
+    ------------------
+    Stack Information:
+    ------------------
+    In <a href="matlab:opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',58,1)">G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m (test_AGA.testInitialization) at 58</a>
+================================================================================
+
+================================================================================
+<strong>Error occurred in test_AGA/testInitialization and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:structRefFromNonStruct'
+    --------------
+    Error Details:
+    --------------
+    Dot indexing is not supported for variables of this type.
+    
+    Error in <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('test_AGA/testInitialization', 'G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m', 59)" style="font-weight:bold">test_AGA/testInitialization</a> (<a href="matlab: opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',59,0)">line 59</a>)
+                testCase.verifyEqual(testCase.Source.SourceName, 'Australian Government Actuary',
+                'Source name should be correct');
+================================================================================
+.if system_dependent('IsDebugMode')==1, dbstep; end
+obj.CacheManager = CacheManagerFactory.createCacheManager(CacheManagerType.Mortality)
+{Unable to resolve the name 'CacheManagerFactory.createCacheManager'.
+} 
+obj.CacheManager = +utilities.CacheManagerFactory.createCacheManager(CacheManagerType.Mortality)
+{Unable to resolve the name 'CacheManagerType.Mortality'.
+} 
+obj.CacheManager = +utilities.CacheManagerFactory.createCacheManager(+utilities.CacheManagerType.Mortality)
+{Unary operator '+' is not supported for operand of type 'utilities.CacheManagerType'.
+} 
+utilities.CacheManagerType
+{Error using <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('utilities.CacheManagerType')" style="font-weight:bold">utilities.CacheManagerType</a>
+Input does not correspond to a member of the enumeration class 'utilities.CacheManagerType'.
+} 
+utilities.CacheManagerType.Mortality
+
+ans = 
+
+  <a href="matlab:helpPopup('utilities.CacheManagerType')" style="font-weight:bold">CacheManagerType</a> enumeration
+
+    Mortality
+
+obj.CacheManager = +utilities.CacheManagerFactory.createCacheManager(utilities.CacheManagerType.Mortality)
+{Error using <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('utilities.CacheManagerFactory.createCacheManager', 'G:\My Drive\Kaparra Software\Rates Analysis\Resources\+utilities\CacheManagerFactory.m', 11)" style="font-weight:bold">utilities.CacheManagerFactory.createCacheManager</a> (<a href="matlab: opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\+utilities\CacheManagerFactory.m',11,0)">line 11</a>)
+Input must be of type CacheManagerType.
+} 
+utilities.CacheManagerFactory.createCacheManager(utilities.CacheManagerType.Mortality)
+{Error using <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('utilities.CacheManagerFactory.createCacheManager', 'G:\My Drive\Kaparra Software\Rates Analysis\Resources\+utilities\CacheManagerFactory.m', 11)" style="font-weight:bold">utilities.CacheManagerFactory.createCacheManager</a> (<a href="matlab: opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\+utilities\CacheManagerFactory.m',11,0)">line 11</a>)
+Input must be of type CacheManagerType.
+} 
+utilities.CacheManagerType.Mortality
+
+ans = 
+
+  <a href="matlab:helpPopup('utilities.CacheManagerType')" style="font-weight:bold">CacheManagerType</a> enumeration
+
+    Mortality
+
+utilities.CacheManagerFactory.createCacheManager(utilities.CacheManagerType.Mortality)
+<a href="matlab: opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\+utilities\CacheManagerFactory.m',10,1)">10  </a>            if ~isa(type, 'utilities.CacheManagerType')
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbcont; end
+{Unable to resolve the name 'CacheManagerType.Mortality'.
+
+Error in <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('utilities.CacheManagerFactory.createCacheManager', 'G:\My Drive\Kaparra Software\Rates Analysis\Resources\+utilities\CacheManagerFactory.m', 16)" style="font-weight:bold">utilities.CacheManagerFactory.createCacheManager</a> (<a href="matlab: opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\+utilities\CacheManagerFactory.m',16,0)">line 16</a>)
+                case CacheManagerType.Mortality
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+} 
+opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\+utilities\CacheManagerFactory.m',16,0)
+if system_dependent('IsDebugMode')==1, dbcont; end
+
+================================================================================
+<strong>Verification failed in test_AGA/testFetchLatestData.</strong>
+    ----------------
+    Test Diagnostic:
+    ----------------
+    Failed to initialize AGA source: Unable to resolve the name 'CacheManagerFactory.createCacheManager'.
+    ------------------
+    Stack Information:
+    ------------------
+    In <a href="matlab:opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',35,1)">G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m (test_AGA.setup) at 35</a>
+================================================================================
+
+================================================================================
+<strong>Error occurred in test_AGA/testFetchLatestData and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:structRefFromNonStruct'
+    --------------
+    Error Details:
+    --------------
+    Dot indexing is not supported for variables of this type.
+    
+    Error in <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('test_AGA/testFetchLatestData', 'G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m', 68)" style="font-weight:bold">test_AGA/testFetchLatestData</a> (<a href="matlab: opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',68,0)">line 68</a>)
+                data = testCase.Source.fetchLatestData; %TODO make latest data either an
+================================================================================
+.if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+
+================================================================================
+<strong>Verification failed in test_AGA/testFetchAllTables.</strong>
+    ----------------
+    Test Diagnostic:
+    ----------------
+    Failed to initialize AGA source: Unable to resolve the name 'CacheManagerFactory.createCacheManager'.
+    ------------------
+    Stack Information:
+    ------------------
+    In <a href="matlab:opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',35,1)">G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m (test_AGA.setup) at 35</a>
+================================================================================
+if system_dependent('IsDebugMode')==1, dbcont; end
+if system_dependent('IsDebugMode')==1, dbcont; end
+
+================================================================================
+<strong>Error occurred in test_AGA/testFetchAllTables and it did not run to completion.</strong>
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:structRefFromNonStruct'
+    --------------
+    Error Details:
+    --------------
+    Dot indexing is not supported for variables of this type.
+    
+    Error in <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('test_AGA/testFetchAllTables', 'G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m', 80)" style="font-weight:bold">test_AGA/testFetchAllTables</a> (<a href="matlab: opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',80,0)">line 80</a>)
+                testCase.Source.fetchAllTables();
+================================================================================
+.if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbquit; end
+run_tests
+Running AGA Test Suite...
+------------------------
+Running test_AGA
+<a href="matlab: opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\AustralianGovernmentActuarySource.m',30,1)">30  </a>            obj@MortalityDataSource();
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbquit; end
+run_tests
+Running AGA Test Suite...
+------------------------
+Running test_AGA
+<a href="matlab: opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\AustralianGovernmentActuarySource.m',30,1)">30  </a>            obj@MortalityDataSource();
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbquit; end
+run_tests
+Running AGA Test Suite...
+------------------------
+Running test_AGA
+<a href="matlab: opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\+utilities\CacheManagerFactory.m',17,1)">17  </a>                    cacheManager = MortalityCacheManager(varargin{:});
+cacheManager = MortalityCacheManager(varargin{:})
+{Unrecognized function or variable 'MortalityCacheManager'.
+} 
+cacheManager = utilities.MortalityCacheManager(varargin{:})
+
+cacheManager = 
+
+  <a href="matlab:helpPopup('utilities.MortalityCacheManager')" style="font-weight:bold">MortalityCacheManager</a> with properties:
+
+           DEFAULT_CACHE_DIR: 'cache'
+    DEFAULT_TABLE_CACHE_FILE: 'mortality_table_cache.mat'
+
+  <a href="matlab:if exist('cacheManager', 'var'),matlab.display.internal.getDebugObjectDisplay('cacheManager', cacheManager, 'utilities.MortalityCacheManager'), else, matlab.display.internal.getDebugObjectDisplay('cacheManager'), end">Show all accessible properties of MortalityCacheManager</a>
+
+if system_dependent('IsDebugMode')==1, dbquit; end
+run_tests
+Running AGA Test Suite...
+------------------------
+Running test_AGA
+[2025-05-29 17:24:07] Successfully loaded URL patterns from resource file
+[2025-05-29 17:24:07] URL cache populated with 4 tables
+[2025-05-29 17:24:07] Clearing data cache...
+[2025-05-29 17:24:07] Data cache cleared.
+[2025-05-29 17:24:07] Data cache cleared and reinitialized
+[2025-05-29 17:24:07] Data cache and URL cache cleared
+.[2025-05-29 17:24:07] Successfully loaded URL patterns from resource file
+[2025-05-29 17:24:07] URL cache populated with 4 tables
+[2025-05-29 17:24:07] Table ALT_Table2020_22 not in cache, fetching from source...
+[2025-05-29 17:24:07] Found download URLs for table ALT_Table2020_22:
+[2025-05-29 17:24:07]   https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:07] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:07] Downloading: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:08] Updated URL cache for ALT_Table2020_22: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:09] Clearing data cache...
+[2025-05-29 17:24:09] Data cache cleared.
+[2025-05-29 17:24:09] Data cache cleared and reinitialized
+[2025-05-29 17:24:09] Data cache and URL cache cleared
+.[2025-05-29 17:24:09] Successfully loaded URL patterns from resource file
+[2025-05-29 17:24:10] URL cache populated with 4 tables
+[2025-05-29 17:24:10] Fetching all available tables...
+[2025-05-29 17:24:10] Fetching table 2020_22...
+[2025-05-29 17:24:10] Table ALT_Table2020_22 not in cache, fetching from source...
+[2025-05-29 17:24:10] Found download URLs for table ALT_Table2020_22:
+[2025-05-29 17:24:10]   https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:10] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:10] Downloading: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:10] Updated URL cache for ALT_Table2020_22: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:11] Fetching table 2015_17...
+[2025-05-29 17:24:11] Table ALT_Table2015_17 not in cache, fetching from source...
+[2025-05-29 17:24:11] Found download URLs for table ALT_Table2015_17:
+[2025-05-29 17:24:11]   https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Males.xlsx
+[2025-05-29 17:24:11]   https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Females.xlsx
+[2025-05-29 17:24:11] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Males.xlsx
+[2025-05-29 17:24:11] Downloading: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Males.xlsx
+[2025-05-29 17:24:12] Updated URL cache for ALT_Table2015_17: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Males.xlsx
+[2025-05-29 17:24:12] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Females.xlsx
+[2025-05-29 17:24:12] Downloading: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Females.xlsx
+[2025-05-29 17:24:13] Updated URL cache for ALT_Table2015_17: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Females.xlsx
+[2025-05-29 17:24:14] Fetching table 2010_12...
+[2025-05-29 17:24:14] Table ALT_Table2010_12 not in cache, fetching from source...
+[2025-05-29 17:24:14] Found download URLs for table ALT_Table2010_12:
+[2025-05-29 17:24:14]   https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Males_Australian_Life_Tables_2010-12.xls
+[2025-05-29 17:24:14]   https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Females_Australian_Life_Tables_2010-12.xls
+[2025-05-29 17:24:14] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Males_Australian_Life_Tables_2010-12.xls
+[2025-05-29 17:24:14] Downloading: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Males_Australian_Life_Tables_2010-12.xls
+[2025-05-29 17:24:14] Updated URL cache for ALT_Table2010_12: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Males_Australian_Life_Tables_2010-12.xls
+[2025-05-29 17:24:14] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Females_Australian_Life_Tables_2010-12.xls
+[2025-05-29 17:24:14] Downloading: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Females_Australian_Life_Tables_2010-12.xls
+[2025-05-29 17:24:15] Updated URL cache for ALT_Table2010_12: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Females_Australian_Life_Tables_2010-12.xls
+[2025-05-29 17:24:16] Fetching table 2005_07...
+[2025-05-29 17:24:16] Table ALT_Table2005_07 not in cache, fetching from source...
+[2025-05-29 17:24:16] Found download URLs for table ALT_Table2005_07:
+[2025-05-29 17:24:16]   https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/males_2005-07.xls
+[2025-05-29 17:24:16]   https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/females_2005-07.xls
+[2025-05-29 17:24:16] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/males_2005-07.xls
+[2025-05-29 17:24:16] Downloading: https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/males_2005-07.xls
+[2025-05-29 17:24:16] Updated URL cache for ALT_Table2005_07: https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/males_2005-07.xls
+[2025-05-29 17:24:16] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/females_2005-07.xls
+[2025-05-29 17:24:16] Downloading: https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/females_2005-07.xls
+[2025-05-29 17:24:17] Updated URL cache for ALT_Table2005_07: https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/females_2005-07.xls
+[2025-05-29 17:24:18] Successfully fetched 4 tables
+
+================================================================================
+<strong>Verification failed in test_AGA/testFetchAllTables.</strong>
+    ---------------------
+    Framework Diagnostic:
+    ---------------------
+    <a href="matlab:helpPopup matlab.unittest.TestCase.verifyNotEmpty" style="font-weight:bold">verifyNotEmpty</a> failed.
+    --> The value must not be empty.
+    --> The value has a size of [0  0].
+    
+    Actual Value:
+         []
+    ------------------
+    Stack Information:
+    ------------------
+    In <a href="matlab:opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',82,1)">G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m (test_AGA.testFetchAllTables) at 82</a>
+================================================================================
+
+================================================================================
+<strong>Verification failed in test_AGA/testFetchAllTables.</strong>
+    ---------------------
+    Framework Diagnostic:
+    ---------------------
+    <a href="matlab:helpPopup matlab.unittest.TestCase.verifyTrue" style="font-weight:bold">verifyTrue</a> failed.
+    --> The value must evaluate to "true".
+    
+    Actual Value:
+      <a href="matlab:helpPopup('logical')" style="font-weight:bold">logical</a>
+    
+       0
+    ------------------
+    Stack Information:
+    ------------------
+    In <a href="matlab:opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',83,1)">G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m (test_AGA.testFetchAllTables) at 83</a>
+================================================================================
+[2025-05-29 17:24:18] Clearing data cache...
+[2025-05-29 17:24:18] Data cache cleared.
+[2025-05-29 17:24:18] Data cache cleared and reinitialized
+[2025-05-29 17:24:18] Data cache and URL cache cleared
+.[2025-05-29 17:24:18] Successfully loaded URL patterns from resource file
+[2025-05-29 17:24:18] URL cache populated with 4 tables
+[2025-05-29 17:24:18] Table ALT_Table2020_22 not in cache, fetching from source...
+[2025-05-29 17:24:18] Found download URLs for table ALT_Table2020_22:
+[2025-05-29 17:24:18]   https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:18] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:18] Downloading: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:19] Updated URL cache for ALT_Table2020_22: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:19] Clearing data cache...
+[2025-05-29 17:24:19] Data cache cleared.
+[2025-05-29 17:24:19] Data cache cleared and reinitialized
+[2025-05-29 17:24:19] Data cache and URL cache cleared
+.[2025-05-29 17:24:20] Successfully loaded URL patterns from resource file
+[2025-05-29 17:24:20] URL cache populated with 4 tables
+[2025-05-29 17:24:20] Clearing data cache...
+[2025-05-29 17:24:20] Data cache cleared.
+[2025-05-29 17:24:20] Data cache cleared and reinitialized
+[2025-05-29 17:24:20] Data cache and URL cache cleared
+.[2025-05-29 17:24:20] Successfully loaded URL patterns from resource file
+[2025-05-29 17:24:20] URL cache populated with 4 tables
+[2025-05-29 17:24:20] Table InvalidTable not in cache, fetching from source...
+[2025-05-29 17:24:20] Clearing data cache...
+[2025-05-29 17:24:20] Data cache cleared.
+[2025-05-29 17:24:20] Data cache cleared and reinitialized
+[2025-05-29 17:24:20] Data cache and URL cache cleared
+.[2025-05-29 17:24:20] Successfully loaded URL patterns from resource file
+[2025-05-29 17:24:20] URL cache populated with 4 tables
+[2025-05-29 17:24:21] Clearing data cache...
+[2025-05-29 17:24:21] Data cache cleared.
+[2025-05-29 17:24:21] Data cache cleared and reinitialized
+[2025-05-29 17:24:21] Data cache and URL cache cleared
+[2025-05-29 17:24:21] Table ALT_Table2020_22 not in cache, fetching from source...
+[2025-05-29 17:24:21] Found download URLs for table ALT_Table2020_22:
+[2025-05-29 17:24:21]   https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:21] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:21] Downloading: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:21] Updated URL cache for ALT_Table2020_22: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+
+================================================================================
+<strong>Verification failed in test_AGA/testCacheManagement.</strong>
+    ---------------------
+    Framework Diagnostic:
+    ---------------------
+    <a href="matlab:helpPopup matlab.unittest.TestCase.verifyNotEmpty" style="font-weight:bold">verifyNotEmpty</a> failed.
+    --> The value must not be empty.
+    --> The value has a size of [0  0].
+    
+    Actual Value:
+         []
+    ------------------
+    Stack Information:
+    ------------------
+    In <a href="matlab:opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',116,1)">G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m (test_AGA.testCacheManagement) at 116</a>
+================================================================================
+[2025-05-29 17:24:22] Clearing data cache...
+[2025-05-29 17:24:22] Data cache cleared.
+[2025-05-29 17:24:22] Data cache cleared and reinitialized
+[2025-05-29 17:24:22] Data cache and URL cache cleared
+[2025-05-29 17:24:22] Clearing data cache...
+[2025-05-29 17:24:22] Data cache cleared.
+[2025-05-29 17:24:22] Data cache cleared and reinitialized
+[2025-05-29 17:24:22] Data cache and URL cache cleared
+.[2025-05-29 17:24:22] Successfully loaded URL patterns from resource file
+[2025-05-29 17:24:22] URL cache populated with 4 tables
+[2025-05-29 17:24:22] Table ALT_Table2020_22 not in cache, fetching from source...
+[2025-05-29 17:24:23] Found download URLs for table ALT_Table2020_22:
+[2025-05-29 17:24:23]   https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:23] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:23] Downloading: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:23] Updated URL cache for ALT_Table2020_22: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:24] Table ALT_Table2020_22 not in cache, fetching from source...
+[2025-05-29 17:24:24] Trying cached download URL for ALT_Table2020_22: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:24] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:24] Downloading: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:24] Updated URL cache for ALT_Table2020_22: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:25] Clearing data cache...
+[2025-05-29 17:24:25] Data cache cleared.
+[2025-05-29 17:24:25] Data cache cleared and reinitialized
+[2025-05-29 17:24:25] Data cache and URL cache cleared
+.[2025-05-29 17:24:25] Successfully loaded URL patterns from resource file
+[2025-05-29 17:24:25] URL cache populated with 4 tables
+[2025-05-29 17:24:25] Table ALT_Table2020_22 not in cache, fetching from source...
+[2025-05-29 17:24:25] Found download URLs for table ALT_Table2020_22:
+[2025-05-29 17:24:25]   https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:25] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:25] Downloading: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:26] Updated URL cache for ALT_Table2020_22: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-29 17:24:27] Successfully loaded URL patterns from resource file
+[2025-05-29 17:24:27] URL cache populated with 4 tables
+[2025-05-29 17:24:27] Clearing data cache...
+[2025-05-29 17:24:27] Data cache cleared.
+[2025-05-29 17:24:27] Data cache cleared and reinitialized
+[Warning: File not found or permission denied] 
+[> In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('AustralianGovernmentActuarySource/clearCache', 'G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\AustralianGovernmentActuarySource.m', 407)" style="font-weight:bold">AustralianGovernmentActuarySource/clearCache</a> (<a href="matlab: opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\AustralianGovernmentActuarySource.m',407,0)">line 407</a>)
+In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('test_AGA/teardown', 'G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m', 46)" style="font-weight:bold">test_AGA/teardown</a> (<a href="matlab: opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',46,0)">line 46</a>)]
+[2025-05-29 17:24:27] Data cache and URL cache cleared
+.[2025-05-29 17:24:27] Successfully loaded URL patterns from resource file
+[2025-05-29 17:24:27] URL cache populated with 4 tables
+[2025-05-29 17:24:27] Test log message
+[2025-05-29 17:24:27] Clearing data cache...
+[2025-05-29 17:24:27] Data cache cleared.
+[2025-05-29 17:24:27] Data cache cleared and reinitialized
+[Warning: File not found or permission denied] 
+[> In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('AustralianGovernmentActuarySource/clearCache', 'G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\AustralianGovernmentActuarySource.m', 407)" style="font-weight:bold">AustralianGovernmentActuarySource/clearCache</a> (<a href="matlab: opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\AustralianGovernmentActuarySource.m',407,0)">line 407</a>)
+In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('test_AGA/teardown', 'G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m', 46)" style="font-weight:bold">test_AGA/teardown</a> (<a href="matlab: opentoline('G:\My Drive\Kaparra Software\Rates Analysis\Resources\lifeandothercontingencyclasses\test_AGA.m',46,0)">line 46</a>)]
+[2025-05-29 17:24:27] Data cache and URL cache cleared
+.
+Done test_AGA
+__________
+
+Failure Summary:
+
+     Name                          Failed  Incomplete  Reason(s)
+    ===========================================================================
+     test_AGA/testFetchAllTables     X                 Failed by verification.
+    ---------------------------------------------------------------------------
+     test_AGA/testCacheManagement    X                 Failed by verification.
+Test Results:
+-------------
+Test: test_AGA/testInitialization
+Result: PASSED
+Details: [Struct or non-string value]
+
+Test: test_AGA/testFetchLatestData
+Result: PASSED
+Details: [Struct or non-string value]
+
+Test: test_AGA/testFetchAllTables
+Result: FAILED
+Details: [Struct or non-string value]
+
+Test: test_AGA/testTableValidation
+Result: PASSED
+Details: [Struct or non-string value]
+
+Test: test_AGA/testUrlPatterns
+Result: PASSED
+Details: [Struct or non-string value]
+
+Test: test_AGA/testErrorHandling
+Result: PASSED
+Details: [Struct or non-string value]
+
+Test: test_AGA/testCacheManagement
+Result: FAILED
+Details: [Struct or non-string value]
+
+Test: test_AGA/testDataConsistency
+Result: PASSED
+Details: [Struct or non-string value]
+
+Test: test_AGA/testUrlCache
+Result: PASSED
+Details: [Struct or non-string value]
+
+Test: test_AGA/testLogging
+Result: PASSED
+Details: [Struct or non-string value]
+
+Summary:
+Total Tests: 10
+Passed: 8
+Failed: 2
+Incomplete: 0
