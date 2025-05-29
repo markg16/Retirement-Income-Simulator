@@ -1,0 +1,187 @@
+[2025-05-30 09:26:13] Successfully loaded URL patterns from resource file
+[2025-05-30 09:26:13] URL cache populated with 4 tables
+[2025-05-30 09:26:13] Clearing data cache...
+[2025-05-30 09:26:13] Data cache cleared.
+[2025-05-30 09:26:13] Data cache cleared and reinitialized
+[2025-05-30 09:26:13] Data cache and URL cache cleared
+[2025-05-30 09:26:13] Table ALT_Table2020_22 not in cache, fetching from source...
+[2025-05-30 09:26:14] Found download URLs for table ALT_Table2020_22:
+[2025-05-30 09:26:14]   https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-30 09:26:14] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-30 09:26:14] Downloading: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-30 09:26:14] Updated URL cache for ALT_Table2020_22: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-30 09:26:15] ---> Sampling cached data for: ALT_Table2020_22
+[2025-05-30 09:26:15] Table ALT_Table2020_22 retrieved from cache.
+           <strong>Age</strong>    <strong>Male_qx</strong>     <strong>Female_qx</strong>
+           <strong>___</strong>    <strong>________</strong>    <strong>_________</strong>
+
+    <strong>0  </strong>      0    0.003394     0.00295 
+    <strong>21 </strong>     21    0.000575    0.000242 
+    <strong>45 </strong>     45    0.001834    0.001111 
+    <strong>65 </strong>     65    0.009403     0.00552 
+    <strong>85 </strong>     85     0.07975    0.058432 
+    <strong>100</strong>    100     0.31805     0.30206 
+
+[2025-05-30 09:26:15] Clearing data cache...
+[2025-05-30 09:26:15] Data cache cleared.
+[2025-05-30 09:26:15] Data cache cleared and reinitialized
+[2025-05-30 09:26:15] Data cache and URL cache cleared
+[2025-05-30 09:26:15] Fetching all available tables...
+[2025-05-30 09:26:15] Fetching table 2020_22...
+[2025-05-30 09:26:15] Table ALT_Table2020_22 not in cache, fetching from source...
+[2025-05-30 09:26:15] Found download URLs for table ALT_Table2020_22:
+[2025-05-30 09:26:15]   https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-30 09:26:15] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-30 09:26:15] Downloading: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-30 09:26:16] Updated URL cache for ALT_Table2020_22: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-30 09:26:16] Fetching table 2015_17...
+[2025-05-30 09:26:16] Table ALT_Table2015_17 not in cache, fetching from source...
+[2025-05-30 09:26:16] Found download URLs for table ALT_Table2015_17:
+[2025-05-30 09:26:16]   https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Males.xlsx
+[2025-05-30 09:26:16]   https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Females.xlsx
+[2025-05-30 09:26:16] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Males.xlsx
+[2025-05-30 09:26:16] Downloading: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Males.xlsx
+[2025-05-30 09:26:17] Updated URL cache for ALT_Table2015_17: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Males.xlsx
+[2025-05-30 09:26:17] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Females.xlsx
+[2025-05-30 09:26:17] Downloading: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Females.xlsx
+[2025-05-30 09:26:17] Updated URL cache for ALT_Table2015_17: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2015-17/downloads/Australian_Life_Tables_2015-17_Females.xlsx
+[2025-05-30 09:26:18] Fetching table 2010_12...
+[2025-05-30 09:26:18] Table ALT_Table2010_12 not in cache, fetching from source...
+[2025-05-30 09:26:18] Found download URLs for table ALT_Table2010_12:
+[2025-05-30 09:26:18]   https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Males_Australian_Life_Tables_2010-12.xls
+[2025-05-30 09:26:18]   https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Females_Australian_Life_Tables_2010-12.xls
+[2025-05-30 09:26:18] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Males_Australian_Life_Tables_2010-12.xls
+[2025-05-30 09:26:18] Downloading: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Males_Australian_Life_Tables_2010-12.xls
+[2025-05-30 09:26:18] Updated URL cache for ALT_Table2010_12: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Males_Australian_Life_Tables_2010-12.xls
+[2025-05-30 09:26:18] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Females_Australian_Life_Tables_2010-12.xls
+[2025-05-30 09:26:18] Downloading: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Females_Australian_Life_Tables_2010-12.xls
+[2025-05-30 09:26:19] Updated URL cache for ALT_Table2010_12: https://aga.gov.au/sites/aga.gov.au/files/publications/life_table_2010-12/downloads/Females_Australian_Life_Tables_2010-12.xls
+[2025-05-30 09:26:20] Fetching table 2005_07...
+[2025-05-30 09:26:20] Table ALT_Table2005_07 not in cache, fetching from source...
+[2025-05-30 09:26:20] Found download URLs for table ALT_Table2005_07:
+[2025-05-30 09:26:20]   https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/males_2005-07.xls
+[2025-05-30 09:26:20]   https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/females_2005-07.xls
+[2025-05-30 09:26:20] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/males_2005-07.xls
+[2025-05-30 09:26:20] Downloading: https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/males_2005-07.xls
+[2025-05-30 09:26:20] Updated URL cache for ALT_Table2005_07: https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/males_2005-07.xls
+[2025-05-30 09:26:20] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/females_2005-07.xls
+[2025-05-30 09:26:20] Downloading: https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/females_2005-07.xls
+[2025-05-30 09:26:20] Updated URL cache for ALT_Table2005_07: https://aga.gov.au/sites/aga.gov.au/files/publications/life_tables_2005-07/downloads/females_2005-07.xls
+[2025-05-30 09:26:21] Successfully fetched 4 tables
+[2025-05-30 09:26:21] ---> Sampling cached data for: ALT_Table2005_07
+[2025-05-30 09:26:21] Table ALT_Table2005_07 retrieved from cache.
+           <strong>Age</strong>    <strong>Male_qx</strong>    <strong>Female_qx</strong>
+           <strong>___</strong>    <strong>_______</strong>    <strong>_________</strong>
+
+    <strong>0  </strong>      0    0.00523      0.0044 
+    <strong>21 </strong>     21    0.00076     0.00028 
+    <strong>45 </strong>     45    0.00204     0.00124 
+    <strong>65 </strong>     65      0.012     0.00679 
+    <strong>85 </strong>     85    0.09907     0.07088 
+    <strong>100</strong>    100    0.28205     0.28281 
+
+[2025-05-30 09:26:21] ---> Sampling cached data for: ALT_Table2010_12
+[2025-05-30 09:26:21] Table ALT_Table2010_12 retrieved from cache.
+           <strong>Age</strong>    <strong>Male_qx</strong>     <strong>Female_qx</strong>
+           <strong>___</strong>    <strong>________</strong>    <strong>_________</strong>
+
+    <strong>0  </strong>      0    0.004121    0.003352 
+    <strong>21 </strong>     21    0.000612    0.000261 
+    <strong>45 </strong>     45    0.001898    0.001188 
+    <strong>65 </strong>     65    0.010505    0.006203 
+    <strong>85 </strong>     85    0.093419    0.066375 
+    <strong>100</strong>    100     0.31255     0.30326 
+
+[2025-05-30 09:26:21] ---> Sampling cached data for: ALT_Table2015_17
+[2025-05-30 09:26:21] Table ALT_Table2015_17 retrieved from cache.
+           <strong>Age</strong>    <strong>Male_qx</strong>     <strong>Female_qx</strong>
+           <strong>___</strong>    <strong>________</strong>    <strong>_________</strong>
+
+    <strong>0  </strong>      0    0.003547     0.00302 
+    <strong>21 </strong>     21    0.000567     0.00022 
+    <strong>45 </strong>     45    0.002015    0.001179 
+    <strong>65 </strong>     65     0.00967    0.005664 
+    <strong>85 </strong>     85    0.086771    0.062792 
+    <strong>100</strong>    100     0.30273     0.30832 
+
+[2025-05-30 09:26:21] ---> Sampling cached data for: ALT_Table2020_22
+[2025-05-30 09:26:21] Table ALT_Table2020_22 retrieved from cache.
+           <strong>Age</strong>    <strong>Male_qx</strong>     <strong>Female_qx</strong>
+           <strong>___</strong>    <strong>________</strong>    <strong>_________</strong>
+
+    <strong>0  </strong>      0    0.003394     0.00295 
+    <strong>21 </strong>     21    0.000575    0.000242 
+    <strong>45 </strong>     45    0.001834    0.001111 
+    <strong>65 </strong>     65    0.009403     0.00552 
+    <strong>85 </strong>     85     0.07975    0.058432 
+    <strong>100</strong>    100     0.31805     0.30206 
+
+[2025-05-30 09:26:21] Clearing data cache...
+[2025-05-30 09:26:21] Data cache cleared.
+[2025-05-30 09:26:21] Data cache cleared and reinitialized
+[2025-05-30 09:26:21] Data cache and URL cache cleared
+[2025-05-30 09:26:21] Table ALT_Table2020_22 not in cache, fetching from source...
+[2025-05-30 09:26:21] Found download URLs for table ALT_Table2020_22:
+[2025-05-30 09:26:21]   https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-30 09:26:21] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-30 09:26:22] Downloading: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-30 09:26:22] Updated URL cache for ALT_Table2020_22: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-30 09:26:23] ---> Sampling cached data for: ALT_Table2020_22
+[2025-05-30 09:26:23] Table ALT_Table2020_22 retrieved from cache.
+           <strong>Age</strong>    <strong>Male_qx</strong>     <strong>Female_qx</strong>
+           <strong>___</strong>    <strong>________</strong>    <strong>_________</strong>
+
+    <strong>0  </strong>      0    0.003394     0.00295 
+    <strong>21 </strong>     21    0.000575    0.000242 
+    <strong>45 </strong>     45    0.001834    0.001111 
+    <strong>65 </strong>     65    0.009403     0.00552 
+    <strong>85 </strong>     85     0.07975    0.058432 
+    <strong>100</strong>    100     0.31805     0.30206 
+
+[2025-05-30 09:26:23] Clearing data cache...
+[2025-05-30 09:26:23] Data cache cleared.
+[2025-05-30 09:26:23] Data cache cleared and reinitialized
+[2025-05-30 09:26:23] Data cache and URL cache cleared
+[2025-05-30 09:26:23] Table InvalidTable not in cache, fetching from source...
+[2025-05-30 09:26:23] Clearing data cache...
+[2025-05-30 09:26:23] Data cache cleared.
+[2025-05-30 09:26:23] Data cache cleared and reinitialized
+[2025-05-30 09:26:23] Data cache and URL cache cleared
+[2025-05-30 09:26:23] Table ALT_Table2020_22 not in cache, fetching from source...
+[2025-05-30 09:26:23] Found download URLs for table ALT_Table2020_22:
+[2025-05-30 09:26:23]   https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-30 09:26:23] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-30 09:26:23] Downloading: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-30 09:26:23] Updated URL cache for ALT_Table2020_22: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-30 09:26:24] Clearing data cache...
+[2025-05-30 09:26:24] Data cache cleared.
+[2025-05-30 09:26:24] Data cache cleared and reinitialized
+[2025-05-30 09:26:24] Data cache and URL cache cleared
+[2025-05-30 09:26:24] Clearing data cache...
+[2025-05-30 09:26:24] Data cache cleared.
+[2025-05-30 09:26:24] Data cache cleared and reinitialized
+[2025-05-30 09:26:24] Data cache and URL cache cleared
+[2025-05-30 09:26:24] Table ALT_Table2020_22 not in cache, fetching from source...
+[2025-05-30 09:26:24] Found download URLs for table ALT_Table2020_22:
+[2025-05-30 09:26:24]   https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-30 09:26:24] Testing URL: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-30 09:26:24] Downloading: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-30 09:26:25] Updated URL cache for ALT_Table2020_22: https://aga.gov.au/sites/aga.gov.au/files/2024-12/australian-life-tables-2020-22-all-tables_2.xlsx
+[2025-05-30 09:26:25] Table ALT_Table2020_22 retrieved from cache.
+[2025-05-30 09:26:25] ---> Sampling cached data for: ALT_Table2020_22
+[2025-05-30 09:26:25] Table ALT_Table2020_22 retrieved from cache.
+           <strong>Age</strong>    <strong>Male_qx</strong>     <strong>Female_qx</strong>
+           <strong>___</strong>    <strong>________</strong>    <strong>_________</strong>
+
+    <strong>0  </strong>      0    0.003394     0.00295 
+    <strong>21 </strong>     21    0.000575    0.000242 
+    <strong>45 </strong>     45    0.001834    0.001111 
+    <strong>65 </strong>     65    0.009403     0.00552 
+    <strong>85 </strong>     85     0.07975    0.058432 
+    <strong>100</strong>    100     0.31805     0.30206 
+
+[2025-05-30 09:26:25] Clearing data cache...
+[2025-05-30 09:26:25] Data cache cleared.
+[2025-05-30 09:26:25] Data cache cleared and reinitialized
+[2025-05-30 09:26:25] Data cache and URL cache cleared
+[2025-05-30 09:26:25] --- Test Class Finished ---
