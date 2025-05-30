@@ -1,4 +1,4 @@
-classdef CashflowStrategy < CashflowInterface
+classdef CashflowStrategy < CashflowInterface & handle
     %CASHFLOWSTRATEGY Strategy for generating cashflows
     %   Implements cashflow generation strategy with mortality table integration
     
@@ -10,7 +10,7 @@ classdef CashflowStrategy < CashflowInterface
         BaseLifeTable     % Base mortality table
         MaxNumPayments    % Maximum number of payments
         TableName         % TableNames enum for mortality table
-        CacheManager      % MortalityCacheManager instance
+        MortalityDataSource      % MortalityDataSource instance
     end
     
     properties (Access = private)
@@ -30,6 +30,7 @@ classdef CashflowStrategy < CashflowInterface
             addParameter(p, 'BaseLifeTable', [], @(x) isempty(x) || isa(x, 'BaseLifeTable'));
             addParameter(p, 'MaxNumPayments', 1200, @isnumeric);
             addParameter(p, 'TableName', obj.DEFAULT_TABLE, @(x) isa(x, 'TableNames'));
+            addParameter(p, 'MortalityDataSource', AustralianGovernmentActuarySource(), @(x) isa(x, 'MortalityDataSource'));
             parse(p, varargin{:});
             
             obj.AnnualAmount = p.Results.AnnualAmount;
@@ -39,40 +40,40 @@ classdef CashflowStrategy < CashflowInterface
             obj.BaseLifeTable = p.Results.BaseLifeTable;
             obj.MaxNumPayments = p.Results.MaxNumPayments;
             obj.TableName = p.Results.TableName;
+            obj.MortalityDataSource = p.Results.MortalityDataSource; % Store the data source
             
-            % Initialize cache manager
-            obj.CacheManager = MortalityCacheManager();
+             % Load the table upon construction or lazily
+            if isempty(p.Results.BaseLifeTable)
+                obj.loadBaseTableUsingSource(); % New primary method
+            else
+                obj.BaseLifeTable = p.Results.BaseLifeTable;
+            end
+
+            % % Initialize cache manager
+            % obj.CacheManager = MortalityCacheManager();
         end
-        
-        function loadOrCreateBaseTableWithCache(obj)
-            %LOADORCREATEBASETABLEWITHCACHE Load or create base life table with caching
-            %   Attempts to load table from cache first, then from source if needed
+        function loadBaseTableUsingSource(obj)
+            % Loads the base life table using the configured MortalityDataSource
             try
-                % Generate cache key
-                cacheKey = obj.generateCacheKey();
-                
-                % Try to get from cache
-                [table, isCached] = obj.CacheManager.getTable(cacheKey);
-                if isCached
-                    obj.BaseLifeTable = table;
-                    return;
-                end
-                
-                % If not in cache, try to load from source
-                source = AustralianGovernmentActuarySource();
-                table = source.getMortalityTable(obj.TableName);
-                
-                % Cache the table
-                obj.CacheManager.cacheTable(cacheKey, table);
-                obj.BaseLifeTable = table;
-                
-            catch e
-                % Fall back to legacy method if source fetch fails
-                warning('Failed to load table from source: %s. Falling back to legacy method.', e.message);
-                obj.loadOrCreateBaseTableLegacy();
+                % The getMortalityTable method in AustralianGovernmentActuarySource
+                % already uses the cache internally.
+                mortalityDataStruct = obj.MortalityDataSource.getMortalityTable(obj.TableName);
+
+                % Now, wrap this struct in a BasicMortalityTable object
+                % The 'tableFilePath' for BasicMortalityTable can be descriptive
+                obj.BaseLifeTable = BasicMortalityTable( ...
+                    sprintf('%s - %s', obj.MortalityDataSource.SourceName, char(obj.TableName)), ...
+                    mortalityDataStruct ...
+                    );
+                obj.BaseLifeTable.TableName = char(obj.TableName);
+            catch ME
+                warning('CashflowStrategy:SourceLoadFailed', ...
+                    'Failed to load table from configured source: %s. Falling back to legacy file.', ME.message);
+                obj.loadOrCreateBaseTableLegacy(); % Your existing fallback
             end
         end
-        
+
+               
         function loadOrCreateBaseTableLegacy(obj)
             %LOADORCREATEBASETABLELEGACY Legacy method to load base life table
             %   Loads table from default path if source fetch fails
@@ -83,30 +84,45 @@ classdef CashflowStrategy < CashflowInterface
                 else
                     error('MATLAB:invalidType', 'Default mortality table file not found: %s', obj.DEFAULT_TABLE_PATH);
                 end
+                endif isempty(obj.BaseLifeTable)
+                if exist(obj.DEFAULT_TABLE_PATH, 'file')
+                    % Load data from file
+                    data = load(obj.DEFAULT_TABLE_PATH); % Expects 'mortalityRates' with Male/Female
+
+                    % Ensure consistency if file has M/F
+                    if isfield(data.mortalityRates, 'M') && isfield(data.mortalityRates, 'F')
+                        actualRates.Male = data.mortalityRates.M;
+                        actualRates.Female = data.mortalityRates.F;
+                    else
+                        actualRates = data.mortalityRates;
+                    end
+                    obj.BaseLifeTable = BasicMortalityTable(obj.DEFAULT_TABLE_PATH, actualRates);
+                    obj.BaseLifeTable.TableName = char(obj.DEFAULT_TABLE);
+                else
+                    error('MATLAB:invalidType', 'Default mortality table file not found: %s', obj.DEFAULT_TABLE_PATH);
+                end
             end
         end
         
-        function cacheKey = generateCacheKey(obj)
-            %GENERATECACHEKEY Generate cache key for current table
-            %   Returns:
-            %       cacheKey - String key for cache lookup
-            cacheKey = sprintf('%s_%s', class(obj.MortalitySource), char(obj.TableName));
-        end
+        % function cacheKey = generateCacheKey(obj)
+        %     %GENERATECACHEKEY Generate cache key for current table
+        %     %   Returns:
+        %     %       cacheKey - String key for cache lookup
+        %     cacheKey = sprintf('%s_%s', class(obj.MortalitySource), char(obj.TableName));
+        % end
         
-        function clearCache(obj)
-            %CLEARCACHE Clear the cache
-            obj.CacheManager.clearCache();
-        end
-        
-        function stats = getCacheStats(obj)
-            %GETCACHESTATS Get cache statistics
-            %   Returns:
-            %       stats - Struct containing cache statistics
-            stats = obj.CacheManager.getCacheStats();
-        end
-    end
+        % function clearCache(obj)
+        %     %CLEARCACHE Clear the cache
+        %     obj.CacheManager.clearCache();
+        % end
+        % 
+        % function stats = getCacheStats(obj)
+        %     %GETCACHESTATS Get cache statistics
+        %     %   Returns:
+        %     %       stats - Struct containing cache statistics
+        %     stats = obj.CacheManager.getCacheStats();
+        % end
     
-    methods (Access = protected)
         function cashflows = generateCashflows(obj, startDate, endDate, paymentDates, inflationRate)
             %GENERATECASHFLOWS Generate cashflows
             %   Generates cashflows based on payment dates and filters by mortality
@@ -117,15 +133,19 @@ classdef CashflowStrategy < CashflowInterface
             %       inflationRate - Annual inflation rate
             %   Returns:
             %       cashflows - Array of cashflow amounts
-            
+
             % Generate basic cashflows
             cashflows = obj.generateBasicCashflows(paymentDates, inflationRate);
-            
+
             % Apply mortality if table exists
             if ~isempty(obj.BaseLifeTable)
                 cashflows = obj.applyMortalityToCashflows(cashflows, paymentDates);
             end
         end
+    end
+    
+    methods (Access = protected)
+        
         
         function cashflows = generateBasicCashflows(obj, paymentDates, inflationRate)
             %GENERATEBASICCASHFLOWS Generate basic cashflows without mortality

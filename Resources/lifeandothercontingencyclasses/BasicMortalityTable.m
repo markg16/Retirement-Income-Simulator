@@ -18,6 +18,7 @@ classdef BasicMortalityTable < MortalityTable
             obj.LastUpdated = datetime('now');
             
             % Validate the data structure
+            %TODO add error handling to log
             MortalityTableFactory.validateTableData(mortalityRates);
         end
 

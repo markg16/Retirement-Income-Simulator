@@ -148,22 +148,97 @@ classdef MortalityDataSource < handle
         end
         
         function log(obj, message, varargin)
-            %LOG Log a message
-            %   Writes message to both console and log file
-            %
-            %   Inputs:
-            %       message - String message to log (can include sprintf format specifiers)
-            %       varargin - Optional arguments for sprintf formatting
+
             timestamp = datestr(now, 'yyyy-mm-dd HH:MM:SS');
             if nargin > 2
                 fullMessage = sprintf('[%s] %s\n', timestamp, sprintf(message, varargin{:}));
             else
                 fullMessage = sprintf('[%s] %s\n', timestamp, message);
             end
-            fprintf('%s', fullMessage);
+            fprintf('%s', fullMessage); % Always print to console
             if ~isempty(obj.LogFile) && obj.LogFile ~= -1
-                fprintf(obj.LogFile, '%s', fullMessage);
+                try
+                    fprintf(obj.LogFile, '%s', fullMessage);
+                catch ME
+                    warning('MortalityDataSource:LogWriteError', ...
+                        'Failed to write to log file: %s', ME.message);
+                    % Optionally, try to close and reopen, or disable file logging
+                end
             end
+        end
+
+        function logMortalityTableSample(obj, mortalityDataStruct, titleString)
+            %LOGMORTALITYTABLESAMPLE Logs a formatted sample of mortality data.
+            %   Inputs:
+            %       mortalityDataStruct - The struct containing .Male and .Female fields.
+            %       titleString         - A title for this sample log.
+
+            if nargin < 3 || isempty(titleString)
+                titleString = '--- Mortality Data Sample ---';
+            end
+            
+            obj.log(titleString); % Uses the existing log method
+
+            if ~isstruct(mortalityDataStruct) || ~isfield(mortalityDataStruct, 'Male') || ~isfield(mortalityDataStruct, 'Female')
+                obj.log('ERROR: Invalid or incomplete mortality data struct provided for sampling. Cannot display sample.');
+                obj.log('--- End of Sample ---');
+                return;
+            end
+            
+            % Further check for subfields to prevent errors
+            if ~isfield(mortalityDataStruct.Male, 'Age') || ~isfield(mortalityDataStruct.Male, 'qx') || ...
+               ~isfield(mortalityDataStruct.Female, 'Age') || ~isfield(mortalityDataStruct.Female, 'qx')
+                obj.log('ERROR: Male or Female data is missing Age or qx fields. Cannot display sample.');
+                obj.log('--- End of Sample ---');
+                return;
+            end
+
+            sampleAges = [0, 21, 45, 65, 85, 100];
+            results = table('Size', [length(sampleAges), 3], ...
+                            'VariableTypes', {'double', 'double', 'double'}, ...
+                            'VariableNames', {'Age', 'Male_qx', 'Female_qx'}, ...
+                            'RowNames', string(sampleAges));
+
+            for j = 1:length(sampleAges)
+                age = sampleAges(j);
+                results.Age(j) = age;
+                
+                % Male data
+                if ~isempty(mortalityDataStruct.Male.Age)
+                    maleIdx = find(mortalityDataStruct.Male.Age == age, 1);
+                    if ~isempty(maleIdx)
+                        results.Male_qx(j) = mortalityDataStruct.Male.qx(maleIdx);
+                    else
+                        results.Male_qx(j) = NaN;
+                    end
+                else
+                    results.Male_qx(j) = NaN;
+                end
+
+                % Female data
+                if ~isempty(mortalityDataStruct.Female.Age)
+                    femaleIdx = find(mortalityDataStruct.Female.Age == age, 1);
+                    if ~isempty(femaleIdx)
+                        results.Female_qx(j) = mortalityDataStruct.Female.qx(femaleIdx);
+                    else
+                        results.Female_qx(j) = NaN;
+                    end
+                else
+                    results.Female_qx(j) = NaN;
+                end
+            end
+            
+            % Display to console (via the log method for timestamping)
+            % Convert table to string array for multiline logging
+            tableLines = splitlines(evalc('disp(results)'));
+            for k = 1:length(tableLines)
+                if ~isempty(strtrim(tableLines{k})) % Avoid logging empty lines
+                    obj.log(strtrim(tableLines{k}));
+                end
+            end
+            
+            % The log method already handles writing to the log file.
+            obj.log('--- End of Sample ---');
         end
     end
     

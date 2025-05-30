@@ -15,43 +15,11 @@ classdef test_AGAv2 < matlab.unittest.TestCase
         % This property is populated by the [TestClassSetup] method.
         DataSource
     end
+    
     methods (Access = private)
-        function logSampleSummary(testCase, tableEnum)
-            % Helper function to log a sample summary for a single table.
-            source = testCase.DataSource;
-            tableName = char(tableEnum);
-
-            source.log('---> Sampling cached data for: %s', tableName);
-
-            try
-                data = source.getMortalityTable(tableEnum);
-
-                if ~isfield(data, 'Male') || ~isfield(data, 'Female')
-                    source.log('ERROR: Cached data for %s is incomplete.', tableName);
-                    return;
-                end
-
-                sampleAges = [0, 21, 45, 65, 85, 100];
-                results = table('Size', [length(sampleAges), 3], 'VariableTypes', {'double', 'double', 'double'}, 'VariableNames', {'Age', 'Male_qx', 'Female_qx'}, 'RowNames', string(sampleAges));
-                for j = 1:length(sampleAges)
-                    age = sampleAges(j);
-                    results.Age(j) = age;
-                    maleIdx = data.Male.Age == age;
-                    femaleIdx = data.Female.Age == age;
-                    if any(maleIdx), results.Male_qx(j) = data.Male.qx(maleIdx); else, results.Male_qx(j) = NaN; end
-                    if any(femaleIdx), results.Female_qx(j) = data.Female.qx(femaleIdx); else, results.Female_qx(j) = NaN; end
-                end
-
-                disp(results); % Display to console
-                logOutput = evalc('disp(results)'); % Capture for log file
-                if ~isempty(source.LogFile) && source.LogFile ~= -1
-                    fprintf(source.LogFile, '%s', logOutput);
-                end
-            catch ME
-                source.log('Could not process summary for %s. Reason: %s', tableName, ME.message);
-            end
-        end
+        
     end
+    
     methods (TestClassSetup)
         function setupClass(testCase, SharedSource)
             % This runs ONCE before any test in the class.
@@ -70,27 +38,25 @@ classdef test_AGAv2 < matlab.unittest.TestCase
     
     methods (TestMethodTeardown)
         function inspectAndClearCache(testCase)
-            % This runs after EACH test.
-
-            % Get all tables that were just placed in the cache by the preceding test.
+             % This runs after EACH test.
             availableTables = testCase.DataSource.getAvailableTables();
-
             if ~isempty(availableTables)
-                fprintf('\n'); % Add a newline for better formatting in the test runner
-                % For each table found, run the summary.
+                fprintf('\n'); % For better console formatting during test runs
                 for i = 1:length(availableTables)
-                    testCase.logSampleSummary(availableTables(i));
+                    tableEnum = availableTables(i);
+                    try
+                        % Get the data struct to pass to the new sampler method
+                        dataStruct = testCase.DataSource.getMortalityTable(tableEnum);
+                        % Call the new method on the DataSource instance
+                        testCase.DataSource.logMortalityTableSample(dataStruct, ...
+                            sprintf('---> Sampling cached data for: %s (after test)', char(tableEnum)));
+                    catch ME
+                        testCase.DataSource.log('Error during post-test sampling for %s: %s', char(tableEnum), ME.message);
+                    end
                 end
             end
-
-            % Now, clear the cache to isolate the next test.
             testCase.DataSource.clearCache();
         end
-        % function clearTableCache(testCase)
-        %     % After each test, clear the CACHED TABLES, but not the whole object.
-        %     % This provides isolation for tests that check caching behavior.
-        %     testCase.DataSource.clearCache();
-        % end
     end
     
     methods (TestClassTeardown)
@@ -158,5 +124,27 @@ classdef test_AGAv2 < matlab.unittest.TestCase
             testCase.verifyEqual(data1.Male.qx, data2.Male.qx, 'Male qx values should be consistent between fetches.');
             testCase.verifyEqual(data1.Female.qx, data2.Female.qx, 'Female qx values should be consistent between fetches.');
         end
+        
+        function testCashflowStrategyMortalityTable(testCase)
+            %#Test, #:Tags "Integration"
+            strategy = CashflowStrategy('MortalityDataSource', testCase.DataSource, ...
+                                        'TableName', TableNames.ALT_Table2020_22);
+
+            testCase.verifyClass(strategy, 'CashflowStrategy', 'Strategy object should be created.');
+            testCase.verifyNotEmpty(strategy.BaseLifeTable, 'BaseLifeTable should be populated.');
+            testCase.verifyClass(strategy.BaseLifeTable, 'BasicMortalityTable', 'BaseLifeTable should be BasicMortalityTable.');
+
+            mortalityData = strategy.BaseLifeTable.MortalityRates;
+            testCase.verifyNotEmpty(mortalityData, 'MortalityRates within BaseLifeTable should not be empty.');
+
+            % Use the new sampler method from the DataSource
+            testCase.DataSource.logMortalityTableSample(mortalityData, ...
+                sprintf('--- Sample data from CashflowStrategy BaseLifeTable: %s ---', char(strategy.TableName)));
+
+            % Basic Sanity Checks (can be expanded)
+            testCase.verifyTrue(all(mortalityData.Male.qx >= 0 & mortalityData.Male.qx <= 1), 'Male qx sanity check.');
+            testCase.verifyTrue(all(diff(mortalityData.Female.lx) <= 0), 'Female lx sanity check (decreasing).');
+        end
+
     end
 end
