@@ -16,6 +16,7 @@ classdef BasicMortalityTable < MortalityTable
             obj.SourceType = 'File';
             obj.SourcePath = tableFilePath;
             obj.LastUpdated = datetime('now');
+            obj.TableName = '';
             
             % Validate the data structure
             %TODO add error handling to log
@@ -64,33 +65,37 @@ classdef BasicMortalityTable < MortalityTable
         end
         
         function survivorshipProbabilities = getSurvivorshipProbabilities(obj, gender, currentAge, finalAge)
-            %test to see if final age for survivorship is beyond the length
-            %of the mortality rates table.
-            ages = obj.MortalityRates.(gender).Age(:);
-            startAgeofTable = ages(1);
-            endAgeofTable = ages(end);
-            qxEndAgeofTable = obj.MortalityRates.(gender).qx(end); % use this to extend prob survival past end of table
             
-            % Initialize output array
-            survivorshipProbabilities = zeros(1, finalAge-currentAge);
+            % Delegate the calculation to the utility function
+            survivorshipProbabilities = utilities.LifeTableUtilities.calculateSurvivorship(obj, gender, currentAge, finalAge);
             
-            % Calculate probabilities for each age
-            for i = 1:length(survivorshipProbabilities)
-                age = currentAge + i - 1;
-                if age <= endAgeofTable
-                    % Get index for current age
-                    ageIdx = find(ages == age, 1);
-                    if isempty(ageIdx)
-                        error('Invalid age: %d', age);
-                    end
-                    % Calculate survivorship probability
-                    survivorshipProbabilities(i) = obj.MortalityRates.(gender).lx(ageIdx)/obj.MortalityRates.(gender).lx(1);
-                else
-                    % Extend past end of table assuming constant mortality
-                    lastValidProb = survivorshipProbabilities(i-1);
-                    survivorshipProbabilities(i) = lastValidProb * (1 - qxEndAgeofTable);
-                end
-            end
+            % %test to see if final age for survivorship is beyond the length
+            % %of the mortality rates table.
+            % ages = obj.MortalityRates.(gender).Age(:);
+            % startAgeofTable = ages(1);
+            % endAgeofTable = ages(end);
+            % qxEndAgeofTable = obj.MortalityRates.(gender).qx(end); % use this to extend prob survival past end of table
+            % 
+            % % Initialize output array
+            % survivorshipProbabilities = zeros(1, finalAge-currentAge);
+            % 
+            % % Calculate probabilities for each age
+            % for i = 1:length(survivorshipProbabilities)
+            %     age = currentAge + i - 1;
+            %     if age <= endAgeofTable
+            %         % Get index for current age
+            %         ageIdx = find(ages == age, 1);
+            %         if isempty(ageIdx)
+            %             error('Invalid age: %d', age);
+            %         end
+            %         % Calculate survivorship probability
+            %         survivorshipProbabilities(i) = obj.MortalityRates.(gender).lx(ageIdx)/obj.MortalityRates.(gender).lx(1);
+            %     else
+            %         % Extend past end of table assuming constant mortality
+            %         lastValidProb = survivorshipProbabilities(i-1);
+            %         survivorshipProbabilities(i) = lastValidProb * (1 - qxEndAgeofTable);
+            %     end
+            % end
         end
         
         function survivorshipProbabilitiesAtPaymentDates = getSurvivorshipProbabilitiesForEachPaymentDate(obj, survivorshipProbabilitiesToCompleteAge, paymentDatesToValue, paymentsPerYear)

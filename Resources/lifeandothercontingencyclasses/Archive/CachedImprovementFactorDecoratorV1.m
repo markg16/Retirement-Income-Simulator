@@ -1,4 +1,5 @@
 classdef CachedImprovementFactorDecorator < MortalityTable
+    
     % ... (baseTable, factor, cache properties as before)
     properties
         BaseTable
@@ -6,7 +7,7 @@ classdef CachedImprovementFactorDecorator < MortalityTable
         Cache
         CachedRatesMap
         CacheFilePath
-        ImprovementFactorStrategy % Reference to the strategy used to calculate imporvement factors
+        ImprovementFactorStrategy % Reference to the strategy used to calculate improvement factors
         ImprovementFactors % Property to hold improvement factors
     end
 

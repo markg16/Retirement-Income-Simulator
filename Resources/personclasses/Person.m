@@ -115,7 +115,7 @@ classdef Person
             % source files
             improvementFactorCalulationAlgo = MeanImprovementFactorStrategy(); 
 
-            %set up the decorator to convert teh base table to the improved
+            %set up the decorator to convert the base table to the improved
             %table
 
             futureMortalityTableDecorator = CachedImprovementFactorDecorator(baseTable, defaultImprovementFactor,improvementFactorsFile, improvementFactorCalulationAlgo);

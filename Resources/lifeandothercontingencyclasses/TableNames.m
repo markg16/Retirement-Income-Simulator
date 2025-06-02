@@ -4,5 +4,6 @@ classdef TableNames < uint32
         ALT_Table2015_17 (2)
         ALT_Table2010_12 (3)
         ALT_Table2005_07 (4)
+        Mock_Table (5)
     end
 end 

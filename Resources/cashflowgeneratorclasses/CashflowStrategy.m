@@ -25,7 +25,7 @@ classdef CashflowStrategy < CashflowInterface & handle
             p = inputParser;
             addParameter(p, 'AnnualAmount', 1000, @isnumeric);
             addParameter(p, 'StartDate', datetime('now'), @(x) isdatetime(x));
-            addParameter(p, 'Frequency', 12, @isnumeric);
+            addParameter(p, 'Frequency', utilities.FrequencyType.Annually, @(x) isa(x,'utilities.FrequencyType'));
             addParameter(p, 'InflationRate', 0.02, @isnumeric);
             addParameter(p, 'BaseLifeTable', [], @(x) isempty(x) || isa(x, 'BaseLifeTable'));
             addParameter(p, 'MaxNumPayments', 1200, @isnumeric);

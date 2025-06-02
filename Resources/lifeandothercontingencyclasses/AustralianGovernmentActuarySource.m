@@ -373,10 +373,14 @@ classdef AustralianGovernmentActuarySource < MortalityDataSource
                 %TODO delete cachefiles should be a separate method
                 %TODO either store an empty cachefile or ensure we always
                 %TODO initialise
-                
+
                 if exist(obj.UrlCacheFile, 'file')
                     delete(obj.UrlCacheFile);
+                    obj.log('URL cache file deleted.');
+                else
+                    obj.log('URL cache file (%s) not found, no deletion needed.', obj.UrlCacheFile); % Or just skip logging if not found
                 end
+                
                % TODO add savecache method
                 % % Save empty cache to file
                 %work out how to saveCache
