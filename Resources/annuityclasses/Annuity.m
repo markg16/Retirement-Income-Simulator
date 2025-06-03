@@ -34,9 +34,9 @@ classdef Annuity < Instrument
             
             switch annuitant.Gender
                 case utilities.GenderType.Male
-                    annuitant.Gender = 'M';
+                    annuitant.Gender = 'Male';
                 case utilities.GenderType.Female
-                    annuitant.Gender = 'F';
+                    annuitant.Gender = 'Female';
             end
             obj.Annuitant = annuitant;
             obj.Name = "Annuity";

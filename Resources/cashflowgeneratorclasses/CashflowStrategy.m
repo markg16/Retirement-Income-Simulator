@@ -57,7 +57,7 @@ classdef CashflowStrategy < CashflowInterface & handle
             try
                 % The getMortalityTable method in AustralianGovernmentActuarySource
                 % already uses the cache internally.
-                mortalityDataStruct = obj.MortalityDataSource.getMortalityTable(obj.TableName);
+                mortalityDataStruct = obj.MortalityDataSource.fetchTable(obj.TableName);
 
                 % Now, wrap this struct in a BasicMortalityTable object
                 % The 'tableFilePath' for BasicMortalityTable can be descriptive

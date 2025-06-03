@@ -6,10 +6,13 @@ function mainScenarioParameters = buildMainScenarioParameters(inputArgs)
 
 parameters.person = inputArgs.person;
 storedMortalityFile = inputArgs.Folders.storedMortalityFile;
-baseLifeTable  = utilities.LifeTableUtilities.loadOrCreateBaseTable(storedMortalityFile);
+%baseLifeTable  = utilities.LifeTableUtilities.loadOrCreateBaseTable(storedMortalityFile);
 inflationRateAssumption =  inputArgs.person.inflationRateAssumption;
-personBaseMortalityTable = baseLifeTable;
-annuityBaseMortalityTable = baseLifeTable;
+%personBaseMortalityTable = baseLifeTable;
+%annuityBaseMortalityTable = baseLifeTable;
+
+personMortalityDataSource = AustralianGovernmentActuarySource();
+annuityMortalityDataSource =personMortalityDataSource;
 
 contributionAmount = parameters.person.contribution;
 contributionPeriod = parameters.person.contributionPeriod;
@@ -17,8 +20,10 @@ contributionFrequency = parameters.person.contributionFrequency;
 
 
 
+%parameters.person.ownerContributionCashflowStrategy = CashflowStrategy('AnnualAmount',contributionAmount,'Frequency',contributionFrequency, ...
+%    'InflationRate', inflationRateAssumption,'BaseLifeTable', personBaseMortalityTable);
 parameters.person.ownerContributionCashflowStrategy = CashflowStrategy('AnnualAmount',contributionAmount,'Frequency',contributionFrequency, ...
-    'InflationRate', inflationRateAssumption,'BaseLifeTable', personBaseMortalityTable);
+    'InflationRate', inflationRateAssumption);
 
 ownerPayment = parameters.person.ownerPayment;
 annuityStartDate = inputArgs.hedgeAnnuity.annuityStartDate;       
@@ -36,10 +41,14 @@ parameters.annuity.ownerPaymentFrequency= ownerPaymentFrequency;
 %parameters.person.annuityParams.PaymentEndDates;
 
 
+%parameters.annuity.ownerPaymentCashflowStrategy = CashflowStrategy('AnnualAmount',ownerPayment, ...
+%    'StartDate',annuityStartDate, ...
+%    'Frequency',ownerPaymentFrequency, ...
+ %   'InflationRate', inflationRateAssumption, 'BaseLifeTable',annuityBaseMortalityTable);
 parameters.annuity.ownerPaymentCashflowStrategy = CashflowStrategy('AnnualAmount',ownerPayment, ...
     'StartDate',annuityStartDate, ...
     'Frequency',ownerPaymentFrequency, ...
-    'InflationRate', inflationRateAssumption, 'BaseLifeTable',annuityBaseMortalityTable);
+    'InflationRate', inflationRateAssumption);
 
 
 % set up portfolio parameters
@@ -67,7 +76,7 @@ parameters.scenario = inputArgs.Dates;
 parameters.scenario.AssetReturnFrequency = inputArgs.runtime.assetReturnFrequency;
 parameters.scenario.RiskPremiums  = inputArgs.portfolioParameters.portfolioTickerRiskPremium;
 parameters.scenario.RiskPremiumTickers = inputArgs.portfolioParameters.benchmarkPortfolioTickers;
-parameters.scenario.BaseLifeTable = baseLifeTable;
+%parameters.scenario.BaseLifeTable = baseLifeTable;
 parameters.scenario.rateScenarios = inputArgs.RateFile.rateScenarios;
 
 parameters.scenario.annuityValuationFrequency = inputArgs.runtime.annuityValuationFrequency;
