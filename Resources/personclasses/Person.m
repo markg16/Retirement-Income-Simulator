@@ -17,7 +17,7 @@ classdef Person
         AssetPortfolio % Reference to the AssetPortfolio object
         Annuity % Reference to an Annuity object that represents payments to the owner of the portfolio
         PortfolioTimeTable
-        FutureMortalityTable BasicMortalityTable
+        FutureMortalityTable CachedImprovementFactorDecorator
 
     end
 
@@ -77,7 +77,7 @@ classdef Person
             presentValue = obj.CashflowStrategy.valueCashflows(rateCurve, cashflows);
         end
 
-        function futureMortalityTable =setFutureMortalityTable(obj)
+        function futureMortalityTableDecorator =setFutureMortalityTable(obj)
             
             cashflowStrategy = obj.CashflowStrategy;
             defaultImprovementFactor = 0.05;
@@ -106,6 +106,7 @@ classdef Person
 
             %baseTable = utilities.LifeTableUtilities.loadOrCreateBaseTable(tableFilePath);
             baseTable = cashflowStrategy.BaseLifeTable;
+            cacheManager = cashflowStrategy.MortalityDataSource.getCacheManager();
 
             % TODO introduce a test to ensure appropriate structure for standard methods
             %genders = fieldnames(baseTable.MortalityRates); 
@@ -115,12 +116,15 @@ classdef Person
             % source files
             improvementFactorCalulationAlgo = MeanImprovementFactorStrategy(); 
 
-            %set up the decorator to convert teh base table to the improved
+            %set up the decorator to convert the base table to the improved
             %table
+            futureMortalityTableDecorator = CachedImprovementFactorDecorator(baseTable,improvementFactorsFile, improvementFactorCalulationAlgo,startAge,cacheManager);
 
-            futureMortalityTableDecorator = CachedImprovementFactorDecorator(baseTable, defaultImprovementFactor,improvementFactorsFile, improvementFactorCalulationAlgo);
+            %futureMortalityTableDecorator = CachedImprovementFactorDecorator(baseTable, defaultImprovementFactor,improvementFactorsFile, improvementFactorCalulationAlgo);
+            % tableKey = futureMortalityTableDecorator.getCacheKeyForImprovedTable();
+            % futureMortalityTable = futureMortalityTableDecorator.CacheManager.getTable(tableKey);
 
-            futureMortalityTable = futureMortalityTableDecorator.createImprovedTable(startAge);
+           % futureMortalityTable = futureMortalityTableDecorator.createImprovedTable(startAge);
           %   futureMortalityTable = futureMortalityTables.MortalityRates.(gender);
 
 

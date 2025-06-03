@@ -229,11 +229,14 @@ classdef AustralianGovernmentActuarySource < MortalityDataSource
                 if ~isa(tableEnum, 'TableNames')
                     error('MATLAB:invalidType', 'Input must be a TableNames enum value');
                 end
-                
+
                 % Fetch the table
-                data = obj.getMortalityTable(tableEnum);
-                success = true;
-                
+                tempData = obj.getMortalityTable(tableEnum);
+                if ~isempty(tempData) && isfield(tempData, 'Male') && isfield(tempData, 'Female')
+                    data = tempData;
+                    success = true;
+                end
+
             catch e
                 obj.log(sprintf('Error fetching table %s: %s', char(tableEnum), e.message));
                 data = [];
@@ -373,10 +376,14 @@ classdef AustralianGovernmentActuarySource < MortalityDataSource
                 %TODO delete cachefiles should be a separate method
                 %TODO either store an empty cachefile or ensure we always
                 %TODO initialise
-                
+
                 if exist(obj.UrlCacheFile, 'file')
                     delete(obj.UrlCacheFile);
+                    obj.log('URL cache file deleted.');
+                else
+                    obj.log('URL cache file (%s) not found, no deletion needed.', obj.UrlCacheFile); % Or just skip logging if not found
                 end
+                
                % TODO add savecache method
                 % % Save empty cache to file
                 %work out how to saveCache

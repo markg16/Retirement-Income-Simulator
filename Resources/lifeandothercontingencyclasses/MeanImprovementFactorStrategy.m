@@ -22,8 +22,9 @@ classdef MeanImprovementFactorStrategy < ImprovementFactorStrategy
                 averageImprovementFactors(i, 3) = mean(femaleFactors(inBin));
             end
 
-            fieldNames = {'Age','M','F'};
+            fieldNames = {'Age','Male','Female'};
             averageImprovementFactors = array2table(averageImprovementFactors,'VariableNames', fieldNames);
+            averageImprovementFactors = table2struct(averageImprovementFactors);
         end
     end
 end

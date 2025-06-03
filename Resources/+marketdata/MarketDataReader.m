@@ -133,7 +133,7 @@ classdef MarketDataReader
                                 ratesMetaData = rateCurveSet.RateCurvesSetMetaData;
                                 if i == 1
                                     defaultMapCountryToCurveName = rateCurveSet.RateCurvesSetMapCountryToCurveName;
-                                    defaultRatesMetaData = rateCurveSet.RateCurvesSetMetaData;
+                                    %defaultRatesMetaData = rateCurveSet.RateCurvesSetMetaData;
                                 end
                                 newEntry = timetable(valuationDate', {rateCurveSet}, 'VariableNames', {'RateCurveSets'});
                                 rateCurveCollection = [rateCurveCollection; newEntry];  % Concatenate vertically
@@ -162,7 +162,7 @@ classdef MarketDataReader
                             rateCurveSet.RateCurvesSetMetaData.SourceFileReread = false;
                             if i == 1
                                 defaultMapCountryToCurveName = rateCurveSet.RateCurvesSetMapCountryToCurveName;
-                                defaultRatesMetaData = rateCurveSet.RateCurvesSetMetaData;
+                                %defaultRatesMetaData = rateCurveSet.RateCurvesSetMetaData;
                             end
 
                             rateCurveCollection = timetable(valuationDate',{rateCurveSet},'VariableNames', {'RateCurveSets'});

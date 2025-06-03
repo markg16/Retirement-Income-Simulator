@@ -28,7 +28,7 @@ rootFolder =pwd;
 % % Output Folders (Flexible) UPDATE FOR Projectbasepath before using
 outputFolderBase = '\Output'; 
 outputFolder = fullfile(outputFolderBase, string(datetime("today"))); % Date-specific subfolder & relative folder
-outputFolder = createDirectory(rootFolder,outputFolder); 
+outputFolder = utilities.createDirectory(rootFolder,outputFolder); 
 % outputSummaryFolder = createDirectory(app.rootdir,fullfile(outputFolder,'\PortfolioSummaries')); 
 % outputReportFolder = createDirectory(app.rootdir,fullfile(outputFolder,'\ReportSummaries'));
 
