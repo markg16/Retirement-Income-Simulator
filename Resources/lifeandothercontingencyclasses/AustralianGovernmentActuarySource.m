@@ -404,12 +404,7 @@ classdef AustralianGovernmentActuarySource < MortalityDataSource
             % Call superclass method first
             updateLastUpdated@MortalityDataSource(obj);
             
-            % Additional AGA-specific updates if needed
-            if obj.DataCache.isKey('metadata')
-                metadata = obj.DataCache('metadata');
-                metadata.Source = 'Australian Government Actuary';
-                obj.DataCache('metadata') = metadata;
-            end
+            
         end
          function urls = getTableUrlsFromUrlCache(obj)
             %GETTABLEURLS Get all available table URLs

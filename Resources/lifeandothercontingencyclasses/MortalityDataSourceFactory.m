@@ -38,6 +38,7 @@ classdef MortalityDataSourceFactory < handle
             obj.Sources('Australian') = AustralianGovernmentActuarySource();
             obj.Sources('NewZealand') = NewZealandMortalitySource();
             obj.Sources('UK') = UKMortalitySource();
+            obj.Sources('Analytic') = AnalyticalMortalityDataSource();
         end
     end
 end 

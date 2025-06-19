@@ -270,7 +270,7 @@ classdef Annuity < Instrument
         function presentValue = presentValue(obj,rateCurve,inflationRates,valuationDate)
 
             % 1. Generate Cash Flow Dates
-            futureCashFlowDates = generateCashFlowDates(obj,valuationDate);
+            futureCashFlowDates = generateCashFlowDates(obj,valuationDate); % assumes next payment is on the valuation date
             
             % 2. Generate Cash Flows (including survivorship if applicable)
             cashFlows = generateCashFlows(obj,futureCashFlowDates,'valuationDate',valuationDate);            

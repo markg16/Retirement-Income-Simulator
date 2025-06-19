@@ -182,9 +182,9 @@ classdef LifeTableUtilities
                 p_start_of_year = probsForInterpolation(iYear);     % This is P_(iYear-1)
                 p_end_of_year   = probsForInterpolation(iYear+1); % This is P_(iYear)
 
-                for iPeriodInYear = 1:paymentsPerYear
+                for iPeriodInYear = 0:paymentsPerYear
                     idx = (iYear-1) * paymentsPerYear + iPeriodInYear;
-                    interpolatedPeriodicProbs(idx) = p_start_of_year + ...
+                    interpolatedPeriodicProbs(idx+1) = p_start_of_year + ...
                         (p_end_of_year - p_start_of_year) * (iPeriodInYear / paymentsPerYear);
                 end
             end

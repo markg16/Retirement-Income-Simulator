@@ -1,14 +1,35 @@
 classdef ConstantImprovementFactorStrategy < ImprovementFactorStrategy
     % Mock ImprovementFactorStrategy for testing
     properties
-        ReturnConstantFactor = []; % e.g., 0.01 for 1% (input as a decimal)
+        ReturnConstantFactor = 0; % Default to 0% improvement (as a decimal, e.g., 0.01 for 1%)
     end
     methods
         function obj = ConstantImprovementFactorStrategy(constantFactor)
-            if nargin > 0
+            if nargin > 0 && isnumeric(constantFactor)
                 obj.ReturnConstantFactor = constantFactor;
             end
         end
+        
+        function factorsStruct = calculateFactors(obj, ~, baseTable)
+            % This strategy IGNORES the filePath input.
+            % It uses the baseTable to get the correct age vector.
+
+            if isempty(baseTable) || isempty(baseTable.MortalityRates)
+                error('ConstantImprovementFactorStrategy:MissingBaseTable', 'This strategy requires a valid baseTable with loaded rates to determine the age vector.');
+            end
+
+            % 1. Get the age vector from the base table to ensure alignment.
+            %    We'll use the male age vector, assuming male and female are the same.
+            ages = baseTable.MortalityRates.Male.Age;
+
+            % 2. Create the factors struct.
+            % The decorator's getImprovementFactor method divides by 100,
+            % so we store the value multiplied by 100 (i.e., as a percentage point).
+            factorsStruct.Age = ages;
+            factorsStruct.Male = ones(size(ages)) * obj.ReturnConstantFactor * 100;
+            factorsStruct.Female = ones(size(ages)) * obj.ReturnConstantFactor * 100;
+        end
+
         function factors = calculateAverageFactors(obj, rawImprovementFactors)
             % If ReturnConstantFactor is set, create factors struct with this constant.
             % The decorator expects obj.ImprovementFactors to have .Age, .Male, .Female fields.
