@@ -87,7 +87,7 @@ function cm = getCacheManager(obj)
     cm = obj.CacheManager;
 end
 
-function table = getMortalityTable(obj, tableEnum)
+function tableObject = getMortalityTable(obj, tableEnum)
     %GETMORTALITYTABLE Get mortality table data
     %   Returns mortality table data for the specified table.
     %   If data is not in cache, fetches from source and caches it.
@@ -101,20 +101,25 @@ function table = getMortalityTable(obj, tableEnum)
     % This method now delegates directly to the CacheManager.
     % It implements the "read-through" cache pattern.
     tableKey = char(tableEnum);
-    [table, isCached] = obj.CacheManager.getTable(tableKey);
+    [tableObject, isCached] = obj.CacheManager.getTable(tableKey);
 
 
     if ~isCached
         obj.log(sprintf('Table %s not in cache, fetching from source...', char(tableEnum)));
         try
             rawData = obj.fetchRawData(tableEnum);
-            parsedData = obj.parseRawData(rawData, tableEnum);
+            parsedDataStruct = obj.parseRawData(rawData, tableEnum);
+            
+            % 2. Convert the data struct into a concrete BasicMortalityTable object
+            %    We create a descriptive "path" for the constructor.
+            descriptivePath = sprintf('%s:%s', obj.SourceName, char(tableEnum));
+            tableObject = BasicMortalityTable(descriptivePath, parsedDataStruct);
+            tableObject.TableName = char(tableEnum); % Ensure TableName is set
+
+            % 3. Cache the newly fetched and parsed data
+            obj.CacheManager.cacheTable(tableKey, tableObject);
 
 
-            %Cache the newly fetched and parsed data
-            obj.CacheManager.cacheTable(tableKey, parsedData);
-            table = parsedData; % Return the new data
-            %obj.cacheTableData(tableEnum, parsedData);
         catch e
             error('MATLAB:invalidType', 'Failed to fetch table %s: %s', char(tableEnum), e.message);
         end
@@ -370,13 +375,15 @@ end
 
             % Update object property
             obj.LastUpdated = datetime('now');
-
-            % Update cache timestamp
-            obj.DataCache('lastUpdated') = obj.LastUpdated;
-
-            % Save cache to file
-            dataCache = obj.DataCache;
-            save(obj.CacheFile, 'dataCache');
+            % 2. Delegate the responsibility of saving to the CacheManager.
+            %    The CacheManager's own saveCache method will handle its internal
+            %    timestamp and writing to its file.
+            if ~isempty(obj.CacheManager) && isvalid(obj.CacheManager)
+                % This is the crucial change:
+                obj.CacheManager.saveCache();
+                obj.log('Persisted cache state via CacheManager.');
+            end
+            
         end
     end
 end 

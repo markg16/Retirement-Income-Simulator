@@ -1,9 +1,8 @@
 % File: CachedImprovementFactorDecorator.m
 classdef CachedImprovementFactorDecorator < MortalityTable
-    %CACHEDIMPROVEMENTFACTORDECORATOR Decorates a base mortality table with improvement factors.
-    %   Applies specified improvement factors starting from a given age.
-    %   Uses a CacheManager to store and retrieve pre-calculated improved rates structs.
-    %   An instance of this decorator represents ONE specific improved table.
+   %CACHEDIMPROVEMENTFACTORDECORATOR Decorates a base mortality table with improvement factors.
+    %   Delegates the calculation of improvement factors to a provided strategy object.
+    %   Uses a CacheManager to store and retrieve pre-calculated improved tables.
 
     properties (SetAccess = private) % Properties specific to the decorator's function
         BaseTable                   % The underlying MortalityTable being decorated
@@ -30,7 +29,11 @@ classdef CachedImprovementFactorDecorator < MortalityTable
 
     methods
         function obj = CachedImprovementFactorDecorator(baseTable, improvementFactorsFile, improvementFactorStrategy, startAgeForImprovement, cacheManager)
-            % Constructor for CachedImprovementFactorDecorator
+            
+             % --- REVISED CONSTRUCTOR ---
+            % It is now much simpler. It validates inputs and delegates the complex
+            % factor calculation to the strategy object.
+ 
             % Inputs:
             %   baseTable:                  Instance of a class implementing MortalityTable
             %   improvementFactorsFile:     Path to file containing raw improvement factors
@@ -53,36 +56,55 @@ classdef CachedImprovementFactorDecorator < MortalityTable
             if ~isnumeric(startAgeForImprovement) || ~isscalar(startAgeForImprovement) || startAgeForImprovement < 0
                 error('CachedImprovementFactorDecorator:InvalidInput', 'startAgeForImprovement must be a non-negative scalar number.');
             end
-
+% 2. Assign core properties
             obj.BaseTable = baseTable;
             obj.ImprovementFactorStrategy = improvementFactorStrategy;
             obj.StartAgeForImprovement = startAgeForImprovement;
             obj.CacheManager = cacheManager;
+% 3. Delegate responsibility for calculating factors to the strategy.
 
-            % Load and process improvement factors
+ %    The strategy itself will handle whether it needs the file path or the base table.
             try
-                rawIF = utilities.LifeTableUtilities.loadImprovementFactors(improvementFactorsFile);
-                obj.ImprovementFactors = obj.ImprovementFactorStrategy.calculateAverageFactors(rawIF);
+                obj.ImprovementFactors = obj.ImprovementFactorStrategy.calculateFactors(improvementFactorsFile, obj.BaseTable);
+                
+                % Validate the structure returned by the strategy to ensure it's usable
                 if ~isstruct(obj.ImprovementFactors) || ~isfield(obj.ImprovementFactors, 'Age') || ...
                    ~isfield(obj.ImprovementFactors, 'Male') || ~isfield(obj.ImprovementFactors, 'Female')
-                    error('CachedImprovementFactorDecorator:InvalidIFStructure', 'Processed improvement factors have an invalid structure.');
+                    error('CachedImprovementFactorDecorator:InvalidIFStructure', 'The provided improvement strategy returned an invalid factors structure.');
                 end
             catch ME
-                error('CachedImprovementFactorDecorator:IFLoadingError', 'Failed to load or process improvement factors: %s', ME.message);
+                % Catch errors from the strategy (e.g., file not found in Mean strategy) and re-throw
+                error('CachedImprovementFactorDecorator:IFStrategyError', 'The improvement factor strategy failed: %s', ME.message);
             end
+
+
+            % % Load and process improvement factors
+            % try
+            %     rawIF = utilities.LifeTableUtilities.loadImprovementFactors(improvementFactorsFile);
+            %     obj.ImprovementFactors = obj.ImprovementFactorStrategy.calculateAverageFactors(rawIF);
+            %     if ~isstruct(obj.ImprovementFactors) || ~isfield(obj.ImprovementFactors, 'Age') || ...
+            %        ~isfield(obj.ImprovementFactors, 'Male') || ~isfield(obj.ImprovementFactors, 'Female')
+            %         error('CachedImprovementFactorDecorator:InvalidIFStructure', 'Processed improvement factors have an invalid structure.');
+            %     end
+            % catch ME
+            %     error('CachedImprovementFactorDecorator:IFLoadingError', 'Failed to load or process improvement factors: %s', ME.message);
+            % end
             
+            
+            % 4. Set descriptive and abstract properties
             % Set inherited properties that were abstract in the superclass
             obj.TableName = sprintf('%s_ImpFrom%d_%s', obj.BaseTable.TableName, obj.StartAgeForImprovement, class(obj.ImprovementFactorStrategy));
             obj.SourceType = 'Decorator';
             obj.SourcePath = obj.BaseTable.TableName; % Origin is the base table's name
             obj.LastUpdated = datetime('now');
-            
+           
+            % 5. Set the unique cache key for this decorator's instance
             obj.CacheKeyForOwnImprovedTable = obj.generateCacheKeyInternal();
 
-            % Generate or load the improved mortality rates and store them in obj.MortalityRates
+            % 6. Generate or load the improved mortality rates from cache
             obj.MortalityRates = obj.getOrGenerateImprovedRatesStruct();
             
-            % Validate the newly populated obj.MortalityRates structure
+            % 7. Validate the final, generated rates structure
             MortalityTableFactory.validateTableData(obj.MortalityRates);
         end
 

@@ -47,6 +47,12 @@ inputArgs.Folders.storedMortalityFile = 'G:\My Drive\Kaparra Software\Rates Anal
 inputArgs.Folders.cacheFolder = 'G:\My Drive\Kaparra Software\Rates Analysis\Resources';
 inputArgs.Folders.marketPriceInputFilePath  = 'G:\My Drive\Kaparra Software\UNSWLecture\PriceReturnData';
 
+inputArgs.Mortality.mortalityTableName = TableNames.ALT_Table2020_22;
+inputArgs.Mortality.mortalityImprovementStrategy = MortalityImprovementStrategyNames.MeanImprovementFactorStrategy;
+inputArgs.Mortality.mortalityDataSource = AustralianGovernmentActuarySource();
+inputArgs.Mortality.cacheManagerType = utilities.CacheManagerType.Mortality;
+
+
 inputArgs.RateFile.Prefix = "EIOPA_RFR_";
 inputArgs.RateFile.Suffix = "_Term_Structures";
 inputArgs.RateFile.Extension = ".xlsx";
