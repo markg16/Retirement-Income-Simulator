@@ -5,14 +5,17 @@ function mainScenarioParameters = buildMainScenarioParameters(inputArgs)
 %set up person parameters
 
 parameters.person = inputArgs.person;
-storedMortalityFile = inputArgs.Folders.storedMortalityFile;
+%storedMortalityFile = inputArgs.Folders.storedMortalityFile;
 %baseLifeTable  = utilities.LifeTableUtilities.loadOrCreateBaseTable(storedMortalityFile);
 inflationRateAssumption =  inputArgs.person.inflationRateAssumption;
 %personBaseMortalityTable = baseLifeTable;
 %annuityBaseMortalityTable = baseLifeTable;
 
-personMortalityDataSource = AustralianGovernmentActuarySource();
-annuityMortalityDataSource =personMortalityDataSource;
+
+annuityMortalityIdentifier = inputArgs.Mortality.mortalityIdentifier;
+personMortalityIdentifier = annuityMortalityIdentifier; 
+personMortalityDataSource = inputArgs.Mortality.mortalityDataSource;
+annuityMortalityDataSource = personMortalityDataSource;
 
 contributionAmount = parameters.person.contribution;
 contributionPeriod = parameters.person.contributionPeriod;
@@ -22,7 +25,7 @@ contributionFrequency = parameters.person.contributionFrequency;
 
 %parameters.person.ownerContributionCashflowStrategy = CashflowStrategy('AnnualAmount',contributionAmount,'Frequency',contributionFrequency, ...
 %    'InflationRate', inflationRateAssumption,'BaseLifeTable', personBaseMortalityTable);
-parameters.person.ownerContributionCashflowStrategy = CashflowStrategy('AnnualAmount',contributionAmount,'Frequency',contributionFrequency, ...
+parameters.person.ownerContributionCashflowStrategy = CashflowStrategy(personMortalityIdentifier,personMortalityDataSource,'AnnualAmount',contributionAmount,'Frequency',contributionFrequency, ...
     'InflationRate', inflationRateAssumption);
 
 ownerPayment = parameters.person.ownerPayment;
@@ -45,7 +48,7 @@ parameters.annuity.ownerPaymentFrequency= ownerPaymentFrequency;
 %    'StartDate',annuityStartDate, ...
 %    'Frequency',ownerPaymentFrequency, ...
  %   'InflationRate', inflationRateAssumption, 'BaseLifeTable',annuityBaseMortalityTable);
-parameters.annuity.ownerPaymentCashflowStrategy = CashflowStrategy('AnnualAmount',ownerPayment, ...
+parameters.annuity.ownerPaymentCashflowStrategy = CashflowStrategy(annuityMortalityIdentifier,annuityMortalityDataSource,'AnnualAmount',ownerPayment, ...
     'StartDate',annuityStartDate, ...
     'Frequency',ownerPaymentFrequency, ...
     'InflationRate', inflationRateAssumption);

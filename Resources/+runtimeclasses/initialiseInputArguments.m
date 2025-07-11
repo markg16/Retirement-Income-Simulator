@@ -10,7 +10,7 @@ inputArgs.runtime.defaultCashflows = 0;
 inputArgs.runtime.verbose = 1;
 inputArgs.runtime.defaultFrequency = utilities.FrequencyType.Annually;
 inputArgs.runtime.assetReturnFrequency = utilities.FrequencyType.Weekly;
-inputArgs.runtime.annuityValuationFrequency = utilities.FrequencyType.Annually;
+inputArgs.runtime.annuityValuationFrequency = utilities.FrequencyType.Monthly;
 inputArgs.runtime.rootPath = 'G:\My Drive\Kaparra Software\Rates Analysis\Resources';
 rootPath = inputArgs.runtime.rootPath;
 inputArgs.runtime.newPath = utilities.PathManagement.addPaths(rootPath,'archive');
@@ -19,8 +19,9 @@ inputArgs.runtime.floatingPointTolerance = 1e-10;
 
 
 
-inputArgs.Dates.startDateRates = datetime('2016-03-31');% earliest date rate input file is available
-inputArgs.Dates.endDateRates = datetime('2022-11-30');% latest date rate input file is available
+inputArgs.Dates.startDateRates = datetime('2015-12-31');% earliest date rate input file is available
+inputArgs.Dates.endDateRates = datetime('2025-05-31');% latest date rate input file is available
+inputArgs.Dates.endDateMarketIndices = datetime('2023-10-31');% latest date rate input file is available
 inputArgs.Dates.startDates = datetime('2017-03-31');% scenario projection start date
 inputArgs.Dates.endDates = datetime('2047-03-31');% scenario projection end date
 inputArgs.Dates.referenceTime = hours(17);
@@ -36,21 +37,24 @@ endDateScenario =inputArgs.Dates.endDates;
 endDateScenario.TimeZone = inputArgs.Dates.localTimeZone;
 endDateScenario= datetime(endDateScenario,'Format',inputArgs.Dates.dateTimeFormat);
 inputArgs.Dates.endDateScenario = endDateScenario+inputArgs.Dates.referenceTime;
-inputArgs.Dates.marketSimulationStartDate = inputArgs.Dates.startDateScenario;
+inputArgs.Dates.marketSimulationStartDate = inputArgs.Dates.endDateMarketIndices;
 
-inputArgs.Folders.inputFolderRates = 'G:\My Drive\Kaparra Software\RatesDataAquisition\EIOPAData';
+inputArgs.Folders.inputFolderRates = 'G:\My Drive\Kaparra Software\RatesDataAquisition\EIOPAData\TermStructures';
 inputArgs.Folders.assetReturnsFile = 'G:\My Drive\Kaparra Software\RatesDataAquisition\AssetReturnsData\asset_returns.csv';
 inputArgs.Folders.outputFolder = 'G:\My Drive\Kaparra Software\Rates Analysis\Output';
 inputArgs.Folders.inputFileNameRates ='EIOPA_RFR_20160131_Term_Structures.xlsx';
-inputArgs.Folders.inputFolderMortality = 'G:\My Drive\Kaparra Software\Rates Analysis\LifeTables';
-inputArgs.Folders.storedMortalityFile = 'G:\My Drive\Kaparra Software\Rates Analysis\LifeTables\Australian_Life_Tables_2015-17.mat';
+%inputArgs.Folders.inputFolderMortality = 'G:\My Drive\Kaparra Software\Rates Analysis\LifeTables';
+%inputArgs.Folders.storedMortalityFile = 'G:\My Drive\Kaparra Software\Rates Analysis\LifeTables\Australian_Life_Tables_2015-17.mat';
 inputArgs.Folders.cacheFolder = 'G:\My Drive\Kaparra Software\Rates Analysis\Resources';
+inputArgs.Folders.mortalityDataCacheFolder = 'G:\My Drive\Kaparra Software\Rates Analysis\LifeTables';
 inputArgs.Folders.marketPriceInputFilePath  = 'G:\My Drive\Kaparra Software\UNSWLecture\PriceReturnData';
 
-inputArgs.Mortality.mortalityTableName = TableNames.ALT_Table2020_22;
-inputArgs.Mortality.mortalityImprovementStrategy = MortalityImprovementStrategyNames.MeanImprovementFactorStrategy;
+inputArgs.Mortality.mortalityIdentifier = TableNames.ALT_Table2020_22;
+inputArgs.Mortality.mortalityImprovementStrategyName = MortalityImprovementStrategyNames.MeanImprovementFactorStrategy;
+inputArgs.Mortality.mortalityImprovementFile = 'G:\My Drive\Kaparra Software\Rates Analysis\LifeTables\Improvement_factors_2015-17.xlsx';
 inputArgs.Mortality.mortalityDataSource = AustralianGovernmentActuarySource();
 inputArgs.Mortality.cacheManagerType = utilities.CacheManagerType.Mortality;
+inputArgs.Mortality.MortalityTableCacheName = 'GlobalMortalityTableCache.mat';
 
 
 inputArgs.RateFile.Prefix = "EIOPA_RFR_";
@@ -61,24 +65,24 @@ inputArgs.RateFile.inputFileFrequency = utilities.FrequencyType.Monthly; % EIOPA
 
 inputArgs.RateFile.rateScenarios = "_RFR_spot_no_VA";
 
-inputArgs.person.gender = 'Male';
-inputArgs.person.startAge = 65;
+inputArgs.person.gender = 'Female';
+inputArgs.person.startAge = 67;
 inputArgs.person.country = "AU";
-inputArgs.person.initialValue = 1600000;
+inputArgs.person.initialValue = 600000;
 
 %inputArgs.person.ownerPayment =100000;
 %inputArgs.person.deferment = 0;
 %inputArgs.person.contribution = 0000;
 %inputArgs.person.contributionFrequency ='Quarterly';
 %inputArgs.person.ownerPayment =100000;
-inputArgs.person.ownerPayment =65000;
-inputArgs.person.deferment = 5;
-inputArgs.person.contribution = 10000;
-inputArgs.person.contributionPeriod = 5;
+inputArgs.person.ownerPayment =55000;
+inputArgs.person.deferment = 0;
+inputArgs.person.contribution = 0000;
+inputArgs.person.contributionPeriod = 0;
 inputArgs.person.contributionFrequency = utilities.FrequencyType.Monthly;
 inputArgs.person.ownerPaymentFrequency = utilities.FrequencyType.Annually;
 inputArgs.person.defaultPersonLifeTable = "Null";
-inputArgs.person.inflationRateAssumption = 0.03;
+inputArgs.person.inflationRateAssumption = 2.75;
 inputArgs.person.maxNumPayments = 45; %in years
 inputArgs.person.paymentStartDate = startDateScenario;
 
@@ -157,6 +161,7 @@ inputArgs.marketData.baseLevelInterestRate = 0.04;
 
 inputArgs.simulations.defaultSimulatorType  = "DeterministicScenarioGenerator";
 
-inputArgs.analysisDefaults.annuityParametersForTable = [3,1];
-inputArgs.analysisDefaults.annuityParametersToPlot = [3,1];
+inputArgs.analysisDefaults.annuityParametersForTable = [5,1];
+inputArgs.analysisDefaults.annuityParametersToPlot = [5,1];
+inputArgs.analysisDefaults.AnnuityPlotType =  PlotType.AnnuityLinePlot;
 end

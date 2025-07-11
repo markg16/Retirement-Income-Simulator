@@ -21,8 +21,13 @@ classdef CashFlowInflationSpec
                 
                 
                 case utilities.CashFlowInflationType.Guaranteed
+                   
+                    
+                    
                     indexationDates = obj.Rules.indexationDates;
                     effectiveInflationDates = obj.Rules.effectiveInflationDates;
+                    
+                    if ~isempty(indexationDates)
 
                     % 1. Align cash flow dates with indexation dates
                     % alignedIndices = utilities.DateUtilities.alignDates(cashflowDates, indexationDates, 'next'); % Find the next indexation date for each cash flow date
@@ -48,21 +53,13 @@ classdef CashFlowInflationSpec
                     % 5. Calculate inflated values
                     inflatedValues = cashflows; % Initialize with original cashflows
                     inflatedValues(validIndices) = inflatedValues(validIndices) .* (1 + alignedInflationRates) .^ yearDiffs(validIndices);
+                    else
+                        inflatedValues(1) = cashflows;
+                    end
 
                    
                 
-                % case utilities.CashFlowInflationType.Guaranteed
-                % 
-                % 
-                %     indexationDates = obj.Rules.indexationDates;
-                %     effectiveInflationDates = obj.Rules.effectiveInflationDates;
-                %     startDates = effectiveInflationDates(1:end-1);
-                %     endDates = effectiveInflationDates(2:end);
-                %     yearDiffs = (year(indexationDates) - year(inflationBaseDate));
-                %     inflationRates = obj.InflationRateCurve.getForwardRate(startD ...
-                %         ates,endDates); % Get rate for the specific date
-                % 
-                %     inflatedValue = cashflows .* (1 + inflationRates).^(yearDiffs);
+               
                 % % case CashFlowInflationType.MarketImplied
                 %     % Use obj.Data (e.g., inflation curve) to calculate the appropriate inflation factor
                 %     inflatedValue =  calculateInflatedValueFromMarketData(obj.Data, cashflowDates, inflationBaseDate); 

@@ -4,6 +4,7 @@ classdef AnnuityInputType
       AnnuityIncomeGtdIncrease,
       AnnuityTerm,
       DefermentPeriod,      
-      InterestRate
+      InterestRate,
+      ValuationDate
    end
 end

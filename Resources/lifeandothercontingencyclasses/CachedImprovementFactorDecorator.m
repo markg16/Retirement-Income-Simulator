@@ -47,7 +47,7 @@ classdef CachedImprovementFactorDecorator < MortalityTable
             if ~isa(baseTable, 'MortalityTable')
                 error('CachedImprovementFactorDecorator:InvalidInput', 'baseTable must be a MortalityTable object.');
             end
-            if ~(isobject(improvementFactorStrategy) && ismethod(improvementFactorStrategy, 'calculateAverageFactors')) % Basic check
+            if ~(isobject(improvementFactorStrategy) && ismethod(improvementFactorStrategy, 'calculateFactors')) % Basic check
                 error('CachedImprovementFactorDecorator:InvalidInput', 'improvementFactorStrategy is not a valid strategy object or lacks calculateAverageFactors method.');
             end
             if ~isa(cacheManager, 'utilities.MortalityCacheManager')
@@ -56,20 +56,20 @@ classdef CachedImprovementFactorDecorator < MortalityTable
             if ~isnumeric(startAgeForImprovement) || ~isscalar(startAgeForImprovement) || startAgeForImprovement < 0
                 error('CachedImprovementFactorDecorator:InvalidInput', 'startAgeForImprovement must be a non-negative scalar number.');
             end
-% 2. Assign core properties
+            % 2. Assign core properties
             obj.BaseTable = baseTable;
             obj.ImprovementFactorStrategy = improvementFactorStrategy;
             obj.StartAgeForImprovement = startAgeForImprovement;
             obj.CacheManager = cacheManager;
-% 3. Delegate responsibility for calculating factors to the strategy.
+            % 3. Delegate responsibility for calculating factors to the strategy.
 
- %    The strategy itself will handle whether it needs the file path or the base table.
+            %    The strategy itself will handle whether it needs the file path or the base table.
             try
                 obj.ImprovementFactors = obj.ImprovementFactorStrategy.calculateFactors(improvementFactorsFile, obj.BaseTable);
-                
+
                 % Validate the structure returned by the strategy to ensure it's usable
                 if ~isstruct(obj.ImprovementFactors) || ~isfield(obj.ImprovementFactors, 'Age') || ...
-                   ~isfield(obj.ImprovementFactors, 'Male') || ~isfield(obj.ImprovementFactors, 'Female')
+                        ~isfield(obj.ImprovementFactors, 'Male') || ~isfield(obj.ImprovementFactors, 'Female')
                     error('CachedImprovementFactorDecorator:InvalidIFStructure', 'The provided improvement strategy returned an invalid factors structure.');
                 end
             catch ME
@@ -78,18 +78,6 @@ classdef CachedImprovementFactorDecorator < MortalityTable
             end
 
 
-            % % Load and process improvement factors
-            % try
-            %     rawIF = utilities.LifeTableUtilities.loadImprovementFactors(improvementFactorsFile);
-            %     obj.ImprovementFactors = obj.ImprovementFactorStrategy.calculateAverageFactors(rawIF);
-            %     if ~isstruct(obj.ImprovementFactors) || ~isfield(obj.ImprovementFactors, 'Age') || ...
-            %        ~isfield(obj.ImprovementFactors, 'Male') || ~isfield(obj.ImprovementFactors, 'Female')
-            %         error('CachedImprovementFactorDecorator:InvalidIFStructure', 'Processed improvement factors have an invalid structure.');
-            %     end
-            % catch ME
-            %     error('CachedImprovementFactorDecorator:IFLoadingError', 'Failed to load or process improvement factors: %s', ME.message);
-            % end
-            
             
             % 4. Set descriptive and abstract properties
             % Set inherited properties that were abstract in the superclass
@@ -387,7 +375,7 @@ classdef CachedImprovementFactorDecorator < MortalityTable
                         duration = max(0, currentActualAge - obj.StartAgeForImprovement);
                         improvementF = obj.getImprovementFactor(gender, currentActualAge);
 
-                        calculated_qx = base_qx_val * (1 - improvementF)^duration;
+                        calculated_qx = base_qx_val * (1 + improvementF)^duration;  % improvement factors are assumed to be negative for a reducing mortality
                         temp_qx(k) = max(0, min(1, calculated_qx)); % Ensure qx is bounded [0,1]
 
                         if k > 1

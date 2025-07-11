@@ -147,6 +147,85 @@ classdef DateUtilities
                     error('Unsupported frequency type');
             end
         end
+        
+        function dtOut = createDateTime(varargin)
+            % Creates a standardized datetime object with a specific timezone and time of day.
+            % Inputs:
+            %   dateInput: The date to be converted. Can be:
+            %              - A datetime object
+            %              - A character string (e.g., '2015-12-31')
+            %   config:    A struct containing the configuration, with fields:
+            %              - .localTimeZone (e.g., 'Australia/Sydney')
+            %              - .referenceTime (e.g., hours(17))
+            %              - .dateTimeFormat (optional, for parsing strings)
+            
+            defaultInputDate = utilities.DefaultScenarioParameters.defaultStartDate; %datetime('now');
+            defaultTimeZone = utilities.DefaultScenarioParameters.defaultTimeZone; % 'Australia/Sydney';
+            defaultReferenceTime = utilities.DefaultScenarioParameters.defaultReferenceTime;
+            defaultDateTimeFormat = utilities.DefaultScenarioParameters.defaultDateTimeFormat;
+
+            p = inputParser;
+            % It now requires a DataSource and an Identifier. No defaults here.
+           
+           
+            addParameter(p, 'InputDate', defaultInputDate, @(x) isdatetime(x));
+            addParameter(p, 'TimeZone',  defaultTimeZone, @(x) isa(x,'TimeZone'));
+            addParameter(p, 'ReferenceTime', defaultReferenceTime, @(x) isduration(x));
+            addParameter(p, 'DateTimeFormat', defaultDateTimeFormat, @(x) isdatetime(x));
+           
+            parse(p, varargin{:});
+
+            dateInput = p.Results.InputDate;
+            config.localTimeZone =p.Results.TimeZone;
+            config.referenceTime = p.Results.ReferenceTime;
+            config.dateTimeFormat = p.Results.DateTimeFormat;
+
+
+            % --- Input Validation ---
+            if ~isstruct(config) || ~isfield(config, 'localTimeZone') || ~isfield(config, 'referenceTime')
+                error('DateUtils:InvalidConfig', 'Config struct must contain localTimeZone and referenceTime fields.');
+            end
+
+            % --- Create the initial datetime object ---
+            if isdatetime(dateInput)
+                dt = dateshift(dateInput,'start','day');
+            elseif ischar(dateInput) || isstring(dateInput)
+                % Use a default format if one isn't provided in the config
+                inputFormat = config.dateTimeFormat; % A robust default format
+                if isfield(config, 'dateTimeFormat') && ~isempty(config.dateTimeFormat)
+                    % Note: The input format might differ from the display format
+                    % For simplicity, we assume the input string matches the display format's date part
+                    % A more robust parser could try multiple formats.
+                    % For now, let's assume a standard input like 'yyyy-MM-dd' or 'dd/MM/yyyy'
+                    try
+                        dt = datetime(dateInput, 'InputFormat', 'uuuu-MM-dd');
+                        dt = dateshift(dateInput,'start','day');
+                    catch
+                         dt = datetime(dateInput, 'InputFormat', 'dd/MM/uuuu');
+                         dt = dateshift(dateInput,'start','day');
+                    end
+                else
+                    dt = datetime(dateInput, 'InputFormat', inputFormat);
+                    dt = dateshift(dateInput,'start','day');
+                end
+            else
+                error('DateUtils:InvalidInput', 'dateInput must be a datetime object or a character string.');
+            end
+
+            % --- Standardize the object ---
+            
+            % 1. Set the TimeZone. This is the most important step for making
+            %    the datetime object unambiguous.
+            dt.TimeZone = config.localTimeZone;
+            
+            % 2. Set the Time of Day. This normalizes all dates to a specific
+            %    reference time, like market close.
+            dt = dt + config.referenceTime;
+           
+            
+            dtOut = dt;
+        end
+        
         function defaultSimulationStartDate = setDefaultSimulationStartDate()
             defaultSimulationStartDate = utilities.DefaultSimulationParameters.defaultSimulationStartDate + ...
                 utilities.DefaultSimulationParameters.defaultReferenceTime;
@@ -215,7 +294,7 @@ classdef DateUtilities
                 currentYear = currentYear + 1;
                 nextIndexationDate = datetime(currentYear, nextIndexMonth, indexationDay);
             end
-            nextEffectiveInflationDate = dateshift(nextIndexationDate - effectiveInflationLag, 'end', 'month'); %eg 30/06/201-3 months = 31/03/2021
+            nextEffectiveInflationDate = utilities.DateUtilities.dateShiftKaparra(nextIndexationDate, -effectiveInflationLag,'end','month'); %eg 30/06/201-3 months = 31/03/2021
            
            
         end
@@ -286,6 +365,17 @@ classdef DateUtilities
             end
         end
 
+        function outputDate = dateShiftKaparra(inputDate,shiftBy,whereTo,unit)
 
+            % 1. Store the original time of day as a 'duration'
+               originalTime1 = timeofday(inputDate);
+
+               % 2. Calculate the target date. This gives the correct day but at the end of the day (23:59:59).
+               outputDate1 = dateshift(inputDate+shiftBy, whereTo, unit);
+
+               % 3. Reset the target date to midnight and add the original time back.
+               outputDate = dateshift(outputDate1, 'start', 'day') + originalTime1;
+
+        end
     end
 end

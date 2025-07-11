@@ -216,7 +216,7 @@ classdef InvestmentReturnUtilities
             % Calculate annualization factor based on frequency
             switch frequency
                 case "daily"
-                    annualizationFactor = 365;
+                    annualizationFactor = 220;
                 case "Weekly"
                     annualizationFactor = 52;
                 case "Monthly"

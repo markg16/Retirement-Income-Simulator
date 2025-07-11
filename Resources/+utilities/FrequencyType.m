@@ -1,12 +1,13 @@
-classdef FrequencyType
+classdef FrequencyType <double
     enumeration
-        Daily 
-        Weekly
-        Monthly
-        Quarterly
-        Annually
-        Hourly    % do not use this for simulated projections until you work out how to calculate number of periods between dates
-        Minutely  % do not use this for simulated projections until you work out how to calculate number of periods between dates
+        
+        Weekly (52)
+        Monthly (12)
+        Quarterly (4)
+        Annually (1)
+        Daily (365)
+        Hourly   (8760) % do not use this for simulated projections until you work out how to calculate number of periods between dates
+        Minutely  (525600) % do not use this for simulated projections until you work out how to calculate number of periods between dates
     end
      methods (Static) % Define a static method for the alias lookup
         function alias = getAlias(frequency)
@@ -56,6 +57,25 @@ classdef FrequencyType
                 otherwise
                     error('Unsupported frequency alias');
             end
+        end
+        function numericValue = getNumericValue(frequency)
+            % Returns the underlying numeric value of the enum member,
+            % representing the number of payments per year.
+            switch frequency
+                case utilities.FrequencyType.Daily
+                    numericValue = 365;
+                case utilities.FrequencyType.Weekly
+                    numericValue =52;
+                case utilities.FrequencyType.Monthly
+                    numericValue=12;
+                case utilities.FrequencyType.Quarterly
+                    numericValue =4;
+                case utilities.FrequencyType.Annually
+                    numericValue =1;
+                otherwise
+                    error('Unsupported frequency alias');
+            end
+            
         end
     end
 end

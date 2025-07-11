@@ -1,4 +1,4 @@
-classdef Person < handle
+classdef Person < handle & matlab.mixin.Copyable
     %UNTITLED9 Summary of this class goes here
     %   Detailed explanation goes here
 
@@ -28,18 +28,24 @@ classdef Person < handle
             %   Detailed explanation goes here
 
             % Default values
-            defaultGender = 'Male';
+            defaultGender = 'Female';
             defaultAge = 60;
             defaultCountry = "AU"; 
             defaultInitialValue = 100000;
             defaultTargetIncome = 50000;
-            defaultDeferment = 10;
+            defaultDeferment = 0;
             defaultContributionPeriod = defaultDeferment;
             defaultTargetContribution = 10000;
-            defaultContributionFrequency = utilities.FrequencyType.Monthly; % Monthly
+            defaultContributionFrequency = utilities.FrequencyType.Annually; % Monthly
             defaultImprovementStrategy = ConstantImprovementFactorStrategy(0); 
             defaultImprovementFile = ''; % Default to no file
             defaultCashflowStrategy = CashflowStrategy.createWithDefaultAGATable('AnnualAmount',defaultTargetIncome); % Example strategy
+            
+
+
+
+
+
 
             % Define parser
             p = inputParser;
@@ -74,7 +80,9 @@ classdef Person < handle
             obj.CashflowStrategy = p.Results.CashflowStrategy;
             obj.setFutureMortalityTable();
 
-            %obj.FutureMortalityTable = obj.setFutureMortalityTable();
+           
+
+            
         end
 
         function cashflows = generateCashflows(obj, startDate, endDate, paymentDates, inflationRate)
@@ -87,30 +95,30 @@ classdef Person < handle
 
         function setFutureMortalityTable(obj)
             
-% This method now uses the configured ImprovementStrategy and FactorFile
+            % This method now uses the configured ImprovementStrategy and FactorFile
             % properties to create the decorator.
-            
+
             % The strategy to use is already stored as a property
             improvementFactorCalulationAlgo = obj.ImprovementStrategy;
-            
+
             % Handle cases where the strategy requires a file
             if isa(improvementFactorCalulationAlgo, 'MeanImprovementFactorStrategy')
                 if isempty(obj.ImprovementFactorFile)
                     error('Person:MissingFile', 'MeanImprovementFactorStrategy requires a valid ImprovementFactorFile to be provided.');
                 elseif ~isfile(obj.ImprovementFactorFile)
-                     error('Person:FileNotFound', 'The specified ImprovementFactorFile was not found: %s', obj.ImprovementFactorFile);
+                    error('Person:FileNotFound', 'The specified ImprovementFactorFile was not found: %s', obj.ImprovementFactorFile);
                 end
-                 improvementFactorsFile = obj.ImprovementFactorFile;
+                improvementFactorsFile = obj.ImprovementFactorFile;
             else
                 % For other strategies like Constant, the file might not be needed,
                 % so we pass a dummy value that loadImprovementFactors can ignore.
                 improvementFactorsFile = 'dummy.txt'; % Or handle more elegantly in the strategy itself
             end
-            
+
             % Get the base table and cache manager from the cashflow strategy
             baseTable = obj.CashflowStrategy.BaseLifeTable;
             cacheManager = obj.CashflowStrategy.MortalityDataSource.getCacheManager();
-            
+
             % Create the decorator with the injected dependencies
             obj.FutureMortalityTable = CachedImprovementFactorDecorator(...
                 baseTable, ...
@@ -120,39 +128,6 @@ classdef Person < handle
                 cacheManager);
 
 
-            % cashflowStrategy = obj.CashflowStrategy;
-            % defaultImprovementFactor = 0.05;
-            % gender = obj.Gender;
-            % startAge = obj.Age;
-            % country = obj.Country;
-            % 
-            % %TODO set tablefilepath and improvementfactros file using
-            % %country as key
-            % try
-            %     if country == "AU"
-            %         % tableFilePath = 'G:\My Drive\Kaparra Software\Rates Analysis\LifeTables\Australian_Life_Tables_2015-17.mat';
-            % 
-            %         improvementFactorsFile = 'G:\My Drive\Kaparra Software\Rates Analysis\LifeTables\Improvement_factors_2015-17.xlsx';
-            %     else
-            %         error('setting up person with country outside Australia')
-            %     end
-            % catch ME
-            %     disp(ME.message)
-            % end
-            % 
-            % % workflow
-            % % read in mortality tables from a file 
-            % 
-            % baseTable = cashflowStrategy.BaseLifeTable;
-            % cacheManager = cashflowStrategy.MortalityDataSource.getCacheManager();
-            % 
-            % % set the algorithm  to calculate the improvement factors from
-            % % source files
-            % improvementFactorCalulationAlgo = MeanImprovementFactorStrategy(); 
-            % 
-            % %set up the decorator to convert the base table to the improved
-            % %table
-            % futureMortalityTableDecorator = CachedImprovementFactorDecorator(baseTable,improvementFactorsFile, improvementFactorCalulationAlgo,startAge,cacheManager);
         end
 
         function set.FutureMortalityTable(obj, value)

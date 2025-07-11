@@ -23,15 +23,15 @@ referenceTime = utilities.DefaultSimulationParameters.defaultReferenceTime;
 
 
 
-localPerson = person;
-frequency = localPerson.CashflowStrategy.Frequency; %utilities.FrequencyType.Annually;
-annuityIncome= localPerson.TargetIncome; %100000;
-annuityIncomeGtdIncrease = localPerson.CashflowStrategy.InflationRate; %0.03;
+
+frequency = person.CashflowStrategy.Frequency; %utilities.FrequencyType.Annually;
+annuityIncome= person.TargetIncome; %100000;
+annuityIncomeGtdIncrease = person.CashflowStrategy.InflationRate; %0.03;
 baseInflationRate = annuityIncomeGtdIncrease;
-annuityStartDate  = localPerson.CashflowStrategy.StartDate;
-sampleAge = localPerson.Age;
-defermentPeriod = localPerson.IncomeDeferement;
-maxNumPmts = localPerson.CashflowStrategy.MaxNumPayments ;
+annuityStartDate  = person.CashflowStrategy.StartDate;
+sampleAge = person.Age;
+defermentPeriod = person.IncomeDeferement;
+maxNumPmts = person.CashflowStrategy.MaxNumPayments ;
 
 
 
@@ -87,6 +87,10 @@ for k = 1:length(annuityTypes)
 
         for i = 1:length(loopVariables(loopVariableIndexes(2)).values)
 
+            % Create a deep copy of the original person object for this specific iteration.
+            % This ensures the original 'person' object is never modified.
+            localPerson = person.copy();
+
             % for l = 1:length(loopVariables(loopVariableIndexes(3)).values)
 
             % Dynamically assign the parameter values to local variables
@@ -118,19 +122,25 @@ for k = 1:length(annuityTypes)
                         localPerson.Age = varValue;
                         sampleAge = varValue;
                     case outputHeaderNames{4} %'DefermentPeriod'
+                        localPerson.IncomeDeferement = varValue;
                         defermentPeriod = varValue;
                     case outputHeaderNames{3} %'AnnuityTerm'
+                        localPerson.CashflowStrategy.MaxNumPayments =varValue;
                         maxNumPmts = varValue;
                     case outputHeaderNames{5} %'InterestRate'
                         levelRate = varValue;
                     case outputHeaderNames{2} %'DefermentPeriod'
+                        localPerson.CashflowStrategy.InflationRate = varValue;%0.03;
                         annuityIncomeGtdIncrease = varValue;
                     case outputHeaderNames{6} %'DefermentPeriod'
+                        localPerson.CashflowStrategy.Frequency = varValue;
                         annuityPaymentFrequency = varValue;
                         % Add more cases for other variables as needed
                 end
             end
 
+
+            
 
             %set up a ratecurve object
             type = 'zero';

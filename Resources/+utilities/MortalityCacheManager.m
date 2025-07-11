@@ -50,7 +50,7 @@ classdef MortalityCacheManager < handle
             try
                 obj.initializeCache();
             catch e
-                warning('Failed to initialize cache: %s', e.message);
+                warning(e.identifier,'Failed to initialize cache: %s', e.message);
                 obj.resetCache();
             end
         end
@@ -76,7 +76,7 @@ classdef MortalityCacheManager < handle
                     obj.LastUpdated = cache.lastUpdated;
                     obj.CacheStats = cache.cacheStats;
                 catch e
-                    warning('Failed to load cache file: %s. Resetting cache.', e.message);
+                    warning(e.identifier,'Failed to load cache file: %s. Resetting cache.', e.message);
                     obj.resetCache();
                 end
             else

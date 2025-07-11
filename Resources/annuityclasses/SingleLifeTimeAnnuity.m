@@ -108,7 +108,7 @@ classdef SingleLifeTimeAnnuity < Annuity
             valuationAge = startAge + calyears(utilities.DateUtilities.calculateYearDiff(annuityStartDate,valuationDate));
             paymentsPerYear = utilities.CashFlowUtils.getPaymentsPerYear(obj.PaymentFrequency);
            
-            paymentDatesToValue = obj.AnnuityPaymentDates(obj.AnnuityPaymentDates > valuationDate);
+            paymentDatesToValue = obj.AnnuityPaymentDates(obj.AnnuityPaymentDates >= valuationDate);
             
             survivorshipProbabilitiesFull = futureMortalityTable.getSurvivorshipProbabilities(gender,valuationAge,ageFinalAnnuityPayment+1); % returns a vector of probabilities for all future ages
             survivalProbabilities = futureMortalityTable.getSurvivorshipProbabilitiesForEachPaymentDate(survivorshipProbabilitiesFull,paymentDatesToValue,paymentsPerYear);

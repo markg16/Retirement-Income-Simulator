@@ -100,6 +100,26 @@ classdef Annuity < Instrument
            obj = obj.updateHistoricalValues(annuityStartDate,0);
            obj.HistoricalGuaranteedPaymentLevel = obj.updateHistoricalGuaranteedPaymentLevel(annuityStartDate,guaranteedPayment);
         end
+
+        function result = value(obj, request)
+            % Main valuation method that takes a request object and delegates
+            % to the appropriate private calculation method.
+
+            mustBeA(request, 'InstrumentValuationRequest');
+
+            % Use the class of the request to determine which analysis to run
+            switch class(request)
+                case 'AnnuitySensitivityRequest'
+                    result = obj.valueSensitivity(request);
+
+                case 'AnnuityProjectionRequest'
+                    result = obj.valueProjection(request);
+
+                otherwise
+                    error('Annuity:UnknownRequest', 'The provided request type is not supported.');
+            end
+        end
+        
         function value = getCurrentValue(obj,valuationDate, marketData, scenarioData)
             %GETCURRENTVALUE Calculates the annuity's value at a specific date.
             %   
@@ -160,16 +180,11 @@ classdef Annuity < Instrument
             annuityStartDate = obj.StartDate;
             paymentDates = obj.AnnuityPaymentDates; 
             cashFlowInflationRules = obj.CashFlowInflationRules;
-            %paymentFrequency = obj.PaymentFrequency;
-            %gtdPaymentIncreaseRate = obj.GuaranteedPaymentIncreaseRate;
+           
             % % get base inflated value from obj.HistoricalGuaranteedPaymentLevel
             payment = obj.GuaranteedPayment;
 
-            % Calculate payments per year based on frequency
-            %paymentPerPeriod = utilities.CashFlowUtils.getPaymentsPerYear(paymentFrequency);
-
-            % Calculate time since annuity start in years
-            %timeSinceStart = years(valuationDate - annuityStartDate);
+           
 
             % Check if the valuationDate is a valid payment date
             %if utilities.CashFlowUtils.isCashFlowDate(valuationDate, paymentDates)
@@ -218,13 +233,16 @@ classdef Annuity < Instrument
             paymentsPerYear = utilities.CashFlowUtils.getPaymentsPerYear(annuity.PaymentFrequency);
             cashFlows = p.Results.obj.GuaranteedPayment/paymentsPerYear * ones(size(p.Results.cashFlowDates));
             % get base inflated value from obj.HistoricalGuaranteedPaymentLevel
+            %TODO this if statement needs to refactored. Perhaps the survival
+            %probability calcs should be defined at annuity child class level..
+            if ~(annuity.AnnuityType == "Fixed")
+                if ~isempty(p.Results.MortalityTable)
+                    futureMortalityTable = p.Results.MortalityTable;
 
-            if ~isempty(p.Results.MortalityTable)
-                futureMortalityTable = p.Results.MortalityTable;
-                
-                % Incorporate Survivorship Probabilities
-                survivalProbabilities = calculateSurvivalProbabilities(annuity, futureMortalityTable, valuationDate);
-                cashFlows = cashFlows .* survivalProbabilities;
+                    % Incorporate Survivorship Probabilities
+                    survivalProbabilities = calculateSurvivalProbabilities(annuity, futureMortalityTable, valuationDate);
+                    cashFlows = cashFlows .* survivalProbabilities;
+                end
             end
 
             %Adjust for Inflation (if applicable)
@@ -237,7 +255,7 @@ classdef Annuity < Instrument
         end
 
         function cashFlowDates = generateCashFlowDates(obj,valuationDate)
-           cashFlowDates= obj.AnnuityPaymentDates(obj.AnnuityPaymentDates > valuationDate);
+           cashFlowDates= obj.AnnuityPaymentDates(obj.AnnuityPaymentDates >= valuationDate);
 
         end
 
@@ -247,16 +265,22 @@ classdef Annuity < Instrument
             maxIndexations = obj.MaxNumPayments+obj.IncomeDeferment;
 
            [firstIndexationDate, firstEffectiveInflationDate] = utilities.DateUtilities.calculateNextIndexationDate(startDate, indexationMonthDay, effectiveInflationLag);
-            
-           dateLastIndexation = firstIndexationDate + years(maxIndexations);
-           dateLastEffectiveInflation = firstEffectiveInflationDate + years(maxIndexations);
+           dateLastIndexation = utilities.DateUtilities.dateShiftKaparra(firstIndexationDate ,+ years(maxIndexations),'end','month');
+           dateLastEffectiveInflation = utilities.DateUtilities.dateShiftKaparra(firstEffectiveInflationDate, + years(maxIndexations), 'end', 'month');
+
+         
            while dateLastIndexation > obj.AnnuityPaymentDates(end) 
-               dateLastIndexation = dateshift(dateLastIndexation - oneIndexationPeriod, 'end', 'month');
-               dateLastEffectiveInflation = dateshift(dateLastEffectiveInflation - oneIndexationPeriod, 'end', 'month');
+
+               dateLastIndexation = utilities.DateUtilities.dateShiftKaparra(dateLastIndexation, - oneIndexationPeriod,'end','month');
+               dateLastEffectiveInflation = utilities.DateUtilities.dateShiftKaparra(dateLastEffectiveInflation, - oneIndexationPeriod, 'end', 'month');
+
+               
            end
-           
-           indexationDates = utilities.generateDateArrays(firstIndexationDate, dateLastIndexation + oneIndexationPeriod,indexationFrequency); % adding oneindexation period as the generateDateArrays function treats the date as the end of the period of last indexation
-           effectiveInflationDates = utilities.generateDateArrays(firstEffectiveInflationDate, dateLastEffectiveInflation + oneIndexationPeriod,indexationFrequency);
+          
+           % adding oneindexation period as the generateDateArrays function treats the date as the end of the period of last indexation
+           indexationDates = utilities.generateDateArrays(firstIndexationDate, utilities.DateUtilities.dateShiftKaparra(dateLastIndexation, oneIndexationPeriod,'end','month'),indexationFrequency); 
+          
+           effectiveInflationDates = utilities.generateDateArrays(firstEffectiveInflationDate, utilities.DateUtilities.dateShiftKaparra(dateLastEffectiveInflation, oneIndexationPeriod, 'end', 'month'),indexationFrequency);
 
         end
 
@@ -264,10 +288,17 @@ classdef Annuity < Instrument
 
             numPaymentsMade = sum(futureCashFlowDates < valuationDate);
             discountFactors = rateCurve.getDiscountFactors(futureCashFlowDates((numPaymentsMade+1):end));
+            discountFactorToValuationDate = rateCurve.getDiscountFactors(valuationDate);
+            discountFactors = discountFactors/discountFactorToValuationDate; % getDiscountFactors provides discounts relative to settle date. Need to bring forward from settle date to valuation date
 
         end
 
         function presentValue = presentValue(obj,rateCurve,inflationRates,valuationDate)
+            % TODO work out how to bring in actual inflation rates for CPI
+            % linked annuities
+            %TODO need to allow a MortalityTable to be passed that is not
+            %specific to the annuitant to allow product provider mortality
+            %vs annuitant perspective
 
             % 1. Generate Cash Flow Dates
             futureCashFlowDates = generateCashFlowDates(obj,valuationDate); % assumes next payment is on the valuation date
@@ -289,6 +320,9 @@ classdef Annuity < Instrument
 
         function presentValues = present_value(obj, futureMortalityTable,rateCurve, ...
                 inflationRate, valuationDates)
+
+            %TODO this function is deprecated by the annuity
+            %valuationrequest interface
 
            if ~isa(rateCurve, 'marketdata.RateCurveKaparra')
                 error('Input must be a RateCurveKaparra object');
@@ -321,6 +355,42 @@ classdef Annuity < Instrument
         
       
     end
+
+
+    methods (Access = private)
+        
+    function resultsTable = valueSensitivity(obj, request)
+        % This private method contains the logic from your AnnuityValuationEngine.
+        % It runs a 2D sensitivity analysis.
+        
+        engine = AnnuityValuationEngine(obj.Person, obj.AnnuityType, request.RateCurveProvider);
+        resultsTable = engine.runAnnuitySensitivityAnalysis(request.XAxisEnum, request.LineVarEnum);
+    end
+
+    function resultsTable = valueProjection(obj, request)
+        % This private method contains the logic from your AnnuityValuationEngine.
+        % It runs a 2D sensitivity analysis.
+        
+        resultsTable = 'Valuation Projectio not yet implemented. see roll forward service';
+    end
+
+    function stochasticResults = valueStochastic(obj, request)
+        % --- FUTURE IMPLEMENTATION ---
+        % This is where your Monte Carlo logic would go.
+        
+        % scenarioGenerator = request.ScenarioGenerator;
+        % numPaths = request.NumPaths;
+        % results = zeros(numPaths, 1);
+        % for i = 1:numPaths
+        %     rateCurvePath = scenarioGenerator.getNewPath();
+        %     results(i) = obj.presentValue(rateCurvePath, ...);
+        % end
+        % stochasticResults.Mean = mean(results);
+        % stochasticResults.StdDev = std(results);
+        % stochasticResults.Distribution = results;
+        stochasticResults = 'Stochastic valuation not yet implemented.';
+    end
+end
 end
         
 

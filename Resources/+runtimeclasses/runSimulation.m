@@ -1,8 +1,8 @@
-function [results,updatedScenario] = runSimulation(scenario,baseLifeTableFolder)
+function [results,updatedScenario] = runSimulation(scenario)
 
 arguments
     scenario  scenarios.Scenario
-    baseLifeTableFolder
+    
 
 end
 
@@ -11,7 +11,7 @@ disp("running simulation")
 tic
 % # Run simulation
 try
-    [results,updatedScenario] = scenario.run_simulation(baseLifeTableFolder);
+    [results,updatedScenario] = scenario.run_simulation();
 catch ME
     % Handle errors (log, display message, etc.)
     rethrow(ME);  % Or handle the error differently

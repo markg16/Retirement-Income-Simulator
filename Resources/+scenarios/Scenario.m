@@ -75,7 +75,7 @@ classdef Scenario <scenarios.ScenarioDataProvider
         
         
 
-        function [results,updatedScenario] = run_simulation(obj,baseLifeTableFolder)
+        function [results,updatedScenario] = run_simulation(obj)
             %METHOD1 Summary of this method goes here
             %   Detailed explanation goes here
 
@@ -235,7 +235,7 @@ classdef Scenario <scenarios.ScenarioDataProvider
             % check market data includes all past data required . If not
             % output an error message to say the start date commences
             % before the available historical market data.
-
+            
 
             tempScenario = obj;
             scenarioStartDate = obj.ScenarioStartDate;

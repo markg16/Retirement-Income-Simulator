@@ -20,44 +20,62 @@ classdef AustralianGovernmentActuarySource < MortalityDataSource
         OverwriteExisting = false;  % Whether to overwrite existing files
         UrlPatterns = struct();  % URL patterns loaded from resource file
         SourceDir = 'source';  % Directory for source files
-        %CacheManager % Property to hold the cache manager
+
     end
     
     methods (Access = public)
         function obj = AustralianGovernmentActuarySource(varargin)
             % Constructor with optional parameters
-            % Usage: obj = AustralianGovernmentActuarySource('OverwriteExisting', true)
-            obj@MortalityDataSource();
+            % Usage: obj = AustralianGovernmentActuarySource('cacheManagerInstance', cacheManager,'OverwriteExisting', true)
             
+            % 1. Pre-scan varargin for arguments intended for the parent constructor.
+            %    In this case, we are only looking for 'cacheManagerInstance'.
+            parentArgs = {};
+            childVarargin = varargin; % Make a copy to pass to the child's parser
+
+            for i = 1:2:length(varargin)
+                if strcmpi(varargin{i}, 'cacheManagerInstance')
+                    % Found the argument for the parent.
+                    parentArgs = {'cacheManagerInstance', varargin{i+1}};
+                    % Remove it from the list that the child will parse.
+                    childVarargin([i, i+1]) = [];
+                    break; % Assume it only appears once
+                end
+            end
+
+            % 2. Call the parent constructor FIRST, passing any found arguments.
+            %    This correctly initializes the CacheManager.
+            obj@MortalityDataSource(parentArgs{:});
+
+            % 3. Now, configure the child-specific properties using its own parser.
+            p = inputParser;
+            addParameter(p, 'OverwriteExisting', false, @islogical);
+            parse(p, childVarargin{:});
+            obj.OverwriteExisting = p.Results.OverwriteExisting;
+
+            % 4. Set other properties and perform initial setup for this source.
             % Set source properties
             obj.SourceName = 'Australian Government Actuary';
             obj.SourceURL = 'https://aga.gov.au/publications/life-tables';
-            
+
             % Configure web options
             obj.WebOptions = weboptions('Timeout', 30, ...
-                                      'HeaderFields', {'User-Agent', 'Mozilla/5.0'}, ...
-                                      'ContentType', 'text', ...
-                                      'CharacterEncoding', 'UTF-8');
-            
-            % Parse optional parameters
-            p = inputParser;
-            addParameter(p, 'OverwriteExisting', false, @islogical);
-            parse(p, varargin{:});
-            obj.OverwriteExisting = p.Results.OverwriteExisting;
+                'HeaderFields', {'User-Agent', 'Mozilla/5.0'}, ...
+                'ContentType', 'text', ...
+                'CharacterEncoding', 'UTF-8');
 
-             % Initialize directories
+
+            % Initialize directories
             obj.initializeSourceDirectory();
-            
+
             % Load URL patterns
             obj.loadUrlPatterns();
-            
+
             % Initialize table URLs before URL cache
             obj.initializeTableURLs();
             obj.initializeUrlCache();
 
-            % % initilaise mortality cachemanager
-            % obj.CacheManager = CacheManagerFactory.createCacheManager(CacheManagerType.Mortality);
-            % % obj.CacheManager = MortalityCacheManager();
+      
         end
          function initializeSourceDirectory(obj)
             %INITIALIZESOURCEDIRECTORY Initialize source directory
@@ -967,3 +985,5 @@ classdef AustralianGovernmentActuarySource < MortalityDataSource
     end
 
 end
+
+

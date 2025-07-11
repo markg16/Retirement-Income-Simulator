@@ -79,7 +79,7 @@ classdef MortalityTableFactory
             % Inputs:
             %   data - Structure containing mortality table data
             
-            requiredFields = {'M', 'F'};
+            requiredFields = {'Male', 'Female'};
             requiredSubFields = {'Age', 'lx', 'qx'};
             
             % Check main structure

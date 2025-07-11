@@ -11,28 +11,7 @@ classdef ScenarioSpecificMarketData < marketdata.MarketData
 
     methods
         function obj = ScenarioSpecificMarketData(simulationIdentifier,scenario,marketData)
-            % extract data between two dates defined for the scenario. 
-            % Add scenario as an input
-            % historicalScenarioMarketData is allready a marketdata object
-
-            % % Use varargin to handle optional input arguments
-            % 
-            % % Define default values for optional arguments
-            % defaultSimulationIdentifier = '';
-            % defaultScenario = scenarios.Scenario(); % Or your default scenario object
-            % defaultMarketData = marketdata.MarketData(); % Or your default market data object
-            % 
-            % % Parse input arguments
-            % p = inputParser;
-            % addParameter(p, 'SimulationIdentifier', defaultSimulationIdentifier, @ischar);
-            % addParameter(p, 'Scenario', defaultScenario, @(x) isa(x, 'scenarios.Scenario'));
-            % addParameter(p, 'MarketData', defaultMarketData, @(x) isa(x, 'marketdata.MarketData'));
-            % parse(p, varargin{:});
-
-            % % Access parsed values
-            % obj.SimulationIdentifier = p.Results.SimulationIdentifier;
-            % scenario = p.Results.Scenario;
-            % marketData = p.Results.MarketData;
+            
             
             scenarioStartDate = scenario.ScenarioStartDate;
             scenarioEndDate = scenario.ScenarioEndDate;
