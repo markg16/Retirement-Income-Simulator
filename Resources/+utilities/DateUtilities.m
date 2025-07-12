@@ -169,7 +169,7 @@ classdef DateUtilities
            
            
             addParameter(p, 'InputDate', defaultInputDate, @(x) isdatetime(x));
-            addParameter(p, 'TimeZone',  defaultTimeZone, @(x) isa(x,'TimeZone'));
+            addParameter(p, 'TimeZone',  defaultTimeZone,@(x) ischar(x));
             addParameter(p, 'ReferenceTime', defaultReferenceTime, @(x) isduration(x));
             addParameter(p, 'DateTimeFormat', defaultDateTimeFormat, @(x) isdatetime(x));
            
