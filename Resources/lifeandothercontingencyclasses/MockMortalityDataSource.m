@@ -7,21 +7,43 @@ classdef MockMortalityDataSource < MortalityDataSource
     end
 
     methods
-        function obj = MockMortalityDataSource(tableName, customRates)
-            obj@MortalityDataSource(); % Call superclass constructor
-            if nargin > 0 && ~isempty(tableName)
-                obj.MockTableName = tableName;
+        function obj = MockMortalityDataSource(varargin)
+            % --- REFACTORED CONSTRUCTOR with argument forwarding ---
+
+            % 1. Pre-scan varargin for arguments intended for the parent constructor.
+            parentArgs = {};
+            childVarargin = varargin; 
+            
+            % We look for 'cacheManagerInstance' and also for arguments that
+            % this mock class's parser will handle, to separate them.
+            for i = 1:2:length(varargin)
+                if strcmpi(varargin{i}, 'cacheManagerInstance')
+                    parentArgs = {'cacheManagerInstance', varargin{i+1}};
+                    childVarargin([i, i+1]) = [];
+                    break; 
+                end
             end
-            if nargin > 1 && ~isempty(customRates)
-                obj.CustomRates = customRates;
-            end
+
+            % 2. Call the parent constructor FIRST, forwarding the found arguments.
+            obj@MortalityDataSource(parentArgs{:});
+            
+            % 3. Now, configure the child-specific properties using its own parser.
+            p = inputParser;
+            addParameter(p, 'TableName', obj.MockTableName, @(x) isa(x, 'TableNames'));
+            addParameter(p, 'CustomRates', [], @isstruct);
+            parse(p, childVarargin{:});
+            
+            obj.MockTableName = p.Results.TableName;
+            obj.CustomRates = p.Results.CustomRates;
+            
+            % 4. Set other properties for this source.
             obj.SourceName = 'MockDataSource';
             obj.SourceURL = 'local://mock';
-            % The superclass constructor already creates obj.CacheManager
-            % using a unique filename like 'MockMortalityDataSource_cache.mat'
-            % if ~isempty(obj.CacheManager) % Ensure it was created
-            %     obj.CacheManager.clearCache(); % Start clean for each instance
-            % end
+            
+            % Ensure the cache is clean for this instance, which is good practice for a mock.
+            if ~isempty(obj.getCacheManager())
+                obj.getCacheManager().clearCache();
+            end
         end
 
         function clearSpecificCache(obj)

@@ -238,10 +238,30 @@ classdef MarketData < marketdata.MarketDataProvider
         end
         function marketPrices = getMarketPrices(obj,priceDate)
             
-            
+            %             This approach naturally handles all  scenarios without creating runtime failures but may give wierd results:
+            %
+            % If priceDate exists: It will be the last and latest date in the tempMarketPrices.Time <= priceDate subset, so its index will be returned.
+            % If priceDate is after the last timestamp: The condition tempMarketPrices.Time <= priceDate will be true for all rows. The find command will return the index of the very last row (the latest available date).
+            % If priceDate falls between two timestamps: The condition will be true for all rows up to the latest date before priceDate. The find command will return the index of that latest available row.
+            % If priceDate is before all timestamps: The condition will be false for all rows, find will return an empty array, and the if statement correctly handles this by creating an empty result.
+            %%TODO check that marketprices always haveNAN in last row if not remove
+            %idx-1 and replace with idx
             tempMarketPrices = obj.ScenarioHistoricalMarketData.MarketIndexPrices;
 
-            tempMarketPrices = tempMarketPrices(tempMarketPrices.Time == priceDate,:);
+            %tempMarketPrices = tempMarketPrices(tempMarketPrices.Time == priceDate,:);
+
+            % Select the row corresponding to the latest time that is on or before the priceDate
+            idx = find(tempMarketPrices.Time <= priceDate, 1, 'last');
+
+            % Check if a valid index was found (i.e., priceDate is not before all available dates)
+            if ~isempty(idx)
+                tempMarketPrices = tempMarketPrices(idx-1, :);
+            else
+                % Handle the case where priceDate is before any data exists
+                % Return an empty table with the same structure
+                tempMarketPrices = tempMarketPrices([], :);
+                disp('Warning: priceDate is earlier than all available market data.');
+            end
             
             marketPrices = tempMarketPrices;
         end

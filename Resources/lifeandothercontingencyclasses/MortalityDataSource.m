@@ -39,41 +39,28 @@ classdef MortalityDataSource < handle
 % In MortalityDataSource.m constructor (conceptual modification)
 function obj = MortalityDataSource(varargin)
     p = inputParser;
-    addParameter(p, 'cacheManagerInstance', [], @(x) isempty(x) || isa(x, 'MortalityCacheManager'));
+    addParameter(p, 'cacheManagerInstance', [], @(x) isempty(x) || isa(x, 'utilities.MortalityCacheManager'));
     % ... other parameters like cacheFileName, cacheDirName if you want to configure file directly
     parse(p, varargin{:});
     %   Initializes common properties and directories
 
     obj.initializeDirectories();
     obj.DataCache = containers.Map();
-    
+
     if ~isempty(p.Results.cacheManagerInstance)
         obj.CacheManager = p.Results.cacheManagerInstance;
     else
-         % Create a new CacheManager; its own constructor will handle loading its cache file
+        % Create a new CacheManager; its own constructor will handle loading its cache file
         className = class(obj);
         % The CacheManagerFactory or MortalityCacheManager constructor will use this file name
         % to initialize its internal cache (e.g., load from this .mat file).
-        uniqueCacheFile = sprintf('%s_cache.mat', className); 
+        uniqueCacheFile = sprintf('%s_cache.mat', className);
         obj.CacheManager = utilities.CacheManagerFactory.createCacheManager(...
             utilities.CacheManagerType.Mortality, 'cacheFile', uniqueCacheFile);
-       
-     end
-   
+
+    end
+
 end
-
-
-% function obj = MortalityDataSource()
-%     %MORTALITYDATASOURCE Constructor
-%     % Constructor now creates the CacheManager via the factory
-%     obj.CacheManager = utilities.CacheManagerFactory.createCacheManager(utilities.CacheManagerType.Mortality);
-%     %   Initializes common properties and directories
-% 
-%     obj.initializeDirectories();
-% 
-%     obj.DataCache = containers.Map();
-%     obj.initializeDataCache();  % Initialize the data cache
-% end
 
 function delete(obj)
     %DELETE Destructor

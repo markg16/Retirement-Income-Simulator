@@ -61,20 +61,19 @@ classdef CashflowStrategy < CashflowInterface & handle
     methods (Access = public)
         % The main constructor is now simpler. It expects a valid source and identifier.
         function obj = CashflowStrategy(varargin)
+            defaultStartDate = utilities.DateUtilities.createDateTime(); %datetime('now');
+            
             p = inputParser;
             % It now requires a DataSource and an Identifier. No defaults here.
             addRequired(p, 'MortalityIdentifier', @(x) ~isempty(x));
 
             addRequired(p, 'MortalityDataSource', @(x) isa(x, 'MortalityDataSource'));
-% addRequired(p, 'MortalityIdentifier');            
-% addRequired(p, 'MortalityDataSource');
 
-
-            addParameter(p, 'AnnualAmount', 1000, @isnumeric);
-            addParameter(p, 'StartDate', datetime('now'), @(x) isdatetime(x));
-            addParameter(p, 'Frequency', 12, @(x) isa(x,'utilities.FrequencyType'));
-            addParameter(p, 'InflationRate', 0.02, @isnumeric);
-            addParameter(p, 'MaxNumPayments', 1200, @isnumeric);
+            addParameter(p, 'AnnualAmount', 50000, @isnumeric);
+            addParameter(p, 'StartDate', defaultStartDate, @(x) isdatetime(x));
+            addParameter(p, 'Frequency', utilities.FrequencyType.Annually, @(x) isa(x,'utilities.FrequencyType'));
+            addParameter(p, 'InflationRate', 0.00, @isnumeric);
+            addParameter(p, 'MaxNumPayments', 45, @isnumeric);
             
            
             

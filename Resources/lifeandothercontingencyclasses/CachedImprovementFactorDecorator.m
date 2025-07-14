@@ -47,7 +47,7 @@ classdef CachedImprovementFactorDecorator < MortalityTable
             if ~isa(baseTable, 'MortalityTable')
                 error('CachedImprovementFactorDecorator:InvalidInput', 'baseTable must be a MortalityTable object.');
             end
-            if ~(isobject(improvementFactorStrategy) && ismethod(improvementFactorStrategy, 'calculateAverageFactors')) % Basic check
+            if ~(isobject(improvementFactorStrategy) && ismethod(improvementFactorStrategy, 'calculateFactors')) % Basic check
                 error('CachedImprovementFactorDecorator:InvalidInput', 'improvementFactorStrategy is not a valid strategy object or lacks calculateAverageFactors method.');
             end
             if ~isa(cacheManager, 'utilities.MortalityCacheManager')
@@ -56,20 +56,20 @@ classdef CachedImprovementFactorDecorator < MortalityTable
             if ~isnumeric(startAgeForImprovement) || ~isscalar(startAgeForImprovement) || startAgeForImprovement < 0
                 error('CachedImprovementFactorDecorator:InvalidInput', 'startAgeForImprovement must be a non-negative scalar number.');
             end
-% 2. Assign core properties
+            % 2. Assign core properties
             obj.BaseTable = baseTable;
             obj.ImprovementFactorStrategy = improvementFactorStrategy;
             obj.StartAgeForImprovement = startAgeForImprovement;
             obj.CacheManager = cacheManager;
-% 3. Delegate responsibility for calculating factors to the strategy.
+            % 3. Delegate responsibility for calculating factors to the strategy.
 
- %    The strategy itself will handle whether it needs the file path or the base table.
+            %    The strategy itself will handle whether it needs the file path or the base table.
             try
                 obj.ImprovementFactors = obj.ImprovementFactorStrategy.calculateFactors(improvementFactorsFile, obj.BaseTable);
-                
+
                 % Validate the structure returned by the strategy to ensure it's usable
                 if ~isstruct(obj.ImprovementFactors) || ~isfield(obj.ImprovementFactors, 'Age') || ...
-                   ~isfield(obj.ImprovementFactors, 'Male') || ~isfield(obj.ImprovementFactors, 'Female')
+                        ~isfield(obj.ImprovementFactors, 'Male') || ~isfield(obj.ImprovementFactors, 'Female')
                     error('CachedImprovementFactorDecorator:InvalidIFStructure', 'The provided improvement strategy returned an invalid factors structure.');
                 end
             catch ME
@@ -78,18 +78,6 @@ classdef CachedImprovementFactorDecorator < MortalityTable
             end
 
 
-            % % Load and process improvement factors
-            % try
-            %     rawIF = utilities.LifeTableUtilities.loadImprovementFactors(improvementFactorsFile);
-            %     obj.ImprovementFactors = obj.ImprovementFactorStrategy.calculateAverageFactors(rawIF);
-            %     if ~isstruct(obj.ImprovementFactors) || ~isfield(obj.ImprovementFactors, 'Age') || ...
-            %        ~isfield(obj.ImprovementFactors, 'Male') || ~isfield(obj.ImprovementFactors, 'Female')
-            %         error('CachedImprovementFactorDecorator:InvalidIFStructure', 'Processed improvement factors have an invalid structure.');
-            %     end
-            % catch ME
-            %     error('CachedImprovementFactorDecorator:IFLoadingError', 'Failed to load or process improvement factors: %s', ME.message);
-            % end
-            
             
             % 4. Set descriptive and abstract properties
             % Set inherited properties that were abstract in the superclass
@@ -122,18 +110,58 @@ classdef CachedImprovementFactorDecorator < MortalityTable
             rate = obj.MortalityRates.(gender).qx(ageIndex);
         end
 
-        function lxVal = getLx(obj, gender, age)
+        function [lxVal, success, errorMessage] = getLx(obj, gender, age)
             % Retrieves the pre-calculated improved number of lives (lx).
+            % Returns a success flag and an error message if the lookup fails.
+
+            % 1. Set default return values for the failure case.
+            lxVal = NaN;
+            success = false;
+            errorMessage = '';
+
+            % 2. Validate that the gender field exists.
             if ~isfield(obj.MortalityRates, gender)
-                error('CachedImprovementFactorDecorator:InvalidGender', 'Gender "%s" not found in improved table for table %s.', gender, obj.TableName);
+                errorMessage = sprintf('Gender "%s" not found in improved table for table %s.', gender, obj.TableName);
+                return; % Exit the function early
             end
 
-            ageIndex = find(obj.MortalityRates.(gender).Age == age, 1);
-            if isempty(ageIndex)
-                error('CachedImprovementFactorDecorator:AgeNotFound', 'Age %d not found in improved table for gender %s, table %s.', age, gender, obj.TableName);
+            % 3. Find the index for the requested age.
+            try
+                ageIndex = find(obj.MortalityRates.(gender).Age == age, 1);
+            catch
+                % This handles cases where .Age might not exist or is not numeric
+                errorMessage = sprintf('Could not search for age in table for gender %s.', gender);
+                return;
             end
+
+            % 4. Validate that the age was found.
+            if isempty(ageIndex)
+                errorMessage = sprintf('Age %d not found in improved table for gender %s, table %s.', age, gender, obj.TableName);
+                return; % Exit the function early
+            end
+
+            % --- Success Case ---
+            % If all checks passed, we can get the value and set success to true.
             lxVal = obj.MortalityRates.(gender).lx(ageIndex);
+            success = true;
+            % No error message is needed on success.
         end
+        % function lxVal = getLx(obj, gender, age)
+        %     % Retrieves the pre-calculated improved number of lives (lx).
+        %     try
+        % 
+        %         if ~isfield(obj.MortalityRates, gender)
+        %             error('CachedImprovementFactorDecorator:InvalidGender', 'Gender "%s" not found in improved table for table %s.', gender, obj.TableName);
+        %         end
+        %     catch ME
+        %     end
+        % 
+        %     ageIndex = find(obj.MortalityRates.(gender).Age == age, 1);
+        %     if isempty(ageIndex)
+        %         error('CachedImprovementFactorDecorator:AgeNotFound', 'Age %d not found in improved table for gender %s, table %s.', age, gender, obj.TableName);
+        %     end
+        %     lxVal = obj.MortalityRates.(gender).lx(ageIndex);
+        % end
 
         function survivorshipProbabilities = getSurvivorshipProbabilities(obj, gender, currentAge, finalAge)
             % Delegates the calculation to the static utility function.
@@ -366,36 +394,55 @@ classdef CachedImprovementFactorDecorator < MortalityTable
                     baseGenderRates = obj.BaseTable.MortalityRates.(gender);
                     
                     baseAges = baseGenderRates.Age(:);
+                    maxAgeInTable = baseAges(end);
+                    startAgeForImprovement = obj.StartAgeForImprovement;
 
-                    idxStartInBase = find(baseAges == obj.StartAgeForImprovement, 1);
-                    if isempty(idxStartInBase)
-                        error('CachedImprovementFactorDecorator:StartAgeNotFound', ...
-                            'StartAgeForImprovement %d not found in BaseTable for gender %s.', obj.StartAgeForImprovement, gender);
-                    end
+                    if startAgeForImprovement <=maxAgeInTable
+                        try
 
-                    numImprovedAges = length(baseAges) - idxStartInBase + 1;
-                    improvedAges = baseAges(idxStartInBase:end);
+                            idxStartInBase = find(baseAges == startAgeForImprovement, 1);
+                            if isempty(idxStartInBase)
+                                errmsg = sprintf('CachedImprovementFactorDecorator:StartAgeNotFound',...
+                                    'Age %d not found in improved table for gender %s, table %s.', startAgeForImprovement, gender, obj.TableName);
+                                
+                            end
 
-                    temp_qx = zeros(numImprovedAges, 1);
-                    temp_lx = zeros(numImprovedAges, 1);
+                            numImprovedAges = length(baseAges) - idxStartInBase + 1;
+                            improvedAges = baseAges(idxStartInBase:end);
 
-                    temp_lx(1) = obj.BaseTable.getLx(gender, obj.StartAgeForImprovement);
+                            temp_qx = zeros(numImprovedAges, 1);
+                            temp_lx = zeros(numImprovedAges, 1);
 
-                    for k = 1:numImprovedAges
-                        currentActualAge = improvedAges(k);
-                        base_qx_val = obj.BaseTable.getRate(gender, currentActualAge);
-                        duration = max(0, currentActualAge - obj.StartAgeForImprovement);
-                        improvementF = obj.getImprovementFactor(gender, currentActualAge);
+                            temp_lx(1) = obj.BaseTable.getLx(gender, startAgeForImprovement);
 
-                        calculated_qx = base_qx_val * (1 - improvementF)^duration;
-                        temp_qx(k) = max(0, min(1, calculated_qx)); % Ensure qx is bounded [0,1]
+                            for k = 1:numImprovedAges
+                                currentActualAge = improvedAges(k);
+                                base_qx_val = obj.BaseTable.getRate(gender, currentActualAge);
+                                duration = max(0, currentActualAge - startAgeForImprovement);
+                                improvementF = obj.getImprovementFactor(gender, currentActualAge);
 
-                        if k > 1
-                            temp_lx(k) = temp_lx(k-1) * (1 - temp_qx(k-1));
+                                calculated_qx = base_qx_val * (1 + improvementF)^duration;  % improvement factors are assumed to be negative for a reducing mortality
+                                temp_qx(k) = max(0, min(1, calculated_qx)); % Ensure qx is bounded [0,1]
+
+                                if k > 1
+                                    temp_lx(k) = temp_lx(k-1) * (1 - temp_qx(k-1));
+                                end
+
+                                newRates.(gender) = struct('Age', improvedAges, 'lx', temp_lx, 'qx', temp_qx);
+                            end
+                        catch ME
+                            warning('getImprovedRate:FailedLookup', 'Could not retrieve starting qx value. Reason: %s , revert to existing table', errMsg);
+                            newRates.(gender) = obj.BaseTable.MortalityRates;
+
                         end
-
-                        newRates.(gender) = struct('Age', improvedAges, 'lx', temp_lx, 'qx', temp_qx);
+                    else
+                        errMsg = sprintf('CachedImprovementFactorDecorator:StartAgeGreater than max table age %d not found in improved table for gender %s, table %s.',...
+                            startAgeForImprovement, gender, obj.TableName);
+                        warning('getImprovedRate:FailedLookup', 'Could not retrieve starting qx value. Reason: %s , revert to existing table',errMsg );
+                        %TODO work out how to 
+                            newRates.(gender) = obj.BaseTable.MortalityRates.(gender);
                     end
+                    
                     improvedRatesStruct = newRates;
                     obj.CacheManager.cacheTable(cacheKey, improvedRatesStruct);
                 end

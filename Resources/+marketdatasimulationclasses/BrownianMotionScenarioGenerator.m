@@ -73,7 +73,7 @@ classdef BrownianMotionScenarioGenerator < marketdatasimulationclasses.EconomicS
             [V,D] = eig(corr_matrix);
             corr_matrix_sqrt = V*sqrt(D);
             %portfolio_weights = obj.SimulationParameters.TradingStrategy.BenchmarkWeights;  % [0.2 0.2 0.2 0.2 0.1 0.1]';
-
+%TODO make these inputs from the paramter file eg risk premiums
             sigma = 0.15;
             mu = 0.04;
 

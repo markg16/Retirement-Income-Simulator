@@ -2,6 +2,8 @@ function marketData =initialiseMarketDataObject()
 
 
 % Other Settings
+%TODOD make this initialisation somethingthat depends on app state not
+%rerunnning initialisation
 inputArgs = runtimeclasses.initialiseInputArguments();
 
 format(inputArgs.runtime.numericalOutputformat);
@@ -29,6 +31,9 @@ rateFileInputFileFrequency = utilities.FrequencyType.Monthly;
 % # Load Rates data
 disp("loading rates data")
 disp("generating rate file dates")
+
+% TODO This code missess the last date as it uses the startDate output so
+% end of last month is ignored eg [statdates,enddates] is teh output
 rateInputFileDates = utilities.generateDateArrays(startDateRates, endDateRates, rateFileInputFileFrequency);
 
 disp("loading rate files for  dates from file or cached file if exists")
