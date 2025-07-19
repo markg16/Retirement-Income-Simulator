@@ -5,14 +5,21 @@ classdef AnnuityValuationEngine < handle
         Person Person
         AnnuityFactory
         RateCurveProvider %marketdata.RateCurveProviderBase
+        MortalityDataSourceManager
     end
 
     methods
-        function obj = AnnuityValuationEngine(person,annuityType)
+        function obj = AnnuityValuationEngine(person,annuityType,mortalityDataSourceManager)
             % The constructor is now simpler. It doesn't need the RateCurveProvider,
             % as that will be part of the config passed to the run method.
+
+            if ~isa(mortalityDataSourceManager, 'DataSourceManager')
+                error('AnnuityValuationEngine:InvalidInput', 'A valid DataSourceManager object must be provided.');
+            end
+
             obj.Person = person;
             obj.AnnuityFactory = AnnuityStrategyFactory.createAnnuityStrategyFactory(annuityType);
+            obj.MortalityDataSourceManager = mortalityDataSourceManager;
 
         end
         % function set.RateCurveProvider(obj, value)
@@ -35,23 +42,17 @@ classdef AnnuityValuationEngine < handle
             % Runs a 2D sensitivity analysis and returns the results in a table.
             % xAxisVarEnum: The AnnuityInputType enum member for the x-axis.
             % lineVarEnum:  The AnnuityInputType enum member for the different lines.
-            %set up ratecurveprovider
-            obj.RateCurveProvider = config.RateCurveProvider;
+            
 
             % Get loop values directly from the config object
             xAxisValues = config.XAxisValues;
             lineVarValues = config.LineVarValues;
             xAxisEnum = config.XAxisEnum;
             lineVarEnum = config.LineVarEnum;
+           
+            %set up ratecurve provider property from config object
+            obj.RateCurveProvider = config.RateCurveProvider;           
 
-            % % Use a config struct for clarity
-            % config.xAxis.enum = xAxisVarEnum;
-            % config.xAxis.name = char(xAxisVarEnum);
-            % config.lineVar.enum = lineVarEnum;
-            % config.lineVar.name = char(lineVarEnum);
-            % config.xAxis.values = obj.getValuesForParam(config.xAxis.enum);
-            % config.lineVar.values = obj.getValuesForParam(config.lineVar.enum);
-            
             % Pre-allocate results array of structs for speed
             %numRows = length(config.xAxis.values) * length(config.lineVar.values);
             numRows = length(xAxisValues) * length(lineVarValues);
@@ -61,35 +62,6 @@ classdef AnnuityValuationEngine < handle
                 warning('AnnuityValuationEngine:NoScenarios', 'No scenarios to run based on the provided looping variable ranges.');
                 return;
             end
-
-            %Gather the BASE parameters from the initial Person object ---
-            % We will use these as the starting point for each iteration.
-            baseParams.Gender = obj.Person.Gender;
-            baseParams.Country = obj.Person.Country;
-            baseParams.InitialValue = obj.Person.InitialValue;
-            baseParams.TargetIncome = obj.Person.TargetIncome;
-            baseParams.Contribution = obj.Person.Contribution;
-            baseParams.ContributionPeriod = obj.Person.ContributionPeriod;
-            baseParams.ContributionFrequency = obj.Person.ContributionFrequency;
-            baseParams.ImprovementStrategy = obj.Person.ImprovementStrategy;
-            baseParams.ImprovementFactorFile = obj.Person.ImprovementFactorFile;
-
-            % Base parameters that might be varied by the loops
-            baseParams.Age = obj.Person.Age;
-            baseParams.IncomeDeferement = obj.Person.IncomeDeferement;
-
-            % Base CashflowStrategy parameters
-            baseParams.AnnualAmount = obj.Person.CashflowStrategy.AnnualAmount;
-            baseParams.StartDate = obj.Person.CashflowStrategy.StartDate;
-            baseParams.Frequency = obj.Person.CashflowStrategy.Frequency;
-            baseParams.InflationRate = obj.Person.CashflowStrategy.InflationRate;
-            baseParams.MaxNumPayments = obj.Person.CashflowStrategy.MaxNumPayments;
-            baseParams.MortalityDataSource = obj.Person.CashflowStrategy.MortalityDataSource;
-            baseParams.MortalityIdentifier = obj.Person.CashflowStrategy.MortalityIdentifier;
-
-
-
-
            % results(numRows) = struct(config.xAxis.name, [], config.lineVar.name, [], 'AnnuityValue', []);
             results(numRows) = struct(char(xAxisEnum), [], char(lineVarEnum), [], 'AnnuityValue', []);
 
@@ -99,11 +71,13 @@ classdef AnnuityValuationEngine < handle
             isXAxisRateBased = (xAxisEnum == AnnuityInputType.InterestRate || xAxisEnum == AnnuityInputType.ValuationDate);
             isLineVarRateBased = (lineVarEnum == AnnuityInputType.InterestRate || lineVarEnum == AnnuityInputType.ValuationDate);
 
-            for lineVal = lineVarValues
-                for xVal = xAxisValues
+            for lineValCell = lineVarValues
+                lineVal = lineValCell{:};
+                for xValCell = xAxisValues
+                    xVal = xValCell{:};
 
                     % --- 2. Create a temporary struct of parameters for THIS iteration ---
-                    currentParams = baseParams;
+                    currentParams = obj.getBaseParams();
 
                     % Overwrite base parameters with the current loop variables
                     currentParams = obj.updateParamsForLoop(currentParams, xAxisEnum, xVal);
@@ -166,27 +140,8 @@ classdef AnnuityValuationEngine < handle
     end
     
     methods (Access = private)
-        % function values = getValuesForParam(obj, paramEnum)
-        %     % This method replaces the old valueMap
-        %     baseInflationRate = obj.Person.CashflowStrategy.InflationRate;
-        %     switch paramEnum
-        %         case AnnuityInputType.InterestRate
-        %             values = obj.RateCurveProvider.getAvailableIdentifiers();
-        %         case AnnuityInputType.ValuationDate
-        %             values = obj.RateCurveProvider.getAvailableIdentifiers();
-        %         case AnnuityInputType.AnnuityTerm
-        %             values = 5:1:(obj.Person.CashflowStrategy.MaxNumPayments + 10);
-        %         case AnnuityInputType.Age
-        %             values = obj.Person.Age:1:(obj.Person.Age + 20);
-        %         case AnnuityInputType.DefermentPeriod
-        %             values = 0:5:(obj.Person.IncomeDeferement + 5);
-        %         case AnnuityInputType.AnnuityIncomeGtdIncrease
-        %             values = 0:0.01:(baseInflationRate + 0.02);
-        %         otherwise
-        %             values = [];
-        %     end
-        % end
-        function params = updateParamsForLoop(~, params, paramEnum, value)
+  
+        function params = updateParamsForLoop(obj, params, paramEnum, value)
             switch paramEnum
                 case AnnuityInputType.Age
                     params.Age = value;
@@ -196,6 +151,13 @@ classdef AnnuityValuationEngine < handle
                     params.MaxNumPayments = value;
                 case AnnuityInputType.AnnuityIncomeGtdIncrease
                     params.InflationRate = value;
+                case AnnuityInputType.MortalityIdentifier
+
+                    mortalityDataSourceManager = obj.MortalityDataSourceManager;
+                    mortalityDataSource = mortalityDataSourceManager.getDataSourceForTable(value);
+                    params.MortalityDataSource = mortalityDataSource;
+                    params.MortalityIdentifier = value;
+
             end
         end
 
@@ -213,26 +175,36 @@ classdef AnnuityValuationEngine < handle
             end
             rateCurve = obj.RateCurveProvider.getCurve(rateCurveIdentifier);
         end
+        
+        function baseParams = getBaseParams(obj)
+        %Gather the BASE parameters from the initial Person object ---
+            % We will use these as the starting point for each iteration.
+            baseParams.Gender = obj.Person.Gender;
+            baseParams.Country = obj.Person.Country;
+            baseParams.InitialValue = obj.Person.InitialValue;
+            baseParams.TargetIncome = obj.Person.TargetIncome;
+            baseParams.Contribution = obj.Person.Contribution;
+            baseParams.ContributionPeriod = obj.Person.ContributionPeriod;
+            baseParams.ContributionFrequency = obj.Person.ContributionFrequency;
+            baseParams.ImprovementStrategy = obj.Person.ImprovementStrategy;
+            baseParams.ImprovementFactorFile = obj.Person.ImprovementFactorFile;
 
-        % function person = setParameter(obj, person, paramEnum, value)
-        %     % Helper to set the correct property on the person/strategy object
-        %     switch paramEnum
-        %         case AnnuityInputType.Age
-        %             person.Age = value;
-        %         case AnnuityInputType.DefermentPeriod
-        %             person.IncomeDeferement = value;
-        %         case AnnuityInputType.AnnuityTerm
-        %             person.CashflowStrategy.MaxNumPayments = value;
-        %         case AnnuityInputType.AnnuityIncomeGtdIncrease
-        %             person.CashflowStrategy.InflationRate = value;
-        %         % These cases don't need to doanything because they are handled by the RateCurveProvider,
-        %         % but including them prevents any potential "unhandled enum" errors
-        %         % and makes the code's intent clear.
-        %         case {AnnuityInputType.InterestRate, AnnuityInputType.ValuationDate}
-        %             % No action needed. These parameters are used to select a rate curve,
-        %             % not to modify the Person object's properties.
-        %     end
-        % end
+            % Base parameters that might be varied by the loops
+            baseParams.Age = obj.Person.Age;
+            baseParams.IncomeDeferement = obj.Person.IncomeDeferement;
+
+            % Base CashflowStrategy parameters
+            baseParams.AnnualAmount = obj.Person.CashflowStrategy.AnnualAmount;
+            baseParams.StartDate = obj.Person.CashflowStrategy.StartDate;
+            baseParams.Frequency = obj.Person.CashflowStrategy.Frequency;
+            baseParams.InflationRate = obj.Person.CashflowStrategy.InflationRate;
+            baseParams.MaxNumPayments = obj.Person.CashflowStrategy.MaxNumPayments;
+            baseParams.MortalityDataSource = obj.Person.CashflowStrategy.MortalityDataSource;
+            baseParams.MortalityIdentifier = obj.Person.CashflowStrategy.MortalityIdentifier;
+
+        end
+
+        
         
     end
 end

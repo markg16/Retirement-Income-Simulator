@@ -5,7 +5,7 @@ classdef PlotManager
     %   It acts as a client to the PlottingEngine and various PlotStrategy classes.
 
     methods (Static)
-        function plotAnnuityValues(axesMap, allAnnuityValues, annuityParametersToPlot, plotType)
+        function plotAnnuitySensitivities(axesMap, allAnnuityValues, annuityParametersToPlot, plotType)
             % This static method is the main entry point for all plotting.
             % It is completely decoupled from the UI app.
             %

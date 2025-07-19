@@ -5,6 +5,8 @@ classdef AnnuityInputType
       AnnuityTerm,
       DefermentPeriod,      
       InterestRate,
-      ValuationDate
+      ValuationDate,
+      MortalityIdentifier
+
    end
 end

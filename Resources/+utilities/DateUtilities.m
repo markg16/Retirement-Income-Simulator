@@ -7,6 +7,53 @@ classdef DateUtilities
     end
 
     methods (Static)
+        function allDates = generateDateArrays(startDate, endDate, frequency, referenceTime)
+            % Generates a datetime vector between a start and end date with a given frequency
+            % and applies a specific time of day.
+
+            % Input validation using an arguments block is modern and robust
+            arguments
+                startDate (1,1) datetime
+                endDate (1,1) datetime
+                frequency (1,1) utilities.FrequencyType
+                % The referenceTime is now an optional duration argument
+                referenceTime (1,1) duration = duration(17,0,0) % Default to midnight if not provided
+            end
+
+            if startDate > endDate
+                allDates = datetime.empty(0,1);
+                allDates.TimeZone = startDate.TimeZone; % Preserve timezone
+                return;
+            end
+
+            % --- THIS IS THE FIX ---
+            % 1. First, ensure the start and end dates are at midnight to create a clean date sequence.
+            startDateAtMidnight = dateshift(startDate, 'start', 'day');
+            endDateAtMidnight = dateshift(endDate, 'start', 'day');
+
+            % 2. Generate the date series based on frequency.
+            switch frequency
+                case utilities.FrequencyType.Daily,      step = caldays(1);
+                case utilities.FrequencyType.Weekly,     step = calweeks(1);
+                case utilities.FrequencyType.Monthly,    step = calmonths(1);
+                case utilities.FrequencyType.Quarterly,  step = calquarters(1);
+                case utilities.FrequencyType.Annually,   step = calyears(1);
+                case utilities.FrequencyType.Hourly,     step = hours(1);
+                case utilities.FrequencyType.Minutely,   step = minutes(1);
+                otherwise
+                    error('DateUtilities:UnsupportedFrequency', 'The provided frequency is not supported.');
+            end
+
+            dateSeriesAtMidnight = startDateAtMidnight:step:endDateAtMidnight;
+
+            % Ensure the final date does not exceed the specified endDate
+            if ~isempty(dateSeriesAtMidnight) && dateSeriesAtMidnight(end) > endDateAtMidnight
+                dateSeriesAtMidnight(end) = [];
+            end
+
+            % 3. Add the referenceTime duration to shift all dates to the correct time of day.
+            allDates = dateSeriesAtMidnight + referenceTime;
+        end
         function frequencyPerYear = getFrequencyPerYear(frequency)
             %GETFREQUENCYPERYEAR Get the number of payments per year based on frequency.
             %

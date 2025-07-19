@@ -16,17 +16,17 @@ classdef FixedAnnuity < Annuity
     end
 
     methods
-        function obj = FixedAnnuity(person, guaranteedPayment, guaranteedPaymentIncreaseRate, annuityStartDate, incomeDeferment, maxNumPayments, paymentFrequency, annuityPaymentDates)
+        function obj = FixedAnnuity(person, guaranteedPayment, guaranteedPaymentIncreaseRate, annuityStartDate, incomeDeferment, maxNumPayments, paymentFrequency)
      % Constructor for FixedAnnuity
-           % Constructor for FixedAnnuity
-           if nargin == 7
-                % If not provided, generate them based on frequency and start date
-                dateLastAnnuityPayment = annuityStartDate + years(maxNumPayments);
-
-
-                annuityPaymentDates = utilities.generateDateArrays(annuityStartDate, dateLastAnnuityPayment,paymentFrequency);
-           end
-           obj@Annuity(person, guaranteedPayment, guaranteedPaymentIncreaseRate, annuityStartDate, incomeDeferment, maxNumPayments, paymentFrequency, annuityPaymentDates);  % Call the Annuity superclass constructor
+           % % Constructor for FixedAnnuity
+           % if nargin == 7
+           %      % If not provided, generate them based on frequency and start date
+           %      dateLastAnnuityPayment = annuityStartDate + years(maxNumPayments);
+           % 
+           % 
+           %      annuityPaymentDates = utilities.generateDateArrays(annuityStartDate, dateLastAnnuityPayment,paymentFrequency);
+           % end
+           obj@Annuity(person, guaranteedPayment, guaranteedPaymentIncreaseRate, annuityStartDate, incomeDeferment, maxNumPayments, paymentFrequency);  % Call the Annuity superclass constructor
           % obj@Annuity(person, guaranteedPayment, annuityStartDate, incomeDeferment, maxNumPayments, paymentFrequency, annuityPaymentDates);  % Call the Annuity superclass constructor
              obj.Name = "FixedAnnuity"; 
           % Set FixedAnnuity specific properties

@@ -165,30 +165,93 @@ classdef LifeTableUtilities
 
         end
         
-        function interpolatedPeriodicProbs = interpolateAnnualSurvivorship(annualCompleteAgeProbs, paymentsPerYear)
-            numCompleteYears = length(annualCompleteAgeProbs);
-            if numCompleteYears == 0
-                interpolatedPeriodicProbs = [];
-                return;
-            end
+        % function interpolatedPeriodicProbs = interpolateAnnualSurvivorship(annualCompleteAgeProbs, paymentsPerYear)
+        %     numCompleteYears = length(annualCompleteAgeProbs);
+        %     if numCompleteYears == 0
+        %         interpolatedPeriodicProbs = [];
+        %         return;
+        %     end
+        % 
+        %     % Prepend probability of surviving 0 years (which is 1) for interpolation base
+        %     probsForInterpolation = [1, annualCompleteAgeProbs]; % Now [P0, P1, P2, ..., PN]
+        % 
+        %     numInterpolatedPeriods = numCompleteYears * paymentsPerYear;
+        %     interpolatedPeriodicProbs = zeros(1, numInterpolatedPeriods);
+        % 
+        %     for iYear = 1:numCompleteYears % Corresponds to P(iYear-1) to P(iYear) from probsForInterpolation
+        %         p_start_of_year = probsForInterpolation(iYear);     % This is P_(iYear-1)
+        %         p_end_of_year   = probsForInterpolation(iYear+1); % This is P_(iYear)
+        % 
+        %         for iPeriodInYear = 0:paymentsPerYear
+        %             idx = (iYear-1) * paymentsPerYear + iPeriodInYear;
+        %             interpolatedPeriodicProbs(idx+1) = p_start_of_year + ...
+        %                 (p_end_of_year - p_start_of_year) * (iPeriodInYear / paymentsPerYear);
+        %         end
+        %     end
+        % end
+        function survivalProbsTimetable = calculateSurvivalProbabilitiesTT(mortalityTable, gender, ageAtValuation, valuationDate,paymentDates)
+        % This is the single, authoritative function for calculating survivorship
+        % probabilities for a series of specific payment dates.
+        %
+        % Inputs:
+        %   mortalityTable:    Any object that implements the MortalityTable interface.
+        %   gender:            'Male' or 'Female'.
+        %   ageAtValuation:    The person's age at the valuation date.
+        %   valuationDate:     The "time zero" for the probability calculation.
+        %   paymentDates:      A datetime vector of all future payment dates.
+        %
+        % Returns:
+        %   A timetable with the payment dates and their corresponding survival probabilities.
 
-            % Prepend probability of surviving 0 years (which is 1) for interpolation base
-            probsForInterpolation = [1, annualCompleteAgeProbs]; % Now [P0, P1, P2, ..., PN]
+        if isempty(paymentDates)
+            survivalProbsTimetable = timetable();
+            return;
+        end
 
-            numInterpolatedPeriods = numCompleteYears * paymentsPerYear;
-            interpolatedPeriodicProbs = zeros(1, numInterpolatedPeriods);
+        % 1. Get the annual survivorship probabilities needed to cover all payment dates.
+        %    This is _{t}p_x where x = ageAtValuation.
+        durationToLastPayment = years(paymentDates(end) - valuationDate);
+        finalAgeForAnnualProbs = ageAtValuation + ceil(durationToLastPayment);
+        
+        annualProbs = mortalityTable.getSurvivorshipProbabilities(gender, ageAtValuation, finalAgeForAnnualProbs);
 
-            for iYear = 1:numCompleteYears % Corresponds to P(iYear-1) to P(iYear) from probsForInterpolation
-                p_start_of_year = probsForInterpolation(iYear);     % This is P_(iYear-1)
-                p_end_of_year   = probsForInterpolation(iYear+1); % This is P_(iYear)
+        % 2. Prepend 1 to represent the probability of surviving 0 years (p_0 = 1).
+        %    This makes the interpolation math cleaner.
+        annualProbsWithP0 = [1, annualProbs]; % Now [p_0, p_1, p_2, ..., p_N]
 
-                for iPeriodInYear = 0:paymentsPerYear
-                    idx = (iYear-1) * paymentsPerYear + iPeriodInYear;
-                    interpolatedPeriodicProbs(idx+1) = p_start_of_year + ...
-                        (p_end_of_year - p_start_of_year) * (iPeriodInYear / paymentsPerYear);
-                end
+        % 3. Loop through each specific payment date and interpolate.
+        finalProbs = zeros(size(paymentDates));
+        for i = 1:length(paymentDates)
+            % Calculate the exact duration in years from the valuation date.
+            duration = years(paymentDates(i) - valuationDate);
+            
+            % Find the integer and fractional parts of the duration.
+            yearIndex = floor(duration);      % e.g., for 10.5 years, this is 10
+            fractionOfYear = duration - yearIndex; % e.g., for 10.5 years, this is 0.5
+            
+            % Check if we have enough annual data for interpolation.
+            if yearIndex + 2 > length(annualProbsWithP0)
+                % This means the payment date is beyond our calculated annual probabilities.
+                % We will use the last available probability (extrapolation).
+                finalProbs(i) = annualProbsWithP0(end);
+                warning('LifeTableUtilities:Extrapolation', ...
+                    'Payment date %s is beyond the mortality table range. Using last known survival probability.', datestr(paymentDates(i)));
+            else
+                % Get the probabilities for the start and end of the year.
+                % +1 is needed because MATLAB is 1-indexed and our array starts with p_0.
+                p_start = annualProbsWithP0(yearIndex + 1); % This is _{k}p_x
+                p_end   = annualProbsWithP0(yearIndex + 2); % This is _{k+1}p_x
+                
+                % Perform linear interpolation.
+                finalProbs(i) = p_start + (p_end - p_start) * fractionOfYear;
             end
         end
+
+        % 4. Create the final output timetable.
+        %    The 'finalProbs' are the correct probabilities. There is no need to re-normalize.
+        survivalProbsTimetable = timetable(paymentDates', finalProbs(:), 'VariableNames', {'SurvivalProbability'});
+    
+    end
 
         function survivorshipProbabilities = getSurvivorship(tableInstance, gender, currentAge, finalAge)
             % Calculates survivorship probabilities using getLx and getRate from the tableInstance.
@@ -252,60 +315,7 @@ classdef LifeTableUtilities
                     return;
                 end
             end
-            % try
-                %     % Try to get lx for the future age directly
-                %     % This will use the getLx method of tableInstance (either base or improved)
-                %     lx_future_val = tableInstance.getLx(gender, age_future);
-                %     survivorshipProbabilities(t) = lx_future_val / lx_current_age_val;
-                % catch ME
-                %     % Handle cases where age_future might be beyond the table's explicit range
-                %     % This requires extrapolation logic using the tableInstance's last qx
-                %     if strcmp(ME.identifier, 'CachedImprovementFactorDecorator:AgeNotFound') || ...
-                %        strcmp(ME.identifier, 'BasicMortalityTable:AgeNotFound') % Or whatever your getLx error ID is for out of bounds
-                % 
-                %         % Need to access the MortalityRates of the tableInstance to get its age range
-                %         % This assumes MortalityRates is a public or protected property accessible here,
-                %         % or that tableInstance has methods to get its max age and last qx.
-                %         % For simplicity, let's assume we can get the max age and last qx from the tableInstance.
-                %         % This part might need tableInstance to expose its max age and last qx.
-                %         % Alternatively, the getLx method itself should handle extrapolation.
-                %         % Assuming getLx errors if out of bounds for now, and we implement extrapolation here.
-                % 
-                %         % Get the maximum age explicitly defined in the tableInstance's rates
-                %         % This is a bit of a hack; ideally, tableInstance would have a getMaxAge method.
-                %         if isprop(tableInstance, 'MortalityRates') && ...
-                %            isfield(tableInstance.MortalityRates, gender) && ...
-                %            ~isempty(tableInstance.MortalityRates.(gender).Age)
-                % 
-                %             ages_in_table = tableInstance.MortalityRates.(gender).Age;
-                %             max_age_in_table = ages_in_table(end);
-                % 
-                %             if age_future > max_age_in_table
-                %                 if t == 1 || (currentAge + t - 1) < ages_in_table(1) || (currentAge + t - 1) > max_age_in_table % Check if previous step was also extrapolation
-                %                     lx_at_max_table_age = tableInstance.getLx(gender, max_age_in_table);
-                %                     prob_surv_at_max_table_age = lx_at_max_table_age / lx_current_age_val;
-                %                     qx_at_max_table_age = tableInstance.getRate(gender, max_age_in_table);
-                %                     survivorshipProbabilities(t) = prob_surv_at_max_table_age * (1 - qx_at_max_table_age)^(age_future - max_age_in_table);
-                %                 else
-                %                     % Extrapolate from the previously calculated survivorship probability
-                %                     qx_at_max_table_age = tableInstance.getRate(gender, max_age_in_table);
-                %                     survivorshipProbabilities(t) = survivorshipProbabilities(t-1) * (1 - qx_at_max_table_age);
-                %                 end
-                %             else
-                %                 % This should not be reached if getLx errors for out of bounds
-                %                 % but is a fallback.
-                %                 rethrow(ME); % Rethrow original error if not an age not found error we can handle
-                %             end
-                %         else
-                %             rethrow(ME); % Cannot determine max age, rethrow.
-                %         end
-                %     else
-                %         rethrow(ME); % Rethrow other errors
-                %     end
-                % end
-            % end
-        % end
-    % end
+           
         end
     end
 end
