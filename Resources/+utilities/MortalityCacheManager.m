@@ -184,5 +184,6 @@ classdef MortalityCacheManager < handle
             %GETLASTUPDATED Get last update timestamp
             time = obj.LastUpdated;
         end
+        
     end
 end 

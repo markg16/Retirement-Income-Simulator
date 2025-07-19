@@ -24,29 +24,7 @@ classdef DataSourceManager < handle
         end
     end
 
-    % --- The static getInstance() method is REMOVED ---
-    % methods (Static)
-    %     function singleObj = getInstance() ...
-    % end
-    % methods (Access = private)
-    %     % The constructor is private to enforce the singleton pattern.
-    %     function obj = DataSourceManager()
-    %         obj.DataSourcePool = containers.Map('KeyType', 'char', 'ValueType', 'any');
-    %         obj.CacheManagerRegistry = containers.Map('KeyType', 'char', 'ValueType', 'any');
-    %     end
-    % end
-    % 
-    % methods (Static)
-    %     function singleObj = getInstance()
-    %         % Provides global access to the single instance of this manager.
-    %         persistent uniqueInstance
-    %         if isempty(uniqueInstance) || ~isvalid(uniqueInstance)
-    %             uniqueInstance = DataSourceManager();
-    %         end
-    %         singleObj = uniqueInstance;
-    %     end
-    % end
-
+   
     methods
         % --- NEW PUBLIC METHOD for configuration ---
         function registerCacheManager(obj, dataSourceEnum, cacheManagerInstance)

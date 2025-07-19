@@ -10,7 +10,7 @@ classdef AustralianGovernmentActuarySource < MortalityDataSource
     properties (Access = public)
         % Public properties for AGA source
         TableURLs = containers.Map('KeyType', 'char', 'ValueType', 'any');  % Map of table names to their publication URLs
-        UrlCacheFile = 'aga_url_cache.mat';  % Path to MAT-file for URL cache
+        UrlCacheFile  % Path to MAT-file for URL cache
         UrlCache = containers.Map('KeyType', 'char', 'ValueType', 'any');  % Cache of working URLs with structure: {tableKey: {pubUrl: url, downloadUrl: url}}
     end
     
@@ -67,13 +67,19 @@ classdef AustralianGovernmentActuarySource < MortalityDataSource
 
             % Initialize directories
             obj.initializeSourceDirectory();
+            % Get the cache manager instance from the parent
+            cacheManager = obj.getCacheManager();
+            % Define the full path for the URL cache file
+            obj.UrlCacheFile = fullfile(cacheManager.getCacheDir(), 'aga_url_cache.mat');
 
             % Load URL patterns
             obj.loadUrlPatterns();
 
             % Initialize table URLs before URL cache
             obj.initializeTableURLs();
+            
             obj.initializeUrlCache();
+            obj.verifyUrlsFromPatterns()
 
       
         end
@@ -109,26 +115,27 @@ classdef AustralianGovernmentActuarySource < MortalityDataSource
         end
         
         function populateUrlCache(obj)
+
             %POPULATEURLCACHE Populate URL cache with all known tables
             %   Ensures all tables in TableURLs have an entry in the cache
             try
-                % Get all table keys
                 tableKeys = keys(obj.TableURLs);
-                
-                % Add each table to cache if not present
+
                 for i = 1:length(tableKeys)
                     key = tableKeys{i};
                     if ~isKey(obj.UrlCache, key)
-                        obj.UrlCache(key) = struct('pubUrl', obj.TableURLs(key), 'downloadUrl', '');
+                        % --- THE FIX ---
+                        % 'downloadUrls' is now a cell array, initialized as empty.
+                        obj.UrlCache(key) = struct('pubUrl', obj.TableURLs(key), 'downloadUrls', {{}});
                     end
                 end
-                
-                % Save updated cache
+
                 obj.saveUrlCache();
                 obj.log('URL cache populated with %d tables', length(tableKeys));
             catch ME
                 error('MATLAB:invalidType', 'Failed to populate URL cache: %s', ME.message);
             end
+           
         end
         
         function initializeTableURLs(obj)
@@ -264,41 +271,41 @@ classdef AustralianGovernmentActuarySource < MortalityDataSource
         
         
 
-        function testUrlPatterns(obj)
-            %TESTURLPATTERNS Test URL patterns
-            %   Tests all known URL patterns for each table
-            tables = obj.getAvailableTables();
-            for i = 1:length(tables)
-                tableEnum = tables(i);
-                tableName = obj.enumToTableString(tableEnum);
-                obj.log(sprintf('\nTesting patterns for table %s:', tableName));
-                currentDate = datetime('now');
-                yearMonth = datestr(currentDate, 'yyyy-mm');
-                patterns = obj.generateUrlPatterns(tableName, yearMonth);
-                for j = 1:length(patterns)
-                    try
-                        obj.log(sprintf('  Testing pattern %d: %s', j, patterns{j}));
-
-                        response = webread(patterns{j}, obj.WebOptions);
-                        if isempty(response)
-                            obj.log('Warning: Empty response from URL: %s', urlsprintf('  FAILED: Pattern %d works for table %s', patterns{j}, tableName));
-                            continue;
-                        end
-
-                        
-                        % %[~, status] = urlread(patterns{j}, 'Timeout', 5);
-                        % if status == 200
-                        %     obj.log(sprintf('  SUCCESS: Pattern %d works for table %s', j, tableName));
-                        %     obj.updateUrlCache(tableEnum, patterns{j});
-                        % else
-                        %     obj.log(sprintf('  FAILED: Pattern %d returned status %d', j, status));
-                        % end
-                    catch e
-                        obj.log(sprintf('  ERROR: Pattern %d failed with error: %s', j, e.message));
-                    end
-                end
-            end
-        end
+        % function testUrlPatterns(obj)
+        %     %TESTURLPATTERNS Test URL patterns
+        %     %   Tests all known URL patterns for each table
+        %     tables = obj.getAvailableTables();
+        %     for i = 1:length(tables)
+        %         tableEnum = tables(i);
+        %         tableName = obj.enumToTableString(tableEnum);
+        %         obj.log(sprintf('\nTesting patterns for table %s:', tableName));
+        %         currentDate = datetime('now');
+        %         yearMonth = datestr(currentDate, 'yyyy-mm');
+        %         patterns = obj.generateUrlPatterns(tableName, yearMonth);
+        %         for j = 1:length(patterns)
+        %             try
+        %                 obj.log(sprintf('  Testing pattern %d: %s', j, patterns{j}));
+        % 
+        %                 response = webread(patterns{j}, obj.WebOptions);
+        %                 if isempty(response)
+        %                     obj.log('Warning: Empty response from URL: %s', urlsprintf('  FAILED: Pattern %d works for table %s', patterns{j}, tableName));
+        %                     continue;
+        %                 end
+        % 
+        % 
+        %                 % %[~, status] = urlread(patterns{j}, 'Timeout', 5);
+        %                 % if status == 200
+        %                 %     obj.log(sprintf('  SUCCESS: Pattern %d works for table %s', j, tableName));
+        %                 %     obj.updateUrlCache(tableEnum, patterns{j});
+        %                 % else
+        %                 %     obj.log(sprintf('  FAILED: Pattern %d returned status %d', j, status));
+        %                 % end
+        %             catch e
+        %                 obj.log(sprintf('  ERROR: Pattern %d failed with error: %s', j, e.message));
+        %             end
+        %         end
+        %     end
+        % end
         
         function saveUrlCache(obj)
             %SAVEURLCACHE Save URL cache to file
@@ -483,19 +490,7 @@ classdef AustralianGovernmentActuarySource < MortalityDataSource
             end
         end
 
-        % function tableEnum = tableStringToEnum(obj, tableName)
-        %     %TABLESTRINGTOENUM Convert string table name to enum
-        %     %   Inputs:
-        %     %       tableName - String table name
-        %     %   Returns:
-        %     %       tableEnum - TableNames enumeration value
-        %     try
-        %         % Convert string to enum
-        %         tableEnum = TableNames.(tableName);
-        %     catch e
-        %         error('MATLAB:invalidType', 'Invalid table name: %s', tableName);
-        %     end
-        % end
+        
     end
        
         
@@ -533,7 +528,14 @@ classdef AustralianGovernmentActuarySource < MortalityDataSource
             end
             
             % Extract download URLs
-            downloadURLs = obj.getDownloadUrls(pageContent, tableKey);
+            % Get download URLs from the cache
+            if ~isKey(obj.UrlCache, tableKey) || isempty(obj.UrlCache(tableKey).downloadUrls)
+                error('MATLAB:invalidType', 'No download URLs found for table: %s', tableKey);
+            end
+
+            downloadURLs = obj.UrlCache(tableKey).downloadUrls;
+
+            % downloadURLs = obj.getDownloadUrls(pageContent, tableKey);
             if isempty(downloadURLs)
                 error('MATLAB:invalidType', 'No download URLs found for table: %s', tableKey);
             end
@@ -792,6 +794,92 @@ classdef AustralianGovernmentActuarySource < MortalityDataSource
                 obj.log('Successfully loaded URL patterns from resource file');
             catch e
                 error('MATLAB:invalidType', 'Failed to load URL patterns: %s', e.message);
+            end
+        end
+        % Add this to your methods (Access = protected) block
+
+        function verifyUrlsFromPatterns(obj)
+            %VERIFYURLSROMPATTERNS Proactively find and verify download URLs from JSON patterns.
+            obj.log('Verifying download URLs from patterns...');
+            tableKeys = keys(obj.UrlCache);
+
+            for i = 1:length(tableKeys)
+                key = tableKeys{i};
+                cacheEntry = obj.UrlCache(key);
+
+                % Only check if the download URLs are missing
+                if isempty(cacheEntry.downloadUrls)
+                    %patternKey = ['x' key]; % Assumes 'x' prefix in JSON keys
+                    patternKey = key; % Assumes  no 'x' prefix in JSON keys
+
+                    if ~isfield(obj.UrlPatterns.table_patterns, patternKey)
+                        continue; % No pattern for this table
+                    end
+
+                    pattern = obj.UrlPatterns.table_patterns.(patternKey);
+                    baseUrl = obj.UrlPatterns.base_url;
+                    verifiedUrls = {};
+
+                    if strcmp(pattern.type, 'combined')
+                        % --- HANDLE COMBINED FILES (ONE URL) ---
+                        url = [baseUrl, pattern.url];
+                        if obj.isUrlValid(url)
+                            verifiedUrls = {url};
+                        end
+                    elseif strcmp(pattern.type, 'separate')
+                        % --- HANDLE SEPARATE FILES (TWO URLS) ---
+                        maleUrl = [baseUrl, pattern.urls.male];
+                        femaleUrl = [baseUrl, pattern.urls.female];
+
+                        if obj.isUrlValid(maleUrl)
+                            verifiedUrls{end+1} = maleUrl;
+                        end
+                        if obj.isUrlValid(femaleUrl)
+                            verifiedUrls{end+1} = femaleUrl;
+                        end
+                    end
+
+                    if ~isempty(verifiedUrls)
+                        cacheEntry.downloadUrls = verifiedUrls;
+                        obj.UrlCache(key) = cacheEntry;
+                        obj.log('Verified and cached %d URL(s) for %s.', numel(verifiedUrls), key);
+                    end
+                end
+            end
+            obj.saveUrlCache();
+        end
+
+        function isValid = isUrlValid(obj, url)
+            %ISURLVALID Checks if a URL is accessible using a modern HEAD request.
+    
+            import matlab.net.http.*
+
+            try
+                % --- THE FIX ---
+                % 1. Create an HTTPOptions object and set the timeout.
+                %    'ConnectTimeout' is for establishing the connection.
+                options = HTTPOptions('ConnectTimeout', 15);
+
+                % 2. Create the HEAD request message.
+                request = RequestMessage('HEAD');
+
+                % 3. Create the URI object.
+                uri = matlab.net.URI(url);
+
+                % 4. Send the request with the options object.
+                response = request.send(uri, options);
+
+                % A successful status code (e.g., 200 OK) means the URL is valid.
+                isValid = (response.StatusCode == StatusCode.OK);
+
+                if ~isValid
+                    obj.log('URL is invalid or inaccessible (Status: %s): %s', ...
+                        char(response.StatusCode), url);
+                end
+
+            catch ME
+                obj.log('Error validating URL %s: %s', url, ME.message);
+                isValid = false;
             end
         end
       end

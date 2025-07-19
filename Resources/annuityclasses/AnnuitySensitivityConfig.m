@@ -1,8 +1,8 @@
 % File: SensitivityConfig.m
 classdef AnnuitySensitivityConfig < handle
-    %SENSITIVITYCONFIG Encapsulates all parameters for a sensitivity analysis run.
-    %   This object is created by the client (e.g., the UI) and passed to the
-    %   AnalysisEngine, decoupling the engine from the configuration logic.
+       %SENSITIVITYCONFIG Encapsulates all parameters for a sensitivity analysis run.
+            %   This version ensures that the value ranges (XAxisValues, LineVarValues)
+            %   are always returned as cell arrays for consistent use by the engine.
 
     properties
         XAxisEnum AnnuityInputType
@@ -15,6 +15,7 @@ classdef AnnuitySensitivityConfig < handle
 
     methods
         function obj = AnnuitySensitivityConfig(xAxisEnum, lineVarEnum, person,scenario, rangeOverrides)
+         
             % Constructor acts as a builder.
             % Inputs:
             %   xAxisEnum, lineVarEnum: The enums selected by the user.
@@ -64,7 +65,7 @@ classdef AnnuitySensitivityConfig < handle
     end
     
     methods (Access = private)
-        function values = getValuesForParam(~, paramEnum, person, rateCurveProvider, rangeOverrides)
+        function valuesCell = getValuesForParam(~, paramEnum, person, rateCurveProvider, rangeOverrides)
             % This helper now checks for a user-provided override first,
             % then falls back to a calculated default.
             paramName = char(paramEnum);
@@ -89,6 +90,17 @@ classdef AnnuitySensitivityConfig < handle
                         % Interpret r(3) as an offset from the person's default deferment
                         endValue = person.IncomeDeferement + r(3);
                         values = r(1):r(2):endValue;
+                    case AnnuityInputType.AnnuityIncomeGtdIncrease
+                        % Interpret r(3) as an offset from the person's default deferment
+                        % endValue = person.IncomeDeferement + r(3);
+                        values = r(1):r(2):r(3);
+                    case AnnuityInputType.MortalityIdentifier
+                        % For this type, the override 'r' is expected to be a cell array
+                        % of the actual identifiers to loop through.
+                        if ~iscell(r)
+                            error('SensitivityConfig:InvalidOverride', 'Override for MortalityIdentifier must be a cell array.');
+                        end
+                        values = r;
 
                     otherwise
                         % For other types like InterestRate, assume r(3) is an absolute end value.
@@ -110,9 +122,19 @@ classdef AnnuitySensitivityConfig < handle
                         values = 0:5:(person.IncomeDeferement + 10);
                     case AnnuityInputType.AnnuityIncomeGtdIncrease
                         values = 0:0.01:(baseInflationRate + 0.02);
+                    case AnnuityInputType.MortalityIdentifier
+                        % The default is to just use the person's current identifier.
+                        values = {person.CashflowStrategy.MortalityIdentifier};
                     otherwise
                         values = [];
                 end
+            end
+            
+            % If the calculated 'values' is not already a cell array, convert it.
+            if ~iscell(values)
+                valuesCell = num2cell(values);
+            else
+                valuesCell = values;
             end
         end
         end

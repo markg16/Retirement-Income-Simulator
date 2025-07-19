@@ -16,19 +16,12 @@ classdef SingleLifeTimeAnnuity < Annuity
     end
 
     methods
-        function obj = SingleLifeTimeAnnuity(person, guaranteedPayment, guaranteedPaymentIncreaseRate, annuityStartDate, incomeDeferment, maxNumPayments, paymentFrequency, annuityPaymentDates)
+        function obj = SingleLifeTimeAnnuity(person, guaranteedPayment, guaranteedPaymentIncreaseRate, annuityStartDate, incomeDeferment, maxNumPayments, paymentFrequency)
             % Constructor for Single Life TIme Annuity
 
-            if nargin == 7
-                % If not provided, generate them based on frequency and start date
-                dateLastAnnuityPayment = annuityStartDate + years(maxNumPayments);
+      
 
-
-                annuityPaymentDates = utilities.generateDateArrays(annuityStartDate, dateLastAnnuityPayment,paymentFrequency);
-            end
-
-
-            obj@Annuity(person, guaranteedPayment, guaranteedPaymentIncreaseRate, annuityStartDate, incomeDeferment, maxNumPayments, paymentFrequency, annuityPaymentDates);  % Call the Annuity superclass constructor
+            obj@Annuity(person, guaranteedPayment, guaranteedPaymentIncreaseRate, annuityStartDate, incomeDeferment, maxNumPayments, paymentFrequency);  % Call the Annuity superclass constructor
 
             obj.Name = "SingleLifeTimeAnnuity";
            
@@ -99,21 +92,21 @@ classdef SingleLifeTimeAnnuity < Annuity
 
      
 
-        function survivalProbabilities = calculateSurvivalProbabilities(obj,futureMortalityTable, valuationDate)
-
-            annuityStartDate = obj.StartDate;
-            gender = obj.Annuitant.Gender;
-            startAge = obj.Annuitant.Age;  % assumes the person object only stores the start age.
-            ageFinalAnnuityPayment = startAge + calyears(utilities.DateUtilities.calculateYearDiff(annuityStartDate,obj.AnnuityPaymentDates(end)));
-            valuationAge = startAge + calyears(utilities.DateUtilities.calculateYearDiff(annuityStartDate,valuationDate));
-            paymentsPerYear = utilities.CashFlowUtils.getPaymentsPerYear(obj.PaymentFrequency);
-           
-            paymentDatesToValue = obj.AnnuityPaymentDates(obj.AnnuityPaymentDates >= valuationDate);
-            
-            survivorshipProbabilitiesFull = futureMortalityTable.getSurvivorshipProbabilities(gender,valuationAge,ageFinalAnnuityPayment+1); % returns a vector of probabilities for all future ages
-            survivalProbabilities = futureMortalityTable.getSurvivorshipProbabilitiesForEachPaymentDate(survivorshipProbabilitiesFull,paymentDatesToValue,paymentsPerYear);
-
-        end
+        % function survivalProbabilities = calculateSurvivalProbabilities(obj,futureMortalityTable, valuationDate)
+        % 
+        %     annuityStartDate = obj.StartDate;
+        %     gender = obj.Annuitant.Gender;
+        %     startAge = obj.Annuitant.Age;  % assumes the person object only stores the start age.
+        %     ageFinalAnnuityPayment = startAge + calyears(utilities.DateUtilities.calculateYearDiff(annuityStartDate,obj.AnnuityPaymentDates(end)));
+        %     valuationAge = startAge + calyears(utilities.DateUtilities.calculateYearDiff(annuityStartDate,valuationDate));
+        %     paymentsPerYear = utilities.CashFlowUtils.getPaymentsPerYear(obj.PaymentFrequency);
+        % 
+        %     paymentDatesToValue = obj.AnnuityPaymentDates(obj.AnnuityPaymentDates >= valuationDate);
+        % 
+        %     survivorshipProbabilitiesFull = futureMortalityTable.getSurvivorshipProbabilities(gender,valuationAge,ageFinalAnnuityPayment+1); % returns a vector of probabilities for all future ages
+        %     survivalProbabilities = futureMortalityTable.getSurvivorshipProbabilitiesForEachPaymentDate(survivorshipProbabilitiesFull,paymentDatesToValue,paymentsPerYear);
+        % 
+        % end
 
 
      end

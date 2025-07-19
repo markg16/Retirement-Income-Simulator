@@ -72,16 +72,7 @@ classdef BuyAndHoldAnnuity < TradingStrategy
             tradeDateIsLessThanAnnuityStartDate  = tradeDate < annuityStartDate;
             portfolioPayment = utilities.CashFlowUtils.adjustForInflation(initialPortfolioPayment, inflationRate, yearsToInflate);
 
-            % if isempty(portfolio.PortfolioHoldings)  % only create instrument on initial trade for the portfolio
-
-
-            % if portfolio.PortfolioHoldings contains annuity skip creation of annuity
-
-
-            %annuityTradingStrategy = BuyAndHoldAnnuity()
-            %[portfolioAnnuity, purchasePrice] = BuyAndHoldAnnuity(determineTrade(portfolio,person,tradeDate, portfolioMarketData,scenarioData)
-
-
+            
             portfolioContainsAnnuity = any(cellfun(@(x) isa(x, 'Annuity'), portfolio.PortfolioHoldings));
             portfolioContainsMarketIndxAcct = any(cellfun(@(x) isa(x, 'MarketIndexAccount'), portfolio.PortfolioHoldings));
             currentPortfolioValue = portfolio.calculatePortfolioValue(tradeDate,portfolioMarketData,scenarioData);
