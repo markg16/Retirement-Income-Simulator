@@ -21,3 +21,11 @@
 
 # Test Results
 test-results/
+# Google Drive shortcut files
+*.[gG][dD][oO][cC]
+*.[gG][sS][hH][eE][eE][tT]
+*.[gG][sS][lL][iI][dD][eE][sS]
+*.[gG][dD][rA][aW][w]
+*.[gG][fF][oO][rR][mM]
+*.[gG][mM][aA][pP]
+*.[gG][sS][iI][tT][eE]
