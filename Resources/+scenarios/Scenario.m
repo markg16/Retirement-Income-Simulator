@@ -125,7 +125,8 @@ classdef Scenario <scenarios.ScenarioDataProvider
             % performed here. Presentation layer looks after extracting teh
             % required data for users.
 
-
+%START REFACTORING CODE TO REMOVE THIS DUPLICATION OR USE THE
+%ANNUITYPROGRESSIONMETHOD V1
             scenarioName ="TEST Calculating person income payment value";
             valuationDates = obj.AnnuityValuationDates;
 
