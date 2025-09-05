@@ -29,5 +29,16 @@ classdef AnnuityType
                     error('Unsupported AnnuityType alias');
             end
         end
+        function displayTermContingency = getDisplayTermContingency(annuityType)
+            switch annuityType
+                     case AnnuityType.SingleLifeTimeAnnuity
+                    displayTermContingency= 'Single Life';
+                case AnnuityType.FixedAnnuity
+                   displayTermContingency = 'Term Certain';
+                
+                otherwise
+                    error('Unsupported annuity type');
+            end
+        end
     end
 end

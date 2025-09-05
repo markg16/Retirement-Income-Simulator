@@ -37,10 +37,11 @@ classdef Person < handle & matlab.mixin.Copyable
             defaultContributionPeriod = defaultDeferment;
             defaultTargetContribution = 10000;
             defaultContributionFrequency = utilities.FrequencyType.Annually; % Monthly
-            defaultImprovementStrategy = ConstantImprovementFactorStrategy(0); 
+            defaultImprovementStrategy = ConstantImprovementFactorStrategy(0);
             defaultImprovementFile = ''; % Default to no file
-            defaultCashflowStrategy = CashflowStrategy.createWithDefaultAGATable('AnnualAmount',defaultTargetIncome); % Example strategy
             
+            %defaultCashflowStrategy = CashflowStrategy.createWithDefaultAGATable('AnnualAmount',defaultTargetIncome); % Example strategy
+
 
 
 
@@ -60,7 +61,11 @@ classdef Person < handle & matlab.mixin.Copyable
             addParameter(p, 'ContributionFrequency', defaultContributionFrequency, @(x) utilities.ValidationUtils.validateWithParser(@utilities.ValidationUtils.validateContributionFrequency, x, p));
             addParameter(p, 'ImprovementStrategy', defaultImprovementStrategy, @(x) isa(x, 'ImprovementFactorStrategy'));
             addParameter(p, 'ImprovementFactorFile', defaultImprovementFile, @ischar);
-            addParameter(p, 'CashflowStrategy', defaultCashflowStrategy, @(x) isa(x, 'CashflowInterface'));
+
+            % Add CashflowStrategy with an empty default. We will handle the
+            % real default after parsing to avoid unnecessary object creation.
+            addParameter(p, 'CashflowStrategy', [], @(x) isa(x, 'CashflowInterface'));
+            %addParameter(p, 'CashflowStrategy', defaultCashflowStrategy, @(x) isa(x, 'CashflowInterface'));
 
             % Parse input
             parse(p, varargin{:});
@@ -77,12 +82,22 @@ classdef Person < handle & matlab.mixin.Copyable
             obj.ContributionFrequency = p.Results.ContributionFrequency;
             obj.ImprovementStrategy = p.Results.ImprovementStrategy;
             obj.ImprovementFactorFile = p.Results.ImprovementFactorFile;
-            obj.CashflowStrategy = p.Results.CashflowStrategy;
+
+            %handle the CashflowStrategy assignment intelligently.
+            if isempty(p.Results.CashflowStrategy)
+                % If the user did NOT provide a strategy, create the default one now.
+                % It uses the TargetIncome that was already parsed or defaulted.
+                %obj.log('No CashflowStrategy provided, creating default AGA strategy.');
+                obj.CashflowStrategy = CashflowStrategy.createWithDefaultAGATable('AnnualAmount', obj.TargetIncome);
+            else
+                % If the user DID provide a strategy, simply assign it.
+                %obj.log('Using user-provided CashflowStrategy.');
+                obj.CashflowStrategy = p.Results.CashflowStrategy;
+            end
+            %obj.CashflowStrategy = p.Results.CashflowStrategy;
             obj.setFutureMortalityTable();
 
-           
-
-            
+                       
         end
 
         function cashflows = generateCashflows(obj, startDate, endDate, paymentDates, inflationRate)

@@ -57,8 +57,21 @@ classdef AnnuityWaterFallProgressionStrategy < PlotStrategy
 
                     % --- Plot the Start Value ---
                     % Use logical indexing to find the 'Start Value' row
-                    startValue = values(categories == 'Start Value');
+                    startValue = values(categories == 'Start Value')/1000;
                     bar(ax, x_offset, startValue, 'BarWidth', 0.8, 'FaceColor', startEndColor);
+                    textYPosition = startValue; 
+                    barXPosition = x_offset;
+                     % 1. Divide by 1000 to get value in thousands.
+                        valueInK = startValue ;
+                        % 2. Format the number with a sign and no decimal places.
+                        formattedNum = sprintf('%+.0f', valueInK);
+                        % 3. Concatenate with the desired currency and suffix.
+                        formattedText = ['$' formattedNum 'k'];
+                        %formattedText.Font = 14;
+                        text(ax, barXPosition, textYPosition, formattedText, ...
+                            'HorizontalAlignment', 'center', ...
+                            'VerticalAlignment', 'bottom', ...
+                            'FontSize', 8, 'FontWeight', 'bold', 'Color', [0.2 0.2 0.2]);
                     runningTotal = startValue;
 
                     % --- Reorder and Plot the Change Components ---
@@ -67,7 +80,7 @@ classdef AnnuityWaterFallProgressionStrategy < PlotStrategy
                         if ~ismember(categoryName, categories), continue; end
 
                         % Use logical indexing to get the change for this category
-                        currentChange = values(categories == categoryName);
+                        currentChange = values(categories == categoryName)/1000;
                         barXPosition = x_offset + k;
 
                         utilities.PlottingUtils.plotFloatingBar(ax, barXPosition, runningTotal, runningTotal + currentChange, colorMap(categoryName));
@@ -78,7 +91,7 @@ classdef AnnuityWaterFallProgressionStrategy < PlotStrategy
                         % the change value
 
                         % 1. Divide by 1000 to get value in thousands.
-                        valueInK = currentChange / 1000;
+                        valueInK = currentChange ;
                         % 2. Format the number with a sign and no decimal places.
                         formattedNum = sprintf('%+.0f', valueInK);
                         % 3. Concatenate with the desired currency and suffix.
@@ -88,7 +101,7 @@ classdef AnnuityWaterFallProgressionStrategy < PlotStrategy
                         % Determine the Y position and alignment for the text
                         if currentChange > 0
                             % For positive bars, place text just above the starting baseline
-                            textYPosition = runningTotal;
+                            textYPosition = runningTotal+currentChange;
                             verticalAlign = 'bottom';
                         else
                             % For negative bars, place text just below the ending baseline
@@ -105,18 +118,31 @@ classdef AnnuityWaterFallProgressionStrategy < PlotStrategy
                     end
 
                     % --- Plot the End Value ---
-                    endValue = values(categories == 'End Value');
+                    endValue = values(categories == 'End Value')/1000;
                     endBarPosition = x_offset + length(preferredOrder) + 1;
                     plot(ax, [endBarPosition - 1.5, endBarPosition], [runningTotal, runningTotal], 'k:');
                     bar(ax, endBarPosition, endValue, 'BarWidth', 0.8, 'FaceColor', startEndColor);
+                    textYPosition = endValue;
+                   
+                     %1. Divide by 1000 to get value in thousands.
+                     valueInK = endValue ;
+                        % 2. Format the number with a sign and no decimal places.
+                        formattedNum = sprintf('%+.0f', valueInK);
+                        % 3. Concatenate with the desired currency and suffix.
+                        formattedText = ['$' formattedNum 'k'];
+                        %formattedText.Font = 14;
+                        text(ax, endBarPosition, textYPosition, formattedText, ...
+                            'HorizontalAlignment', 'center', ...
+                            'VerticalAlignment', 'bottom', ...
+                            'FontSize', 8, 'FontWeight', 'bold', 'Color', [0.2 0.2 0.2]);
 
 
                     % --- 5. Add Arrow Annotation for this Period ---
-                    startBarTop = values(1);
-                    endBarTop = values(end);
-                    textYPos = max(startBarTop, endBarTop) * 1.08; % Position arrow above the bars
-                    arrowYPosStartBar =startBarTop *1.08;
-                    arrowYPosEndBar = endBarTop*1.08;
+                    startBarTop = values(1)/1000;
+                    endBarTop = values(end)/1000;
+                    textYPos = max(startBarTop, endBarTop) * 1.10; % Position arrow above the bars
+                    arrowYPosStartBar =startBarTop *1.10;
+                    arrowYPosEndBar = endBarTop*1.10;
 
                     % Draw the horizontal line of the arrow
                     plot(ax, [x_offset, endBarPosition], [arrowYPosStartBar, arrowYPosEndBar], 'k-', 'LineWidth', 1.5);
@@ -132,19 +158,7 @@ classdef AnnuityWaterFallProgressionStrategy < PlotStrategy
                         'VerticalAlignment', 'bottom', ... % Position text above the arrow's Y coordinate
                         'FontSize', 10, 'FontWeight', 'bold');
 
-                    % % Draw arrow
-                    % a=annotation(ax.Parent, 'textarrow', ...
-                    %     'X', [.1, .5], 'Y', [.8,.9], ...
-                    %     'HeadStyle', 'vback2', 'HeadWidth', 8, 'HeadLength', 8);
-                    %
-                    % % Add text label for the arrow
-                    % meta = progressionTimetable.Properties.UserData;
-                    % arrowText = sprintf('Age %d to %d', meta.startAge, meta.endAge);
-                    % a.String = arrowText;
-                    %
-                    % % text(ax, .2, .8, arrowText, ...
-                    % %     'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom', 'FontSize', 10, 'FontWeight', 'bold');
-
+                    
                     % Update the offset for the next segment
                     x_offset = endBarPosition + 2; % Add a larger gap
                 end
@@ -153,11 +167,7 @@ classdef AnnuityWaterFallProgressionStrategy < PlotStrategy
 
 
                 % --- 6. Store Tick Positions and Labels ---
-                % % We set the ticks at the position of each bar.
-                % allTickPositions = [allTickPositions, x_offset, (x_offset+1:endBarPosition-1), endBarPosition];
-                % segmentLabels = [{'Start Value'}, preferredOrder, {'End Value'}];
-                % allTickLabels = [allTickLabels, segmentLabels];
-                % --- 6. Create a Single, Shared Legend ---
+                
                 legendEntries = {};
                 proxyPlots = [];
                 for k = 1:length(preferredOrder)
@@ -171,10 +181,11 @@ classdef AnnuityWaterFallProgressionStrategy < PlotStrategy
                 % --- 7. Final Plot Formatting ---
                 hold(ax, 'off');
                 grid(ax, 'on');
-                ylabel(ax, 'Annuity Present Value');
+                ytickformat(ax, '$%gk');
+                ylabel(ax, '$K');
                 xlabel(ax, 'Progression Period');
-                title(ax, 'Multi-Period Annuity Value Progression');
-                subtitle(ax,annuityTypeData.AnnuityType)
+                title(ax, 'Multi-Period Value Progression');
+                subtitle(ax,AnnuityType.getDisplayTermContingency(annuityTypeData.AnnuityType))
                 set(ax, 'XTick', []); % Remove the numeric x-ticks
             end
         end

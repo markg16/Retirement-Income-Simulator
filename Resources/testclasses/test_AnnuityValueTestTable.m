@@ -246,46 +246,58 @@ classdef test_AnnuityValueTestTable < matlab.unittest.TestCase
                     expected_qx = genderData.qx(ageIndex);
 
                     %TODO Handle age plus deferment greater than test table
-                    expected_axAtDeferral = genderData.ax(ageIndex+currentDeferment)+1; % assumes ages are one year apart in teh table
-                    probabilityOfSurvivalToDeferment = genderData.lx(ageIndex+currentDeferment)/genderData.lx(ageIndex);
-                    discountFactor =(1+interestRate)^-currentDeferment;
-                    expected_axAtDeferralDiscounted = expected_axAtDeferral*probabilityOfSurvivalToDeferment*discountFactor;
-                    
-                    % The annuity should be a lifetime annuity starting now.
-                    % % MaxNumPayments should be long enough to cover all ages.
-                     maxNumPayments = 110 - currentAge; 
-                    
-                    % Create a Person object for this specific age.
-                    % The CashflowStrategy uses the testTableObject itself.
 
-                    mortalityIdentifier = testTableObject.TableName;
-                    mortalityDataSource = testCase.DataSource;
-                    personStrategy = CashflowStrategy(mortalityIdentifier, ...
-                                                      mortalityDataSource, ...
-                                                      'AnnualAmount', annualPayment, ...
-                                                      'Frequency', frequency, ...
-                                                      'MaxNumPayments', maxNumPayments, ...
-                                                      'InflationRate', inflation, ...
-                                                      'StartDate', startDate);
-                    
-                    person = Person('Age', currentAge, 'Gender', gender, 'CashflowStrategy', personStrategy);
-                    
-                    % Create the annuity instrument to be valued.
-                    %dateLastAnnuityPayment = startDate + years(maxNumPayments);
-                    %annuityPaymentDates = utilities.generateDateArrays(startDate+years(currentDeferment), dateLastAnnuityPayment,frequency);
-                    annuity = AnnuityStrategyFactory.createAnnuityStrategyFactory(AnnuityType.SingleLifeTimeAnnuity).createInstrumentFromParams(person, ...
-                        annualPayment, inflation, startDate, currentDeferment, maxNumPayments, frequency);
-                        
-                    % Calculate the PV using the system.
-                    calculated_pv = annuity.presentValue(rateCurve, inflation, startDate);
-                    % calculated_pv = annuity.presentValue(rateCurve, inflation, startDate)*(1-expected_qx)/(1+interestRate);
-                    
-                    % Compare the calculated PV to the expected 'ax' from the table.
-                    % Use a relative tolerance for financial values.
-                    testCase.verifyEqual(calculated_pv, expected_axAtDeferralDiscounted, 'RelTol', relTol, ...
-                        sprintf('Calculated PV for %s age %d (%.4f) must match expected ax (%.4f).', ...
-                        gender, currentAge, calculated_pv, expected_axAtDeferralDiscounted));
-                    pvCollection{g_idx,i} =[currentAge,currentDeferment,calculated_pv,expected_axAtDeferralDiscounted] ;
+                    if currentAge+currentDeferment < genderData.Age(end)
+                        expected_axAtDeferral = genderData.ax(ageIndex+currentDeferment)+1; % assumes ages are one year apart in teh table
+                        probabilityOfSurvivalToDeferment = genderData.lx(ageIndex+currentDeferment)/genderData.lx(ageIndex);
+                        discountFactor =(1+interestRate)^-currentDeferment;
+                        expected_axAtDeferralDiscounted = expected_axAtDeferral*probabilityOfSurvivalToDeferment*discountFactor;
+
+                        % The annuity should be a lifetime annuity starting now.
+                        % % MaxNumPayments should be long enough to cover all ages.
+                        maxNumPayments = 110 - currentAge;
+
+                        % Create a Person object for this specific age.
+                        % The CashflowStrategy uses the testTableObject itself.
+
+                        mortalityIdentifier = testTableObject.TableName;
+                        mortalityDataSource = testCase.DataSource;
+                        personStrategy = CashflowStrategy(mortalityIdentifier, ...
+                            mortalityDataSource, ...
+                            'AnnualAmount', annualPayment, ...
+                            'Frequency', frequency, ...
+                            'MaxNumPayments', maxNumPayments, ...
+                            'InflationRate', inflation, ...
+                            'StartDate', startDate);
+
+                        person = Person('Age', currentAge, 'Gender', gender, 'CashflowStrategy', personStrategy);
+
+                        % Create the annuity instrument to be valued.
+                        %dateLastAnnuityPayment = startDate + years(maxNumPayments);
+                        %annuityPaymentDates = utilities.generateDateArrays(startDate+years(currentDeferment), dateLastAnnuityPayment,frequency);
+                        annuity = AnnuityStrategyFactory.createAnnuityStrategyFactory(AnnuityType.SingleLifeTimeAnnuity).createInstrumentFromParams(person, ...
+                            annualPayment, inflation, startDate, currentDeferment, maxNumPayments, frequency);
+
+                        % Calculate the PV using the system.
+                        calculated_pv = annuity.presentValue(rateCurve, inflation, startDate);
+                        % calculated_pv = annuity.presentValue(rateCurve, inflation, startDate)*(1-expected_qx)/(1+interestRate);
+
+                        % Compare the calculated PV to the expected 'ax' from the table.
+                        % Use a relative tolerance for financial values.
+                        testCase.verifyEqual(calculated_pv, expected_axAtDeferralDiscounted, 'RelTol', relTol, ...
+                            sprintf('Calculated PV for %s age %d (%.4f) must match expected ax (%.4f).', ...
+                            gender, currentAge, calculated_pv, expected_axAtDeferralDiscounted));
+                        pvCollection{g_idx,i} =[currentAge,currentDeferment,calculated_pv,expected_axAtDeferralDiscounted] ;
+                    else
+                        % 2. If the condition is NOT met, log a formal diagnostic message.
+                        %    This message will appear in the detailed test results without
+                        %    failing the test.
+                        logMessage = sprintf('Skipping test for age %d + deferment %d: Exceeds max table age of %d.', ...
+                            currentAge, currentDeferment, genderData.Age(end));
+
+                        % Use the 'Detailed' verbosity level for this kind of informational message.
+                        testCase.log(matlab.unittest.Verbosity.Detailed, logMessage);
+                    end
                 end
                 summary = array2table(pvCollection);
                 display(summary)

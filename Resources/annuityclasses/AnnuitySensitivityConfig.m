@@ -46,7 +46,7 @@ classdef AnnuitySensitivityConfig < handle
                 obj.RateCurveProvider = marketdata.ScenarioMarketDataAdapter(scenario);
             else
                 % If not looping by a rate-based variable, create a default provider.
-                obj.RateCurveProvider = marketdata.LevelRateCurveProvider(0.03, scenario.ScenarioStartDate);
+                obj.RateCurveProvider = marketdata.LevelRateCurveProvider(0.04, scenario.ScenarioStartDate);
             end
 
            % --- 2. Define the value ranges for the looping variables ---

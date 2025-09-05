@@ -18,7 +18,8 @@ classdef AnnuityLinePlotStrategy < PlotStrategy
             else
                 return; % Nothing to plot
             end
-
+            %Initialize arrays to store handles for the legend ---
+            legendHandles = [];
             % Plot data for each annuity type
             for i = 1:length(allAnnuityValues)
                 annuityTypeData = allAnnuityValues(i);
@@ -47,10 +48,14 @@ classdef AnnuityLinePlotStrategy < PlotStrategy
                         % plot(ax, xAxisValues, yAxisValues, 'LineWidth', 1.5, ...
                         %      'Color', colors{mod(j-1, length(colors)) + 1}, ...
                         %      'DisplayName', displayName);
-                        stairs(ax, xAxisValues, yAxisValues, 'LineStyle', '-.','LineWidth', 1.5, ...
+                        h = stairs(ax, xAxisValues, yAxisValues/1000, 'LineStyle', '-.','LineWidth', 1.5, ...
                              'Color', colors{mod(j-1, length(colors)) + 1}, ...
                              'Marker','o',...
                              'DisplayName', displayName);
+                        % Only add the handle for the first annuity type to avoid duplicates in the legend
+                        if i == 1
+                            legendHandles(end+1) = h;
+                        end
                     else
                         % plot(ax, xAxisValues, yAxisValues, 'LineWidth', 1.5, ...
                              % 'Color', colors{mod(j-1, length(colors)) + 1}, ...
@@ -64,16 +69,26 @@ classdef AnnuityLinePlotStrategy < PlotStrategy
                 hold(ax, 'off');
                 grid(ax, 'on');
                 xlabel(ax, strrep(char(plotConfig.xAxisEnum), '_', ' '));
-                ylabel(ax, 'Annuity Present Value');
+                ylabel(ax, 'Present Value');
                 title(ax, 'Sensitivity Analysis');
-                subtitle(ax, annuityTypeData.AnnuityType);
+                subtitle(ax, AnnuityType.getDisplayTermContingency(annuityTypeData.AnnuityType));
+                ytickformat(ax, '$%gk');
+                ylabel(ax, 'Present Value (in thousands)');
+                %utilities.PlottingUtils.format_yaxis('$k',ax)
             end
-
-            % Create a SINGLE shared legend on the FIRST axes object
-            if ~isempty(axesMap)
-                lgd = legend(axesMap(annuityTypeName), 'show', 'Location', 'best');
+            %Create ONE shared legend for the entire figure ---
+            if ~isempty(legendHandles)
+               
+                % Create the legend on the figure, not a specific subplot
+                lgd = legend( legendHandles, 'Location', 'eastoutside');
                 title(lgd, strrep(lineVarName, '_', ' '));
             end
+            % --- NEW FINAL STEP: SET THE PRE-COPY CALLBACK ---
+            % % Find the parent FIGURE of the axes, skipping over any layout managers.
+            % fig = ancestor(ax, 'figure');
+            % % Call the utility to set the callback. Use the appropriate dimension.
+            % utilities.PlottingUtils.setPrintCallback(fig, axesMap, '$k');
+            
         end
     end
     

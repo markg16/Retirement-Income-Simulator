@@ -115,7 +115,64 @@ classdef PlottingUtils
             % p.DataTipTemplate = dtt;
         end
 
-        
+        function format_yaxis(dimension, ax)
+            %FORMAT_YAXIS Formats y-axis labels using a map for formatting rules.
+            %
+            %   FORMAT_YAXIS('k') formats the current y-axis in thousands.
+            %   FORMAT_YAXIS('M') formats the current y-axis in millions.
+
+            if nargin < 2
+                ax = gca;
+            end
+            if nargin < 1
+                dimension = '';
+            end
+
+            % Create a container map to store all formatting rules
+            rules = containers.Map();
+            rules('k') = struct('divisor', 1e3, 'suffix', 'k');
+            rules('m') = struct('divisor', 1e6, 'suffix', 'M');
+            rules('b') = struct('divisor', 1e9, 'suffix', 'B');
+            % To add trillions: rules('t') = struct('divisor', 1e12, 'suffix', 'T');
+
+            % Normalize the input key (e.g., '$k' -> 'k')
+            dimension_key = lower(strrep(dimension, '$', ''));
+
+            % Look up the formatting rule from the map
+            if isKey(rules, dimension_key)
+                rule = rules(dimension_key);
+                divisor = rule.divisor;
+                suffix = rule.suffix;
+            else
+                % Default case if the dimension is not found in the map
+                divisor = 1;
+                suffix = '';
+            end
+
+            % The rest of the logic remains the same
+            yticks_vals = ax.YTick;
+            new_labels = cell(size(yticks_vals));
+
+            for i = 1:length(yticks_vals)
+                val = yticks_vals(i);
+                if val == 0
+                    new_labels{i} = '$0';
+                else
+                    scaled_val = round(val / divisor);
+                    new_labels{i} = sprintf('$%g%s', scaled_val, suffix);
+                end
+            end
+
+            ax.YTickLabel = new_labels;
+            ax.TickLabelInterpreter = 'latex';
+            % Lock the labels in by switching from 'auto' to 'manual' mode.
+            % This ensures they are preserved when copying or exporting the figure.
+            % First, lock the tick locations themselves.
+            ax.YTickMode = 'manual';
+            % Then, lock the labels for those tick locations.
+            ax.YTickLabelMode = 'manual';
+
+        end
        
         function legendStr = formatAnnuityInputTypeLegendEntry(annuityParamEnum, value)
             % Formats a value for a plot legend based on its AnnuityInputType.
@@ -167,6 +224,18 @@ classdef PlottingUtils
                     % A generic fallback for any other numeric type.
                     legendStr = num2str(value);
             end
+        end
+        function setPrintCallback(fig, axesMap, dimension)
+            %SETPRINTCALLBACK Sets a callback to re-apply formatting just before printing or copying.
+            %   This ensures custom formatting is preserved in the final output.
+
+            % Define the callback. This is an anonymous function that takes two arguments
+            % (from the event) but doesn't use them. Its job is to reformat the axes.
+            % It gets all axes handles from the map and applies the formatter to each.
+            callback = @(src, evt) arrayfun(@(ax) utilities.PlottingUtils.format_yaxis(dimension, ax), [axesMap.values{:}]);
+
+            % Assign this function to the figure's pre-print/copy callback property.
+            fig.PrintTemplate.DriverPreCallback = callback;
         end
     end
 end
