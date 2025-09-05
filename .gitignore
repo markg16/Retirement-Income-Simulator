@@ -1,0 +1,23 @@
+# MATLAB and Simulink
+*.asv
+*.autosave
+*.mex*
+*.mlappinstall
+*.p
+*.slx.r*
+*.slxc
+*.slddc
+*.sltx
+*resources
+*.orig
+
+# Cache and Log files
+# Ignore .mat files specifically inside any folder named 'cache'
+**/cache/*.mat
+*.log
+
+# Microsoft Office temporary files
+~$*.*
+
+# Test Results
+test-results/
