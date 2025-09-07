@@ -7,7 +7,7 @@ name: MATLAB CI for Retirement Income SImulatorr
 # This workflow runs automatically on any pull request that targets the 'develop' branch.
 on:
   pull_request:
-    branches: [ develop ]
+    branches: [ development ]
 
 jobs:
   run-matlab-tests:
