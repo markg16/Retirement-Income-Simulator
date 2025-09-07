@@ -7,7 +7,7 @@ name: MATLAB CI for Retirement Income SImulatorr
 # This workflow runs automatically on any pull request that targets the 'develop' branch.
 on:
   pull_request:
-    branches: [ develop ]
+    branches: [ development ]
 
 jobs:
   run-matlab-tests:
@@ -31,7 +31,9 @@ jobs:
         uses: matlab-actions/run-tests@v2
         with:
           # Tell the action to run a script file
-          source-folder: ${{ github.workspace }}
+          # Explicitly tell the action to run your script instead of its default behavior.
+          run-command: "runAllTests"
+          %source-folder: ${{ github.workspace }}
           test-results-junit: test-results/results.xml
           test-results-html: test-results/TestReport.html
           
