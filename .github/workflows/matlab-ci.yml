@@ -1,0 +1,47 @@
+# This is a GitHub Actions workflow file.
+# It defines the automated process for Continuous Integration.
+
+name: MATLAB CI for Retirement Income SImulatorr
+
+# This is the TRIGGER:
+# This workflow runs automatically on any pull request that targets the 'develop' branch.
+on:
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  run-matlab-tests:
+    # This job will run on a fresh virtual machine provided by GitHub
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the code from your feature branch
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # Step 2: Set up MATLAB on the virtual machine
+      # This uses an official action from MathWorks.
+      - name: Set up MATLAB
+        uses: matlab-actions/setup-matlab@v2
+
+      # Step 3: Run your entire test suite
+      # This command executes the runAllTests.m script you created.
+      # It also generates the test reports.
+      - name: Run MATLAB Tests and Generate Artifacts
+        uses: matlab-actions/run-tests@v2
+        with:
+          # Tell the action to run a script file
+          source-folder: ${{ github.workspace }}
+          test-results-junit: test-results/results.xml
+          test-results-html: test-results/TestReport.html
+          
+      # Step 4: Upload the HTML test report as an artifact
+      # This allows you to download and view the detailed report from the workflow run.
+      - name: Upload Test Report Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: matlab-test-report
+          path: test-results/TestReport.html
+        # This condition ensures the report is always uploaded, even if tests fail
+        if: always()
+
