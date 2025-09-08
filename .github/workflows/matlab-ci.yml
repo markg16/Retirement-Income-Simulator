@@ -1,7 +1,7 @@
 # This is a GitHub Actions workflow file.
 # It defines the automated process for Continuous Integration.
 
-name: MATLAB CI for Retirement Income SImulatorr
+name: MATLAB CI for Retirement Income Simulator
 
 # This is the TRIGGER:
 # This workflow runs automatically on any pull request that targets the 'develop' branch.
