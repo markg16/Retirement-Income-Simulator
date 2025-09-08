@@ -33,7 +33,6 @@ jobs:
           # Tell the action to run a script file
           # Explicitly tell the action to run your script instead of its default behavior.
           run-command: "runAllTests"
-          %source-folder: ${{ github.workspace }}
           test-results-junit: test-results/results.xml
           test-results-html: test-results/TestReport.html
           
